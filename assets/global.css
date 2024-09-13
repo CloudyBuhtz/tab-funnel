@@ -1,0 +1,197 @@
+@layer reset, base, inputs, page, components, utility;
+
+@layer reset {
+  * {
+    font-size: 1rem;
+  }
+
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  *::before,
+  *::after {
+    all: unset;
+  }
+
+  input,
+  button,
+  select {
+    all: unset;
+    font-family: inherit;
+    user-select: none;
+    cursor: pointer;
+  }
+}
+
+@layer base {
+  :root {
+    font-family: Bahnschrift, "DIN Alternate", "Franklin Gothic Medium",
+      "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+    font-weight: normal;
+    font-size: 1rem;
+
+    color-scheme: light dark;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    accent-color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+
+    /* Light Theme */
+    --light-bg0: #d5cea3;
+    --light-bg1: #dcd5ac;
+    --light-bg2: #e5ddb0;
+    --light-bg3: #f2ecbc;
+    --light-bg4: #e7dba0;
+    --light-bg5: #e4d794;
+
+    --light-fgi0: #545464;
+    --light-fgi1: #43436c;
+    --light-fgg0: #dcd7ba;
+    --light-fgg1: #716e61;
+    --light-fgg2: #8a8980;
+    --light-fgo0: #cc6d00;
+    --light-fgo1: #e98a00;
+
+    /* Dark Theme */
+    --dark-bg0: #16161d;
+    --dark-bg1: #181820;
+    --dark-bg2: #1a1a22;
+    --dark-bg3: #1f1f28;
+    --dark-bg4: #2a2a37;
+    --dark-bg5: #363646;
+
+    --dark-fgi0: #c8c093;
+    --dark-fgi1: #dcd7ba;
+    --dark-fgg0: #727169;
+    --dark-fgg1: #717c7c;
+    --dark-fgo0: #ffa066;
+    --dark-fgo1: #da8957;
+
+    --danger-bg: #43242b;
+  }
+
+  html {
+    background-color: light-dark(var(--light-bg0), var(--dark-bg0));
+    color: light-dark(var(--light-fgi1), var(--dark-fgi0));
+  }
+}
+
+@layer inputs {
+  .select-wrapper {
+    position: relative;
+    font-size: inherit;
+
+    &::after {
+      position: absolute;
+      content: "";
+      z-index: 1;
+      width: 0;
+      height: 0;
+      border-left: 0.75ch solid transparent;
+      border-right: 0.75ch solid transparent;
+      border-top: 1ch solid light-dark(var(--light-fgo0), var(--dark-fgo0));
+      user-select: none;
+      pointer-events: none;
+      transform: translate(-200%, 150%);
+    }
+  }
+  select {
+    padding-block: 0.5ch;
+    padding-inline: 1rem 3rem;
+    background-color: light-dark(var(--light-bg4), var(--dark-bg4));
+    border: 1px solid light-dark(var(--light-fgg2), var(--dark-fgg0));
+    color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+    border-radius: 0.5ch;
+
+    &:hover,
+    &:focus {
+      border: 1px solid light-dark(var(--light-fgg1), var(--dark-fgg1));
+      background-color: light-dark(var(--light-bg5), var(--dark-bg5));
+    }
+  }
+
+  input[type="checkbox"] {
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 0.5ch;
+    background-color: light-dark(var(--light-bg4), var(--dark-bg4));
+    border: 1px solid light-dark(var(--light-fgg2), var(--dark-fgg0));
+    position: relative;
+
+    &:checked {
+      background-color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+
+      &:hover {
+        background-color: light-dark(var(--light-fgo1), var(--dark-fgo1));
+      }
+    }
+
+    &:not(:checked):hover {
+      background-color: light-dark(var(--light-bg5), var(--dark-bg5));
+    }
+
+    &:checked::after {
+      content: "";
+      position: absolute;
+      height: 14px;
+      width: 7px;
+      border-bottom: 3px solid light-dark(var(--light-bg0), var(--dark-bg0));
+      border-right: 3px solid light-dark(var(--light-bg0), var(--dark-bg0));
+      transform: translate(50%, 0) rotate(45deg);
+    }
+  }
+}
+
+button {
+  outline: none;
+  appearance: none;
+  padding-block: 0.5ch;
+  padding-inline: 2rem;
+  background-color: light-dark(var(--light-bg4), var(--dark-bg4));
+  border: 1px solid light-dark(var(--light-fgg2), var(--dark-fgg0));
+  color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+  border-radius: 0.5ch;
+  transition: color 100ms linear, background-color 100ms linear;
+  text-align: center;
+
+  &:hover,
+  &:active {
+    border: 1px solid light-dark(var(--light-fgg1), var(--dark-fgg1));
+  }
+
+  &:hover {
+    background-color: light-dark(var(--light-bg5), var(--dark-bg5));
+  }
+
+  &:active {
+    color: light-dark(var(--light-fgi1), var(--dark-fgi1));
+    background-color: light-dark(var(--light-bg2), var(--dark-fgg1));
+  }
+}
+
+input[type="text"] {
+  outline: none;
+  appearance: none;
+  padding-block: 0.5ch;
+  padding-inline: 1rem;
+  background-color: light-dark(var(--light-bg4), var(--dark-bg4));
+  border: 1px solid light-dark(var(--light-fgg2), var(--dark-fgg0));
+  color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+  border-radius: 0.5ch;
+  transition: color 100ms linear, background-color 100ms linear;
+
+  &:hover,
+  &:active,
+  &:focus {
+    border: 1px solid light-dark(var(--light-fgg1), var(--dark-fgg1));
+    background-color: light-dark(var(--light-bg5), var(--dark-bg5));
+  }
+}

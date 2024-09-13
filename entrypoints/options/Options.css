@@ -1,0 +1,58 @@
+@layer reset, base, inputs, page, components, utility;
+
+@layer page {
+  main {
+    display: flex;
+    flex-direction: column;
+    gap: 1ch;
+    padding: 1rem;
+    margin-inline: auto;
+    width: 60%;
+    min-width: 25rem;
+
+    .danger-zone {
+      display: flex;
+      flex-direction: column;
+      gap: 1ch;
+      padding: 1rem;
+      background-color: var(--danger-bg);
+      color: var(--dark-fgo0);
+    }
+
+    .option {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      align-items: center;
+      height: 2.5rem;
+
+      &:hover {
+        color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+      }
+
+      label {
+        min-width: 16rem;
+        user-select: none;
+      }
+    }
+
+    .description {
+      font-size: 0.9rem;
+      opacity: 0.6;
+      margin-block: -0.5rem 0.5rem;
+      user-select: none;
+    }
+  }
+}
+
+@layer utility {
+  .pointer {
+    cursor: pointer;
+  }
+  .fix-padding {
+    margin-block: 0;
+  }
+  .center {
+    align-self: center;
+  }
+}
