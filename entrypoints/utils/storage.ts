@@ -9,7 +9,7 @@ export const TabCountItem = storage.defineItem<number>("local:tab_count", {
   fallback: 0,
 });
 
-export const LastSnapshotDate = storage.defineItem<number>("local:last_snapshot_date", {
+export const LastSnapshotDateItem = storage.defineItem<number>("local:last_snapshot_date", {
   fallback: 0,
 });
 

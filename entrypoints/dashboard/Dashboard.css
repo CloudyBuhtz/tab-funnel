@@ -47,8 +47,31 @@
         border-bottom: 2px solid light-dark(var(--light-fgg1), var(--dark-fgg1));
       }
 
-      .name {
-        color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+      .info {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+
+        .name {
+          color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+        }
+
+        .spacer {
+          flex-grow: 1;
+        }
+
+        .openAll,
+        .removeAll {
+          user-select: none;
+          font-size: 0.8rem;
+          transition: color 100ms linear;
+          cursor: pointer;
+
+          &:hover {
+            color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+            text-shadow: 0 0 1ch light-dark(var(--light-fgo0), var(--dark-fgo0));
+          }
+        }
       }
     }
 

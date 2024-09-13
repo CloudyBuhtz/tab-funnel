@@ -2,7 +2,7 @@ import { CheckInput, MultiInput, TextInput } from "@/components/option";
 import { Option, Options } from "../utils/options";
 import type { CheckOption, MultiOption, TextOption } from "../utils/options";
 import "./Options.css";
-import { LastSnapshotDate, TabCountItem, TabItem } from "../utils/storage";
+import { LastSnapshotDateItem, TabCountItem, TabItem } from "../utils/storage";
 
 export default () => {
   const [showDanger, setShowDanger] = useState(false);
@@ -33,7 +33,7 @@ export default () => {
         </div>
       )
     }
-  }
+  };
 
   // Also make backup just before deleting
   const clearTabs = async () => {
@@ -42,7 +42,7 @@ export default () => {
   };
 
   const clearSnapshotDate = async () => {
-    await LastSnapshotDate.setValue(0);
+    await LastSnapshotDateItem.setValue(0);
   };
 
   const dangerHandler = async () => {

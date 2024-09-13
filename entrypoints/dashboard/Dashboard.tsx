@@ -1,10 +1,15 @@
 import { useEffect } from "react";
 import type { Management } from "webextension-polyfill/namespaces/management";
 import { browser } from "wxt/browser";
-import { StorageItemKey } from "wxt/storage";
 import type { Tab } from "../utils/data";
 import { removeTab } from "../utils/data";
-import { RemoveTabsRestoredItem, SwitchTabRestoredItem, TabCountItem, TabItem } from "../utils/storage";
+import {
+  LastSnapshotDateItem,
+  RemoveTabsRestoredItem,
+  SwitchTabRestoredItem,
+  TabCountItem,
+  TabItem
+} from "../utils/storage";
 import "./Dashboard.css";
 
 function getFavIconURL(url: string) {
@@ -27,6 +32,22 @@ const ReverseItem = storage.defineItem<boolean>("local:dashboard_reverse", {
   fallback: false,
 });
 
+const openTabs = async (opTabs: Tab[]) => {
+  const switchTabRestored = await SwitchTabRestoredItem.getValue();
+  const removeTabsRestored = await RemoveTabsRestoredItem.getValue();
+  opTabs.forEach((tab) => {
+    browser.tabs.create({
+      url: tab.url,
+      active: switchTabRestored
+    });
+  })
+
+  // Optionally remove tab
+  if (removeTabsRestored) {
+    removeTab(opTabs);
+  };
+};
+
 export default () => {
   const [tabs, setTabs] = useState<Tab[]>(TabItem.fallback);
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
@@ -35,13 +56,11 @@ export default () => {
   const [sort, setSort] = useState<string>(SortItem.fallback);
   const [reverse, setReverse] = useState<boolean>(ReverseItem.fallback);
 
-  const removeTabsRestored = useRef(RemoveTabsRestoredItem.fallback);
-  const switchTabRestored = useRef(SwitchTabRestoredItem.fallback);
+  const [lastSnapshotDate, setLastSnapshotDate] = useState(LastSnapshotDateItem.fallback);
 
-  const unwatchTabCount = TabCountItem.watch((v) => { setTabCount(v) });
-  const unwatchTabs = TabItem.watch((v) => setTabs(v));
-  const unwatchRemoveTabsRestored = RemoveTabsRestoredItem.watch((v) => { removeTabsRestored.current = v });
-  const unwatchSwitchTabRestored = SwitchTabRestoredItem.watch((v) => { switchTabRestored.current = v });
+  const unwatchTabCount = TabCountItem.watch(v => setTabCount(v));
+  const unwatchTabs = TabItem.watch(v => setTabs(v));
+  const unwatchLastSnapshotDate = LastSnapshotDateItem.watch(v => setLastSnapshotDate(v))
 
   useEffect(() => {
     const setup = async () => {
@@ -49,8 +68,7 @@ export default () => {
       setTabCount(await TabCountItem.getValue());
       setInfo(await browser.management.getSelf());
 
-      removeTabsRestored.current = await RemoveTabsRestoredItem.getValue();
-      switchTabRestored.current = await SwitchTabRestoredItem.getValue();
+      setLastSnapshotDate(await LastSnapshotDateItem.getValue());
 
       setGroup(await GroupItem.getValue());
       setSort(await SortItem.getValue());
@@ -58,25 +76,6 @@ export default () => {
     };
     setup();
   }, []);
-
-  const openTab = (item: React.MouseEvent<HTMLElement>) => {
-    const tabUrl = item.currentTarget.dataset.url;
-    browser.tabs.create({
-      url: tabUrl,
-      active: switchTabRestored.current
-    });
-
-    // Optionally remove tab
-    if (removeTabsRestored.current) {
-      const tabHash = item.currentTarget.dataset.hash!;
-      removeTab(tabHash);
-    };
-  };
-
-  const closeTab = (item: React.MouseEvent<HTMLElement>) => {
-    const hash: string = item.currentTarget.dataset.hash!;
-    removeTab(hash);
-  };
 
   const changeGroup = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGroup(e.target.value);
@@ -99,6 +98,7 @@ export default () => {
         <div className="logo">TabFunnel</div>
         <div className="count">Tab Count: {tabCount}</div>
         <div className="info">v{info?.version}</div>
+        <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
       </header>
       <div className="controls">
         <label htmlFor="group_by">Grouping:</label>
@@ -123,9 +123,9 @@ export default () => {
         <input onChange={reverseChange} checked={reverse} type="checkbox" name="reverse_sort" id="reverse_sort" />
       </div>
       <main>
-        {group === "ungrouped" && tabs.length > 0 ? <UngroupedView sort={sort as TSort} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></UngroupedView> : null}
-        {group === "group_by_date" && tabs.length > 0 ? <DateGroupView sort={sort as TSort} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></DateGroupView> : null}
-        {group === "group_by_site" && tabs.length > 0 ? <SiteGroupView sort={sort as TSort} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></SiteGroupView> : null}
+        {group === "ungrouped" ? <UngroupedView sort={sort as TSort} reverse={reverse} tabs={tabs}></UngroupedView> : null}
+        {group === "group_by_date" ? <DateGroupView sort={sort as TSort} reverse={reverse} tabs={tabs}></DateGroupView> : null}
+        {group === "group_by_site" ? <SiteGroupView sort={sort as TSort} reverse={reverse} tabs={tabs}></SiteGroupView> : null}
       </main>
     </>
   );
@@ -134,13 +134,11 @@ export default () => {
 type SortType = "sort_by_date" | "sort_by_name" | "sort_by_url";
 type TabViewProps = {
   tabs: Tab[],
-  openTab: React.MouseEventHandler,
-  closeTab: React.MouseEventHandler,
   sort: TSort;
   reverse: boolean;
 };
 
-const SortedTabView = ({ tabs, sort, reverse, openTab, closeTab }: TabViewProps): JSX.Element => {
+const SortedTabView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
   let sortedTabs: Tab[] = tabs.slice(0);
 
   switch (sort) {
@@ -162,22 +160,22 @@ const SortedTabView = ({ tabs, sort, reverse, openTab, closeTab }: TabViewProps)
   return (
     <>{sortedTabs.map((tab: Tab) => (
       <div key={tab.hash} className="tab">
-        <div onClick={closeTab} data-hash={tab.hash} className="close">X</div>
+        <div onClick={() => removeTab([tab])} className="close">X</div>
         <img className="icon" src={getFavIconURL(tab.url)} alt={tab.title} />
-        <span onClick={openTab} className="title" data-hash={tab.hash} data-url={tab.url}>{tab.title}</span>
+        <span onClick={() => openTabs([tab])} className="title">{tab.title}</span>
       </div>
     ))}
     </>
   )
 };
 
-const UngroupedView = ({ tabs, openTab, closeTab, sort = "sort_by_date", reverse }: TabViewProps): JSX.Element => {
+const UngroupedView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
   return (
-    <SortedTabView tabs={tabs} sort={sort} reverse={reverse} openTab={openTab} closeTab={closeTab}></SortedTabView>
+    <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
   )
 };
 
-const SiteGroupView = ({ tabs, openTab, closeTab, sort, reverse }: TabViewProps): JSX.Element => {
+const SiteGroupView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
   const regex = /^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i;
 
   const groupedTabs = Object.entries(tabs.reduce((ob: { [key: string]: Tab[] }, item) => {
@@ -190,22 +188,32 @@ const SiteGroupView = ({ tabs, openTab, closeTab, sort, reverse }: TabViewProps)
     <>
       {groupedTabs.map(([domain, tabs]: [string, Tab[]]) => (
         <div className="group" key={domain}>
-          <div className="name">{domain}</div>
-          <SortedTabView tabs={tabs} sort={sort} reverse={reverse} openTab={openTab} closeTab={closeTab}></SortedTabView>
+          <div className="info">
+            <div className="name">{domain}</div>
+            <div className="spacer"></div>
+            <div className="openAll" onClick={() => openTabs(tabs)}>Restore All</div>
+            <div className="removeAll" onClick={() => removeTab(tabs)}>Remove All</div>
+          </div>
+          <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
         </div>
       ))}
     </>
   );
 };
 
-const DateGroupView = ({ tabs, openTab, closeTab, sort, reverse }: TabViewProps): JSX.Element => {
+const DateGroupView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
   const groupedTabs = tabs.reduce((ob: { [key: string]: Tab[] }, item) => ({ ...ob, [item.date]: [...ob[item.date] ?? [], item] }), {});
   return (
     <>
       {Object.entries(groupedTabs).reverse().map(([date, tabs]: [string, Tab[]]) => (
         <div className="group" key={date}>
-          <div className="name">{new Date(parseInt(date)).toUTCString()}</div>
-          <SortedTabView tabs={tabs} sort={sort} reverse={reverse} openTab={openTab} closeTab={closeTab}></SortedTabView>
+          <div className="info">
+            <div className="name">{new Date(parseInt(date)).toUTCString()}</div>
+            <div className="spacer"></div>
+            <div className="openAll" onClick={() => openTabs(tabs)}>Restore All</div>
+            <div className="removeAll" onClick={() => removeTab(tabs)}>Remove All</div>
+          </div>
+          <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
         </div>
       ))}
     </>

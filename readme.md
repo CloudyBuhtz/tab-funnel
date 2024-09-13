@@ -1,18 +1,19 @@
 # TabFunnel
 
+## LITTLE BITS
+
+- [ ] Show Next Snapshot Time
+- [ ] Add import / export menu
+- [x] Show Bytes Used
+
 ## TODO
 
-- Move to using storage.DefineItem for all things.
-- Snapshots
-  - Interval Snapshots
-  - ~~Manual Snapshots~~
-  - Triggered Snapshots
-  - Popup
-    - Info
-      - Tabs Funnelled
-      - Last Snapshot
-      - Next Snapshot
-    - Buttons
+- Popup
+  - Info
+    - Tabs Funnelled
+    - Last Snapshot
+    - Next Snapshot
+  - Buttons
 - Menu Options
 - Importing / Exporting
   - Import from OneTab
