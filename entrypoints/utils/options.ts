@@ -32,15 +32,15 @@ export const Options = {
     area: "local",
     type: "multi",
     options: [
-      "Never",
-      "Only Funnel",
-      "Every Change",
-      "Hourly",
-      "Daily",
-      "Weekly",
-      "Monthly"
+      "never",
+      "only_funnel",
+      "every_change",
+      "hourly",
+      "daily",
+      "weekly",
+      "monthly"
     ],
-    defaultValue: "Never",
+    defaultValue: "never",
     description: "Calculated as absolute time between snapshots, not necessarily when the date / time changes.<br>'Only Funnel' activates only when tabs are Funnelled.<br>'Every Change' activates when tabs are Funnelled and Removed.",
   } as MultiOption,
   REMOVE_TABS_RESTORED: {

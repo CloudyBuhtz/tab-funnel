@@ -124,7 +124,9 @@ export const MultiInput = ({ option }: MultiInputProps) => {
       <div className="option">
         <label htmlFor={option.name}>{option.label}</label>
         <div className="select-wrapper">
-          <select onChange={changeHandler} name={option.name} id={option.name} value={value}>{option.options.map((item) => (<option key={item}>{item}</option>))}</select>
+          <select onChange={changeHandler} name={option.name} id={option.name} value={value}>
+            {option.options.map((item) => (<option key={item}>{item.replaceAll("_", " ").split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</option>))}
+          </select>
         </div>
       </div>
       {option.description && <div className="description" dangerouslySetInnerHTML={{ __html: option.description }}></div>}

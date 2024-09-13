@@ -3,7 +3,8 @@ import { Md5 } from "ts-md5";
 import type { Management } from "webextension-polyfill/namespaces/management";
 import { browser } from "wxt/browser";
 import { storage, StorageItemKey } from "wxt/storage";
-import { TabItem, snapshotTabs, storeTabs, type Tab } from "../utils/data";
+import { snapshotTabs, storeTabs, type Tab } from "../utils/data";
+import { FunnelPinnedTabsItem, IgnoreDuplicateTabsItem, LastSnapshotDate, RemoveTabsFunnelledItem, TabCountItem, TabItem } from "../utils/storage";
 import { Options } from "../utils/options";
 import "./Popup.css";
 
@@ -11,39 +12,29 @@ export default () => {
   const [funnelCount, setFunnelCount] = useState(0);
   const [info, setInfo] = useState<Management.ExtensionInfo>();
 
-  const funnel_pinned_tabs = Options.FUNNEL_PINNED_TABS;
-  let funnelPinnedTabs = useRef(funnel_pinned_tabs.defaultValue);
-
-  const remove_tab_funnelled = Options.REMOVE_TABS_FUNNELLED;
-  let removeTabFunnelled = useRef(remove_tab_funnelled.defaultValue);
-
-  const ignore_duplicate_tabs = Options.IGNORE_DUPLICATE_TABS;
-  let ignoreDuplicateTabs = useRef(ignore_duplicate_tabs.defaultValue);
+  const funnelPinnedTabs = useRef(FunnelPinnedTabsItem.fallback);
+  const removeTabFunnelled = useRef(RemoveTabsFunnelledItem.fallback);
+  const ignoreDuplicateTabs = useRef(IgnoreDuplicateTabsItem.fallback);
 
   const [lastSnapshotDate, setLastSnapshotDate] = useState(0);
 
-  const unwatchFunnelCount = storage.watch<number>("local:tab_count", (count) => {
-    setFunnelCount(count!);
+  const unwatchFunnelCount = TabCountItem.watch((count) => {
+    setFunnelCount(count);
   });
 
   useEffect(() => {
     const getCount = async () => {
-      setFunnelCount(await storage.getItem<number>("local:tab_count") ?? 0);
+      setFunnelCount(await TabCountItem.getValue());
 
-      funnelPinnedTabs.current = await storage.getItem<boolean>(`${funnel_pinned_tabs.area}:${funnel_pinned_tabs.name}` as StorageItemKey) || false;
-      removeTabFunnelled.current = await storage.getItem<boolean>(`${remove_tab_funnelled.area}:${remove_tab_funnelled.name}` as StorageItemKey) || false;
-      ignoreDuplicateTabs.current = await storage.getItem<boolean>(`${ignore_duplicate_tabs.area}:${ignore_duplicate_tabs.name}` as StorageItemKey) || false;
-      setLastSnapshotDate(await storage.getItem("local:last_snapshot_date") ?? 0);
+      funnelPinnedTabs.current = await FunnelPinnedTabsItem.getValue();
+      removeTabFunnelled.current = await RemoveTabsFunnelledItem.getValue();
+      ignoreDuplicateTabs.current = await IgnoreDuplicateTabsItem.getValue();
+      setLastSnapshotDate(await LastSnapshotDate.getValue());
     };
     getCount();
   }, []);
 
   const funnelTabs = async () => {
-    const tabCount = await storage.setItem<number>(
-      "local:tab_count",
-      funnelCount,
-    );
-
     // Get current tabs
     const storedTabs = await TabItem.getValue();
     const hasTab = (url: string) => {
@@ -62,7 +53,6 @@ export default () => {
 
     // Create tab data
     const funnelDate = Date.now().toString();
-    console.log(funnelDate);
     let tabsToFunnel: Tab[] = tabs.map((tab, index: number) => {
       return {
         title: tab.title!,
@@ -80,7 +70,7 @@ export default () => {
     }
     storeTabs(tabsToFunnel);
     const newCount = funnelCount + tabsToFunnel.length;
-    await storage.setItem("local:tab_count", newCount);
+    await TabCountItem.setValue(newCount);
 
     // Optionally close tabs
     if (removeTabFunnelled.current) {
@@ -116,7 +106,7 @@ export default () => {
 
   return (
     <main>
-      <div className="info">Tabs Funnelled: {funnelCount}</div>
+      <div className="info">{funnelCount} Tabs</div>
       <button onClick={funnelTabs}>Funnel All Tabs</button>
       <button onClick={showList}>Show Funnel</button>
       <button onClick={manualSnapshot}>Manual Snapshot</button>

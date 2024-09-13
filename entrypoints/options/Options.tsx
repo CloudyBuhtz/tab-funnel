@@ -2,6 +2,7 @@ import { CheckInput, MultiInput, TextInput } from "@/components/option";
 import { Option, Options } from "../utils/options";
 import type { CheckOption, MultiOption, TextOption } from "../utils/options";
 import "./Options.css";
+import { LastSnapshotDate, TabCountItem, TabItem } from "../utils/storage";
 
 export default () => {
   const [showDanger, setShowDanger] = useState(false);
@@ -36,12 +37,12 @@ export default () => {
 
   // Also make backup just before deleting
   const clearTabs = async () => {
-    await storage.setItem("local:tab_count", 0);
-    await storage.setItem("local:tabs", []);
+    await TabCountItem.setValue(0);
+    await TabItem.setValue([]);
   };
 
   const clearSnapshotDate = async () => {
-    await storage.setItem("local:last_snapshot_date", 0);
+    await LastSnapshotDate.setValue(0);
   };
 
   const dangerHandler = async () => {

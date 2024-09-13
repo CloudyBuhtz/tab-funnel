@@ -3,8 +3,8 @@ import type { Management } from "webextension-polyfill/namespaces/management";
 import { browser } from "wxt/browser";
 import { StorageItemKey } from "wxt/storage";
 import type { Tab } from "../utils/data";
-import { TabItem, removeTab } from "../utils/data";
-import { Options } from "../utils/options";
+import { removeTab } from "../utils/data";
+import { RemoveTabsRestoredItem, SwitchTabRestoredItem, TabCountItem, TabItem } from "../utils/storage";
 import "./Dashboard.css";
 
 function getFavIconURL(url: string) {
@@ -13,50 +13,48 @@ function getFavIconURL(url: string) {
   return "https://www.google.com/s2/favicons?domain=" + domain;
 };
 
+type TGroup = "ungrouped" | "group_by_date" | "group_by_site";
+const GroupItem = storage.defineItem<TGroup>("local:dashboard_group", {
+  fallback: "ungrouped",
+});
+
+type TSort = "sort_by_date" | "sort_by_name" | "sort_by_url";
+const SortItem = storage.defineItem<TSort>("local:dashboard_sort", {
+  fallback: "sort_by_date",
+});
+
+const ReverseItem = storage.defineItem<boolean>("local:dashboard_reverse", {
+  fallback: false,
+});
+
 export default () => {
   const [tabs, setTabs] = useState<Tab[]>(TabItem.fallback);
-  const [tabCount, setTabCount] = useState(0);
+  const [tabCount, setTabCount] = useState(TabCountItem.fallback);
   const [info, setInfo] = useState<Management.ExtensionInfo>();
-  const [group, setGroup] = useState<string>("ungrouped");
-  const [sort, setSort] = useState<string>("group_by_date");
-  const [reverse, setReverse] = useState<boolean>(false);
+  const [group, setGroup] = useState<string>(GroupItem.fallback);
+  const [sort, setSort] = useState<string>(SortItem.fallback);
+  const [reverse, setReverse] = useState<boolean>(ReverseItem.fallback);
 
-  const remove_tabs_restored = Options.REMOVE_TABS_RESTORED;
-  let removeTabsRestored = useRef(remove_tabs_restored.defaultValue);
+  const removeTabsRestored = useRef(RemoveTabsRestoredItem.fallback);
+  const switchTabRestored = useRef(SwitchTabRestoredItem.fallback);
 
-  const switch_tab_restored = Options.SWITCH_TAB_RESTORED;
-  let switchTabRestored = useRef(switch_tab_restored.defaultValue);
-
-  const unwatchFunnelCount = storage.watch<number>("local:tab_count", (num) => {
-    if (num === null) { return }
-    setTabCount(num);
-  });
-
-  const unwatchTabs = TabItem.watch((items) => {
-    console.log(items);
-    setTabs(items!);
-  });
-
-  const unwatchRemoveTabsRestored = storage.watch<boolean>(`${remove_tabs_restored.area}:${remove_tabs_restored.name}` as StorageItemKey, (val) => {
-    removeTabsRestored.current = val ?? false;
-  });
-
-  const unwatchSwitchTabRestored = storage.watch<boolean>(`${switch_tab_restored.area}:${switch_tab_restored.name}` as StorageItemKey, (val) => {
-    switchTabRestored.current = val ?? false;
-  });
+  const unwatchTabCount = TabCountItem.watch((v) => { setTabCount(v) });
+  const unwatchTabs = TabItem.watch((v) => setTabs(v));
+  const unwatchRemoveTabsRestored = RemoveTabsRestoredItem.watch((v) => { removeTabsRestored.current = v });
+  const unwatchSwitchTabRestored = SwitchTabRestoredItem.watch((v) => { switchTabRestored.current = v });
 
   useEffect(() => {
     const setup = async () => {
       setTabs(await TabItem.getValue());
-      setTabCount((await storage.getItem("local:tab_count", { fallback: 0 }))!)
+      setTabCount(await TabCountItem.getValue());
       setInfo(await browser.management.getSelf());
 
-      removeTabsRestored.current = await storage.getItem<boolean>(`${remove_tabs_restored.area}:${remove_tabs_restored.name}` as StorageItemKey) ?? false;
-      switchTabRestored.current = await storage.getItem<boolean>(`${switch_tab_restored.area}:${switch_tab_restored.name}` as StorageItemKey) ?? false;
+      removeTabsRestored.current = await RemoveTabsRestoredItem.getValue();
+      switchTabRestored.current = await SwitchTabRestoredItem.getValue();
 
-      setGroup((await storage.getItem("local:dashboard_group")) ?? "ungrouped");
-      setSort((await storage.getItem("local:dashboard_sort")) ?? "sort_by_date");
-      setReverse(await storage.getItem("local:dashboard_reverse") ?? false);
+      setGroup(await GroupItem.getValue());
+      setSort(await SortItem.getValue());
+      setReverse(await ReverseItem.getValue());
     };
     setup();
   }, []);
@@ -82,17 +80,17 @@ export default () => {
 
   const changeGroup = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGroup(e.target.value);
-    await storage.setItem("local:dashboard_group", e.target.value);
+    await GroupItem.setValue(e.target.value as TGroup);
   };
 
   const changeSort = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(e.target.value);
-    await storage.setItem("local:dashboard_sort", e.target.value);
+    await SortItem.setValue(e.target.value as TSort);
   };
 
   const reverseChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setReverse(e.target.checked);
-    await storage.setItem("local:dashboard_reverse", e.target.checked);
+    await ReverseItem.setValue(e.target.checked);
   };
 
   return (
@@ -125,9 +123,9 @@ export default () => {
         <input onChange={reverseChange} checked={reverse} type="checkbox" name="reverse_sort" id="reverse_sort" />
       </div>
       <main>
-        {group === "ungrouped" && tabs.length > 0 ? <UngroupedView sort={sort as SortType} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></UngroupedView> : null}
-        {group === "group_by_date" && tabs.length > 0 ? <DateGroupView sort={sort as SortType} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></DateGroupView> : null}
-        {group === "group_by_site" && tabs.length > 0 ? <SiteGroupView sort={sort as SortType} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></SiteGroupView> : null}
+        {group === "ungrouped" && tabs.length > 0 ? <UngroupedView sort={sort as TSort} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></UngroupedView> : null}
+        {group === "group_by_date" && tabs.length > 0 ? <DateGroupView sort={sort as TSort} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></DateGroupView> : null}
+        {group === "group_by_site" && tabs.length > 0 ? <SiteGroupView sort={sort as TSort} reverse={reverse} tabs={tabs} openTab={openTab} closeTab={closeTab}></SiteGroupView> : null}
       </main>
     </>
   );
@@ -138,7 +136,7 @@ type TabViewProps = {
   tabs: Tab[],
   openTab: React.MouseEventHandler,
   closeTab: React.MouseEventHandler,
-  sort: SortType;
+  sort: TSort;
   reverse: boolean;
 };
 

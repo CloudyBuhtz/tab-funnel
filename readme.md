@@ -2,8 +2,7 @@
 
 ## TODO
 
-- Rename funnelCount (funnelCount) tabCount (tab_count)
-
+- Move to using storage.DefineItem for all things.
 - Snapshots
   - Interval Snapshots
   - ~~Manual Snapshots~~
@@ -25,39 +24,6 @@
 - Funnel(led): To put a tab into TabFunnel
 - Tab: Browser tab
 - Snapshot: The state of tabs at a certain time
-
-## Options
-
-- Choose Backup Frequency
-  - Never
-  - Every Change
-  - Hourly
-  - Daily
-  - Weekly \*
-  - Monthly
-- Remove Tab when restored
-  - True
-  - False \*
-- Remove Tab when Funnelled
-  - True \*
-  - False
-- Allow Duplicate Tabs
-  - True \*
-  - False
-- Switch to opened tab
-  - True
-  - False \*
-- Funnel Pinned Tabs
-  - True
-  - False \*
-- Backup Folder
-  - Text Input
-  - tab-funnel \*
-
---- Danger Zone ---
-
-- Reset Backup Timer
-- Clear Tabs
 
 ## Goals
 

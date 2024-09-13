@@ -1,4 +1,4 @@
-import { storage } from "wxt/storage";
+import { TabItem, TabCountItem, SnapshotLocationItem } from "../utils/storage"
 
 export interface Tab {
   title: string;
@@ -7,13 +7,9 @@ export interface Tab {
   hash: string;
 };
 
-export const TabItem = storage.defineItem("local:tabs", {
-  fallback: [],
-});
-
 export const storeTabs = async (newTabs: Tab[]): Promise<void> => {
   const currentTabs = await TabItem.getValue();
-  await storage.setItem<Tab[]>("local:tabs", [...currentTabs, ...newTabs]);
+  await TabItem.setValue([...currentTabs, ...newTabs]);
 };
 
 export const removeTab = async (tabHash: string): Promise<void> => {
@@ -21,10 +17,10 @@ export const removeTab = async (tabHash: string): Promise<void> => {
   const remTabs = tabs.filter((t: Tab) => {
     return !(t.hash === tabHash)
   });
-  await storage.setItem<Tab[]>("local:tabs", remTabs);
+  await TabItem.setValue(remTabs);
 
-  const tabCount: number = await storage.getItem("local:tab_count") ?? 0;
-  await storage.setItem("local:tab_count", tabCount - 1);
+  const tabCount: number = await TabCountItem.getValue() ?? 0;
+  await TabCountItem.setValue(tabCount - 1);
 };
 
 export const snapshotTabs = async () => {
@@ -32,13 +28,18 @@ export const snapshotTabs = async () => {
   const blob = new Blob([tabs], { type: "application/json" })
   const url = URL.createObjectURL(blob);
 
-  const snapshotLocation: string = (await storage.getItem("local:snapshot_location"))!;
+  const snapshotLocation: string = await SnapshotLocationItem.getValue();
 
   const cd = new Date();
-  const dateString: string = `${cd.getFullYear()}-${cd.getMonth().toString().padStart(2, "0")}-${cd.getDay().toString().padStart(2, "0")}_${cd.getHours().toString().padStart(2, "0")}-${cd.getMinutes().toString().padStart(2, "0")}-${cd.getSeconds().toString().padStart(2, "0")}`;
+  let dateString: string = ""
+  // Form of YYYY-MM-DD_hh-mm-ss
+  dateString += `${cd.getFullYear()}-`
+  dateString += `${cd.getMonth().toString().padStart(2, "0")}-`
+  dateString += `${cd.getDay().toString().padStart(2, "0")}_`
+  dateString += `${cd.getHours().toString().padStart(2, "0")}-`
+  dateString += `${cd.getMinutes().toString().padStart(2, "0")}-`
+  dateString += `${cd.getSeconds().toString().padStart(2, "0")}`;
 
   await browser.downloads.download({ url: url, filename: `${snapshotLocation}/${dateString}.json` });
   URL.revokeObjectURL(url);
 };
-
-const makeSnapshot = async () => { };

@@ -1,5 +1,6 @@
 import type { StorageItemKey } from "wxt/storage";
 import { Options } from "./utils/options";
+import { LastSnapshotDate, SnapshotFrequencyItem } from "./utils/storage";
 
 const setupDefaultOptions = async (force: boolean = false) => {
   console.log("Filling Default Options");
@@ -16,47 +17,41 @@ const setupDefaultOptions = async (force: boolean = false) => {
   console.log("Done.");
 };
 
-const setupSnapshotDate = async () => {
-  const lastSnapshotDate: number = await storage.getItem("local:last_snapshot_date") ?? 0;
-  await storage.setItem("local:last_snapshot_date", lastSnapshotDate);
-};
-
 //TODO: Finish this
 const checkSnapshot = async () => {
   console.log("Checking Snapshot", new Date());
 
   const currentTime = Date.now();
-  const lastSnapshotDate: number = (await storage.getItem("local:last_snapshot_date"))!;
+  const lastSnapshotDate: number = await LastSnapshotDate.getValue();
   const snapshotDifference: number = currentTime - lastSnapshotDate;
 
-  const snapshotFrequencyOption = Options.SNAPSHOT_FREQUENCY;
-  const snapshotFrequency = await storage.getItem(`${snapshotFrequencyOption.area}:${snapshotFrequencyOption.name}` as StorageItemKey) ?? "Never";
+  const snapshotFrequency = await SnapshotFrequencyItem.getValue();
 
   switch (snapshotFrequency) {
-    case "Never":
-    case "Only Funnel":
-    case "Every Change":
+    case "never":
+    case "only_funnel":
+    case "every_change":
       console.log("Do Nothing");
       return
-    case "Hourly":
+    case "hourly":
       console.log("Hourly");
       if (snapshotDifference >= 3600000) {
         console.log("Snapping")
       }
       break;
-    case "Daily":
+    case "daily":
       console.log("Daily");
       if (snapshotDifference >= 86400000) {
         console.log("Snapping")
       }
       break;
-    case "Weekly":
+    case "weekly":
       console.log("Weekly");
       if (snapshotDifference >= 604800000) {
         console.log("Snapping")
       }
       break;
-    case "Monthly":
+    case "monthly":
       console.log("Monthly");
       if (snapshotDifference >= 2629746000) {
         console.log("Snapping")
@@ -64,7 +59,7 @@ const checkSnapshot = async () => {
       break;
   };
 
-  await storage.setItem("local:last_snapshot_date", currentTime);
+  await LastSnapshotDate.setValue(currentTime);
 };
 
 export default defineBackground(() => {
