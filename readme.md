@@ -22,25 +22,14 @@ output will be in `.output/tab-funnel-VERSION-firefox.zip`
 
 ### Below this point is just notes used during development
 
-## LITTLE BITS
-
-- [ ] Show Next Snapshot Time
-- [ ] Add import / export menu
-- [x] Show Bytes Used
-
 ## TODO
 
-- Popup
-  - Info
-    - Tabs Funnelled
-    - Last Snapshot
-    - Next Snapshot
-  - Buttons
-- Menu Options
-- Importing / Exporting
-  - Import from OneTab
-  - Import from TabFunnel
-  - Export as List
+- [ ] Show Next Snapshot Time
+- [x] Add import / export menu
+- [x] Show Bytes Used
+- [x] Remove Duplicate Tabs (`@/options/Options.tsx`)
+- [x] Actually Backup before Clearing (`@/options/Options.tsx`)
+- [ ] Sort Site Name (`@/dashboard/Dashboard.tsx`)
 
 ## Verbiage
 
