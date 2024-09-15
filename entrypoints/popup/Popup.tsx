@@ -109,9 +109,11 @@ export default () => {
     await snapshotTabs();
   };
 
+  const convertBytes = (val: number) => ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb'][Math.floor(Math.log2(val) / 10)];
+
   return (
     <main>
-      <div className="info">{tabCount} Tabs | {storeSize} Bytes</div>
+      <div className="info">{tabCount} Tabs | {storeSize} {convertBytes(storeSize)}</div>
       <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
       <button onClick={funnelTabs}>Funnel All Tabs</button>
       <button onClick={showList}>Show Funnel</button>

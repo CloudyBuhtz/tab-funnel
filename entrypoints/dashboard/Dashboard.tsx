@@ -98,12 +98,15 @@ export default () => {
     await ReverseItem.setValue(e.target.checked);
   };
 
+  const storeSize = new Blob([JSON.stringify(tabs)]).size;
+  const convertBytes = (val: number) => ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb'][Math.floor(Math.log2(val) / 10)];
+
   return (
     <>
       <header>
         <div className="logo">TabFunnel</div>
         <div className="v-stack">
-          <div className="count">Tab Count: {tabCount}</div>
+          <div className="count">{tabCount} Tabs | {storeSize} {convertBytes(storeSize)}</div>
           <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
           <div className="info">Version {browser.runtime.getManifest().version}</div>
         </div>
