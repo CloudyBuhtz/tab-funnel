@@ -41,6 +41,8 @@
       opacity: 0.6;
       margin-block: -0.5rem 0.5rem;
       user-select: none;
+      display: flex;
+      flex-direction: column;
     }
   }
 }

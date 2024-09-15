@@ -44,7 +44,11 @@ export const TextInput = ({ option }: TextInputProps) => {
           id={option.name}
         />
       </div>
-      {option.description && <div className="description" dangerouslySetInnerHTML={{ __html: option.description }}></div>}
+      {option.description && <div className="description">
+        {option.description.map(line => (
+          <div>{line}</div>
+        ))}
+      </div>}
     </>
   );
 };
@@ -89,7 +93,11 @@ export const CheckInput = ({ option }: CheckInputProps) => {
           id={option.name}
         />
       </div>
-      {option.description && <div className="description" dangerouslySetInnerHTML={{ __html: option.description }}></div>}
+      {option.description && <div className="description">
+        {option.description.map(line => (
+          <div>{line}</div>
+        ))}
+      </div>}
     </>
   );
 };
@@ -129,7 +137,11 @@ export const MultiInput = ({ option }: MultiInputProps) => {
           </select>
         </div>
       </div>
-      {option.description && <div className="description" dangerouslySetInnerHTML={{ __html: option.description }}></div>}
+      {option.description && <div className="description">
+        {option.description.map(line => (
+          <div>{line}</div>
+        ))}
+      </div>}
     </>
   );
 };

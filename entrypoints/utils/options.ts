@@ -4,7 +4,7 @@ export type BasicOption = {
   name: string;
   label: string;
   area: "sync" | "local" | "session";
-  description?: string;
+  description?: string[];
 };
 
 export type TextOption = BasicOption & {
@@ -41,7 +41,11 @@ export const Options = {
       "monthly"
     ],
     defaultValue: "never",
-    description: "Calculated as absolute time between snapshots, not necessarily when the date / time changes.<br>'Only Funnel' activates only when tabs are Funnelled.<br>'Every Change' activates when tabs are Funnelled and Removed.",
+    description: [
+      "Calculated as absolute time between snapshots, not necessarily when the date / time changes.",
+      "'Only Funnel' activates only when tabs are Funnelled.",
+      "'Every Change' activates when tabs are Funnelled and Removed."
+    ],
   } as MultiOption,
   REMOVE_TABS_RESTORED: {
     name: "remove_tabs_restored",
@@ -49,7 +53,7 @@ export const Options = {
     area: "local",
     type: "check",
     defaultValue: false,
-    description: "When checked, tabs clicked in the TabFunnel are removed as the tab is opened.",
+    description: ["When checked, tabs clicked in the TabFunnel are removed as the tab is opened."],
   } as CheckOption,
   REMOVE_TABS_FUNNELLED: {
     name: "remove_tab_funnelled",
@@ -57,7 +61,7 @@ export const Options = {
     area: "local",
     type: "check",
     defaultValue: true,
-    description: "When checked, Funnelled Tabs are Removed from the browser tab bar.",
+    description: ["When checked, Funnelled Tabs are Removed from the browser tab bar."],
   } as CheckOption,
   IGNORE_DUPLICATE_TABS: {
     name: "ignore_duplicate_tabs",
@@ -65,7 +69,7 @@ export const Options = {
     area: "local",
     type: "check",
     defaultValue: false,
-    description: "When checked, Tabs with a duplicate URL are quietly ignored when Funnelled.",
+    description: ["When checked, Tabs with a duplicate URL are quietly ignored when Funnelled."],
   } as CheckOption,
   SWITCH_TAB_RESTORED: {
     name: "switch_tab_restored",
@@ -73,7 +77,7 @@ export const Options = {
     area: "local",
     type: "check",
     defaultValue: false,
-    description: "When checked, clicking a Tab in the TabFunnel are immediately made active."
+    description: ["When checked, clicking a Tab in the TabFunnel are immediately made active."]
   } as CheckOption,
   FUNNEL_PINNED_TABS: {
     name: "funnel_pinned_tabs",
@@ -81,7 +85,7 @@ export const Options = {
     area: "local",
     type: "check",
     defaultValue: false,
-    description: "When checked, pinned tabs are also Funnelled. (as long as it is http/https)",
+    description: ["When checked, pinned tabs are also Funnelled. (as long as it is http/https)"],
   } as CheckOption,
   SNAPSHOT_LOCATION: {
     name: "snapshot_location",
@@ -90,7 +94,10 @@ export const Options = {
     type: "text",
     defaultValue: "tab-funnel",
     placeholder: "tab-funnel",
-    description: "Defines the folder location of Snapshots, stored within the downloads folder.<br>Restricted to a-z, A-Z, 0-9 and '-'.",
+    description: [
+      "Defines the folder location of Snapshots, stored within the downloads folder.",
+      "Restricted to a-z, A-Z, 0-9 and '-'."
+    ],
     pattern: /[^a-zA-Z0-9\-]/g,
   } as TextOption,
 };
