@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Md5 } from "ts-md5";
 import { browser } from "wxt/browser";
 import { snapshotTabs, storeTabs, type Tab } from "../utils/data";
 import {
@@ -11,6 +10,7 @@ import {
   TabItem
 } from "../utils/storage";
 import "./Popup.css";
+import { convertBytes, hashString } from "../utils/misc";
 
 export default () => {
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
@@ -58,21 +58,22 @@ export default () => {
 
     // Create tab data
     const funnelDate = Date.now().toString();
-    let tabsToFunnel: Tab[] = tabs.map((tab, index: number) => {
+    let tabsToFunnel: Tab[] = await Promise.all(tabs.map(async (tab, index: number) => {
+      const tabHash = await hashString(`${funnelDate}/${index.toString()}`);
       return {
         title: tab.title!,
         url: tab.url!.toString(),
         date: funnelDate,
-        hash: Md5.hashStr(`${funnelDate}/${index.toString()}`)
+        hash: tabHash
       } satisfies Tab;
-    });
+    }));
 
     // Optionally remove duplicates
     if (ignoreDuplicateTabs.current) {
       tabsToFunnel = tabsToFunnel.filter((tab: Tab) => {
         return !hasTab(tab.url);
       });
-    }
+    };
     storeTabs(tabsToFunnel);
     const newCount = tabCount + tabsToFunnel.length;
     await TabCountItem.setValue(newCount);
@@ -84,7 +85,7 @@ export default () => {
           return tab.id!
         })
       );
-    }
+    };
   };
 
   const showList = async () => {
@@ -109,11 +110,9 @@ export default () => {
     await snapshotTabs();
   };
 
-  const convertBytes = (val: number) => ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb'][Math.floor(Math.log2(val) / 10)];
-
   return (
     <main>
-      <div className="info">{tabCount} Tabs | {storeSize} {convertBytes(storeSize)}</div>
+      <div className="info">{tabCount} Tabs | {convertBytes(storeSize)}</div>
       <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
       <button onClick={funnelTabs}>Funnel All Tabs</button>
       <button onClick={showList}>Show Funnel</button>

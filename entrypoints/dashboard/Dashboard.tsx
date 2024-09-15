@@ -11,8 +11,8 @@ import {
 } from "../utils/storage";
 import "./Dashboard.css";
 import { Tabs, WebNavigation } from "wxt/browser";
-import { Md5 } from "ts-md5";
 import { browser } from "wxt/browser";
+import { convertBytes, hashString } from "../utils/misc";
 
 function getFavIconURL(url: string) {
   const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
@@ -99,14 +99,13 @@ export default () => {
   };
 
   const storeSize = new Blob([JSON.stringify(tabs)]).size;
-  const convertBytes = (val: number) => ['Bytes', 'Kb', 'Mb', 'Gb', 'Tb'][Math.floor(Math.log2(val) / 10)];
 
   return (
     <>
       <header>
         <div className="logo">TabFunnel</div>
         <div className="v-stack">
-          <div className="count">{tabCount} Tabs | {storeSize} {convertBytes(storeSize)}</div>
+          <div className="count">{tabCount} Tabs | {convertBytes(storeSize)}</div>
           <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
           <div className="info">Version {browser.runtime.getManifest().version}</div>
         </div>
@@ -191,7 +190,17 @@ const SortedTabView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
 
 const UngroupedView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
   return (
-    <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
+    <>
+      <div className="group">
+        <div className="info">
+          <div className="name">All Tabs</div>
+          <div className="spacer"></div>
+          <div className="openAll" onClick={() => openTabs(tabs)}>Open Group</div>
+          <div className="removeAll" onClick={() => removeTab(tabs)}>Remove Group</div>
+        </div>
+        <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
+      </div>
+    </>
   )
 };
 
@@ -392,14 +401,15 @@ const ImportListModal = ({ openModal, closeModal }: ModalProps) => {
       if (collectedTabs.size === lines?.length) {
         const funnelDate = Date.now().toString();
         const tabArray = Array.from(collectedTabs);
-        const tabsToFunnel: Tab[] = tabArray.map(([id, tab]: [number, Tabs.Tab], index) => {
+        const tabsToFunnel: Tab[] = await Promise.all(tabArray.map(async ([id, tab]: [number, Tabs.Tab], index) => {
+          const tabHash = await hashString(`${funnelDate}/${index.toString()}`);
           return {
             title: tab.title!,
             url: tab.url!.toString(),
             date: funnelDate,
-            hash: Md5.hashStr(`${funnelDate}/${index.toString()}`)
+            hash: tabHash
           } satisfies Tab;
-        });
+        }));
 
         storeTabs(tabsToFunnel);
         const tabCount = await TabCountItem.getValue();

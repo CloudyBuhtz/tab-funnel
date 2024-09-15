@@ -45,8 +45,8 @@ export const TextInput = ({ option }: TextInputProps) => {
         />
       </div>
       {option.description && <div className="description">
-        {option.description.map(line => (
-          <div>{line}</div>
+        {option.description.map((line, index) => (
+          <div key={index}>{line}</div>
         ))}
       </div>}
     </>
@@ -59,7 +59,6 @@ interface CheckInputProps {
 export const CheckInput = ({ option }: CheckInputProps) => {
   const storageKey = `${option.area}:${option.name}` as StorageItemKey;
   const [value, setValue] = useState(option.defaultValue);
-
 
   const unwatch = storage.watch<boolean>(storageKey, (value) => {
     if (value === null) {
@@ -94,8 +93,8 @@ export const CheckInput = ({ option }: CheckInputProps) => {
         />
       </div>
       {option.description && <div className="description">
-        {option.description.map(line => (
-          <div>{line}</div>
+        {option.description.map((line, index) => (
+          <div key={index}>{line}</div>
         ))}
       </div>}
     </>
@@ -138,8 +137,8 @@ export const MultiInput = ({ option }: MultiInputProps) => {
         </div>
       </div>
       {option.description && <div className="description">
-        {option.description.map(line => (
-          <div>{line}</div>
+        {option.description.map((line, index) => (
+          <div key={index}>{line}</div>
         ))}
       </div>}
     </>
