@@ -29,7 +29,7 @@ output will be in `.output/tab-funnel-VERSION-firefox.zip`
 - [x] Show Bytes Used
 - [x] Remove Duplicate Tabs (`@/options/Options.tsx`)
 - [x] Actually Backup before Clearing (`@/options/Options.tsx`)
-- [ ] Sort Site Name (`@/dashboard/Dashboard.tsx`)
+- [x] Sort Site Name (`@/dashboard/Dashboard.tsx`)
 
 ## Verbiage
 

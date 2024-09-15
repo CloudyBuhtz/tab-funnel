@@ -199,7 +199,9 @@ const SiteGroupView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
     const matches = item.url.match(regex)!;
     const domain: string = matches && matches[1];
     return { ...ob, [domain]: [...ob[domain] ?? [], item] }
-  }, {}));
+  }, {})).sort(([a, _]: [string, Tab[]], [b, __]: [string, Tab[]]) => {
+    return a.replace("www.", "").localeCompare(b.replace("www.", ""));
+  });
 
   return (
     <>
