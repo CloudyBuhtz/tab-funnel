@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { ReactEventHandler, useEffect } from "react";
 import type { Management } from "webextension-polyfill/namespaces/management";
-import { browser } from "wxt/browser";
 import type { Tab } from "../utils/data";
-import { removeTab } from "../utils/data";
+import { removeTab, storeTabs } from "../utils/data";
 import {
   LastSnapshotDateItem,
   RemoveTabsRestoredItem,
@@ -11,6 +10,9 @@ import {
   TabItem
 } from "../utils/storage";
 import "./Dashboard.css";
+import { Tabs, WebNavigation } from "wxt/browser";
+import { Md5 } from "ts-md5";
+import { browser } from "wxt/browser";
 
 function getFavIconURL(url: string) {
   const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
@@ -40,7 +42,7 @@ const openTabs = async (opTabs: Tab[]) => {
       url: tab.url,
       active: switchTabRestored
     });
-  })
+  });
 
   // Optionally remove tab
   if (removeTabsRestored) {
@@ -55,6 +57,10 @@ export default () => {
   const [group, setGroup] = useState<string>(GroupItem.fallback);
   const [sort, setSort] = useState<string>(SortItem.fallback);
   const [reverse, setReverse] = useState<boolean>(ReverseItem.fallback);
+
+  const [showImportSnapshot, setShowImportSnapshot] = useState<boolean>(false);
+  const [showImportList, setShowImportList] = useState<boolean>(false);
+  const [showExportList, setShowExportList] = useState<boolean>(false);
 
   const [lastSnapshotDate, setLastSnapshotDate] = useState(LastSnapshotDateItem.fallback);
 
@@ -96,9 +102,17 @@ export default () => {
     <>
       <header>
         <div className="logo">TabFunnel</div>
-        <div className="count">Tab Count: {tabCount}</div>
-        <div className="info">v{info?.version}</div>
-        <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
+        <div className="v-stack">
+          <div className="count">Tab Count: {tabCount}</div>
+          <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
+          <div className="info">Version {browser.runtime.getManifest().version}</div>
+        </div>
+        <div className="spacer"></div>
+        <menu>
+          <div onClick={() => setShowImportSnapshot(true)} className="importSnapshot">Import Snapshot</div>
+          <div onClick={() => setShowImportList(true)} className="importList">Import List</div>
+          <div onClick={() => setShowExportList(true)} className="exportList">Export List</div>
+        </menu>
       </header>
       <div className="controls">
         <label htmlFor="group_by">Grouping:</label>
@@ -127,6 +141,9 @@ export default () => {
         {group === "group_by_date" ? <DateGroupView sort={sort as TSort} reverse={reverse} tabs={tabs}></DateGroupView> : null}
         {group === "group_by_site" ? <SiteGroupView sort={sort as TSort} reverse={reverse} tabs={tabs}></SiteGroupView> : null}
       </main>
+      <ImportSnapshotModal openModal={showImportSnapshot} closeModal={() => setShowImportSnapshot(false)}></ImportSnapshotModal>
+      <ImportListModal openModal={showImportList} closeModal={() => setShowImportList(false)}></ImportListModal>
+      <ExportListModal openModal={showExportList} closeModal={() => setShowExportList(false)}></ExportListModal>
     </>
   );
 };
@@ -191,8 +208,8 @@ const SiteGroupView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
           <div className="info">
             <div className="name">{domain}</div>
             <div className="spacer"></div>
-            <div className="openAll" onClick={() => openTabs(tabs)}>Restore All</div>
-            <div className="removeAll" onClick={() => removeTab(tabs)}>Remove All</div>
+            <div className="openAll" onClick={() => openTabs(tabs)}>Open Group</div>
+            <div className="removeAll" onClick={() => removeTab(tabs)}>Remove Group</div>
           </div>
           <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
         </div>
@@ -210,12 +227,242 @@ const DateGroupView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
           <div className="info">
             <div className="name">{new Date(parseInt(date)).toUTCString()}</div>
             <div className="spacer"></div>
-            <div className="openAll" onClick={() => openTabs(tabs)}>Restore All</div>
-            <div className="removeAll" onClick={() => removeTab(tabs)}>Remove All</div>
+            <div className="openAll" onClick={() => openTabs(tabs)}>Open Group</div>
+            <div className="removeAll" onClick={() => removeTab(tabs)}>Remove Group</div>
           </div>
           <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
         </div>
       ))}
     </>
+  );
+};
+
+type ModalProps = {
+  openModal: boolean,
+  closeModal: ReactEventHandler,
+}
+const ImportSnapshotModal = ({ openModal, closeModal }: ModalProps) => {
+  const [importActive, setImportActive] = useState(false);
+  const [importInfo, setImportInfo] = useState<string>();
+  const [importError, setImportError] = useState<boolean>(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const overwriteRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (openModal) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+      setImportInfo(undefined);
+    }
+  }, [openModal]);
+
+  const fileChange = async () => {
+    const fileFound = (fileRef.current?.files?.length ?? 0) > 0;
+
+    setImportActive(false);
+    if (!fileFound) {
+      return
+    }
+
+    // Validate file
+    try {
+      const file = fileRef.current?.files![0];
+      const json = await file?.text();
+      const tabs: Tab[] = JSON.parse(json!) as Tab[];
+      if (tabs.reduce === undefined) {
+        throw new SyntaxError("Invalid JSON");
+      }
+      const valid: boolean = tabs.reduce((acc: boolean, tab: Tab) => {
+        return acc && validateTab(tab)
+      }, true);
+
+      if (valid && tabs.length < 1) {
+        throw new SyntaxError("No Tabs Found");
+      }
+
+      if (valid) {
+        // Set tabs
+        setImportInfo(`${tabs.length} Tabs Found`);
+        setImportError(false);
+        setImportActive(true);
+      } else {
+        throw new SyntaxError("Invalid JSON");
+      }
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        setImportError(true);
+        setImportInfo(`Error: ${err.message}`);
+      }
+    }
+  };
+
+  const validateTab = (tab: any): boolean => {
+    return tab !== undefined &&
+      tab.title !== undefined &&
+      tab.url !== undefined &&
+      tab.date !== undefined &&
+      tab.hash !== undefined
+  };
+
+  const importTabs = async () => {
+    const file = fileRef.current?.files![0];
+    const json = await file?.text();
+    const tabs: Tab[] = JSON.parse(json!) as Tab[];
+
+    if (overwriteRef.current?.checked) {
+      TabItem.setValue(tabs);
+      TabCountItem.setValue(tabs.length);
+    } else {
+      storeTabs(tabs);
+      TabCountItem.setValue(await TabCountItem.getValue() + tabs.length);
+    }
+  };
+
+  return (
+    <dialog onCancel={closeModal} ref={dialogRef}>
+      <div className="title">Import Snapshot</div>
+      <input onChange={fileChange} ref={fileRef} accept="application/json" type="file" name="import_filename" id="import_filename" />
+      <div className="buttons">
+        <button disabled={!importActive} onClick={importTabs}>Import</button>
+        <label htmlFor="import_overwrite">Overwrite:</label>
+        <input ref={overwriteRef} type="checkbox" name="import_overwrite" id="import_overwrite" />
+        <div className="spacer"></div>
+        <button onClick={closeModal}>Close</button>
+      </div>
+      {importInfo && <div className={"info" + (importError ? " error" : "")}>{importInfo}</div>}
+    </dialog>
+  );
+};
+
+const ImportListModal = ({ openModal, closeModal }: ModalProps) => {
+  const [importActive, setImportActive] = useState(false);
+  const [importInfo, setImportInfo] = useState<string>();
+  const [importError, setImportError] = useState<boolean>(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const listRef = useRef<HTMLTextAreaElement>(null);
+  const overwriteRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (openModal) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+      setImportInfo(undefined);
+    }
+  }, [openModal]);
+
+  const textChange = () => {
+    const lines = listRef.current?.value.split("\n").filter(v => v.match(/^http[s]*:\/\/.*/));
+    if (lines === undefined) return
+
+    const tabCount = lines[0] === '' ? 0 : lines?.length;
+
+    console.log(lines);
+
+    if (tabCount! > 0) {
+      setImportInfo(`${tabCount} Tabs`);
+      setImportActive(true);
+    } else {
+      setImportInfo(undefined);
+      setImportActive(false);
+    }
+  };
+
+  const importTabs = async () => {
+    const lines = listRef.current?.value.split("\n").filter(v => v.match(/^http[s]*:\/\/.*/));
+    setImportInfo(`Importing ${lines?.length} Tabs. This may take some time`);
+
+    if (overwriteRef.current?.checked) {
+      TabItem.setValue([]);
+      TabCountItem.setValue(0);
+    }
+
+    let collectedTabs: Map<number, Tabs.Tab> = new Map();
+    const tabListener = async (tabID: number, changeInfo: Tabs.OnUpdatedChangeInfoType, tab: Tabs.Tab) => {
+      if (changeInfo.status !== "complete") return;
+      collectedTabs.set(tabID, tab);
+
+      if (collectedTabs.size === lines?.length) {
+        const funnelDate = Date.now().toString();
+        const tabArray = Array.from(collectedTabs);
+        const tabsToFunnel: Tab[] = tabArray.map(([id, tab]: [number, Tabs.Tab], index) => {
+          return {
+            title: tab.title!,
+            url: tab.url!.toString(),
+            date: funnelDate,
+            hash: Md5.hashStr(`${funnelDate}/${index.toString()}`)
+          } satisfies Tab;
+        });
+
+        storeTabs(tabsToFunnel);
+        const tabCount = await TabCountItem.getValue();
+        const newCount = tabCount + tabsToFunnel.length;
+        await TabCountItem.setValue(newCount);
+
+        browser.tabs.remove(
+          tabArray.map(([_, tab]) => {
+            return tab.id!
+          })
+        );
+
+        browser.tabs.onUpdated.removeListener(tabListener);
+      }
+    };
+
+    browser.tabs.onUpdated.addListener(tabListener);
+    lines?.map((line: string) => {
+      return browser.tabs.create({
+        url: line,
+        active: false
+      });
+    })!;
+  };
+
+  return (
+    <dialog onCancel={closeModal} ref={dialogRef}>
+      <div className="title">Import List</div>
+      <textarea ref={listRef} onChange={textChange} rows={24}></textarea>
+      <div className="buttons">
+        <button disabled={!importActive} onClick={importTabs}>Import</button>
+        <label htmlFor="import_overwrite">Overwrite:</label>
+        <input ref={overwriteRef} type="checkbox" name="import_overwrite" id="import_overwrite" />
+        <div className="spacer"></div>
+        <button onClick={closeModal}>Close</button>
+      </div>
+      {importInfo && <div className={"info" + (importError ? " error" : "")}>{importInfo}</div>}
+    </dialog>
+  );
+};
+
+const ExportListModal = ({ openModal, closeModal }: ModalProps) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const listRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const loadTabs = async () => {
+      if (listRef.current === undefined || listRef.current === null) return
+      const tabs = await TabItem.getValue();
+      listRef.current.value = tabs.map(t => t.url).join("\n");
+    }
+
+    if (openModal) {
+      dialogRef.current?.showModal();
+    } else {
+      dialogRef.current?.close();
+      loadTabs();
+    }
+  }, [openModal]);
+
+  return (
+    <dialog onCancel={closeModal} ref={dialogRef}>
+      <div className="title">Export List</div>
+      <textarea ref={listRef} rows={24}></textarea>
+      <div className="buttons">
+        <div className="spacer"></div>
+        <button onClick={closeModal}>Close</button>
+      </div>
+    </dialog>
   );
 };

@@ -40,10 +40,11 @@ export const removeTab = async (remTabs: Tab[]): Promise<void> => {
 };
 
 export const snapshotTabs = async () => {
-  const tabs = JSON.stringify(await TabItem.getValue());
+  const tabs = await TabItem.getValue();
   if (tabs.length === 0) return
 
-  const blob = new Blob([tabs], { type: "application/json" });
+  const json = JSON.stringify(tabs);
+  const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
 
   const snapshotLocation: string = await SnapshotLocationItem.getValue();
@@ -51,11 +52,11 @@ export const snapshotTabs = async () => {
   const cd = new Date();
   let dateString: string = ""
   // Form of YYYY-MM-DD_hh-mm-ss
-  dateString += `${cd.getFullYear()}-`
-  dateString += `${cd.getMonth().toString().padStart(2, "0")}-`
-  dateString += `${cd.getDay().toString().padStart(2, "0")}_`
-  dateString += `${cd.getHours().toString().padStart(2, "0")}-`
-  dateString += `${cd.getMinutes().toString().padStart(2, "0")}-`
+  dateString += `${cd.getFullYear()}-`;
+  dateString += `${(cd.getMonth() + 1).toString().padStart(2, "0")}-`;
+  dateString += `${cd.getDate().toString().padStart(2, "0")}_`;
+  dateString += `${cd.getHours().toString().padStart(2, "0")}-`;
+  dateString += `${cd.getMinutes().toString().padStart(2, "0")}-`;
   dateString += `${cd.getSeconds().toString().padStart(2, "0")}`;
 
   await browser.downloads.download({ url: url, filename: `${snapshotLocation}/${dateString}.json` });

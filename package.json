@@ -2,7 +2,7 @@
   "name": "TabFunnel",
   "description": "Funnels all tabs into a list",
   "private": true,
-  "version": "1",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "wxt",

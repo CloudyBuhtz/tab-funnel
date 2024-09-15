@@ -112,10 +112,11 @@ export default () => {
   return (
     <main>
       <div className="info">{tabCount} Tabs | {storeSize} Bytes</div>
+      <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
       <button onClick={funnelTabs}>Funnel All Tabs</button>
       <button onClick={showList}>Show Funnel</button>
       <button onClick={manualSnapshot}>Manual Snapshot</button>
-      <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : new Date(lastSnapshotDate).toLocaleString()}</div>
+      <div className="info">Version {browser.runtime.getManifest().version}</div>
     </main>
   );
 };
