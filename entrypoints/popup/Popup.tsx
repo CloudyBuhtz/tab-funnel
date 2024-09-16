@@ -10,7 +10,7 @@ import {
   TabItem
 } from "../utils/storage";
 import "./Popup.css";
-import { convertBytes, hashString } from "../utils/misc";
+import { convertBytes } from "../utils/misc";
 
 export default () => {
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
@@ -59,12 +59,11 @@ export default () => {
     // Create tab data
     const funnelDate = Date.now().toString();
     let tabsToFunnel: Tab[] = await Promise.all(tabs.map(async (tab, index: number) => {
-      const tabHash = await hashString(`${funnelDate}/${index.toString()}`);
       return {
         title: tab.title!,
         url: tab.url!.toString(),
         date: funnelDate,
-        hash: tabHash
+        hash: crypto.randomUUID()
       } satisfies Tab;
     }));
 

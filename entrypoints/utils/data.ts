@@ -3,8 +3,10 @@ import {
   TabCountItem,
   SnapshotLocationItem,
   LastSnapshotDateItem,
-  SnapshotFrequencyItem
+  SnapshotFrequencyItem,
+  LastSnapshotHashItem
 } from "../utils/storage"
+import { hashString } from "./misc";
 
 export interface Tab {
   title: string;
@@ -23,7 +25,7 @@ export const storeTabs = async (newTabs: Tab[]): Promise<void> => {
   }
 };
 
-export const removeTab = async (remTabs: Tab[]): Promise<void> => {
+export const removeTabs = async (remTabs: Tab[]): Promise<void> => {
   const tabs = await TabItem.getValue();
   const filteredTabs = tabs.filter((t: Tab) => {
     return !(remTabs.filter(v => v.hash === t.hash).length > 0)
@@ -48,6 +50,8 @@ export const snapshotTabs = async () => {
   const url = URL.createObjectURL(blob);
 
   const snapshotLocation: string = await SnapshotLocationItem.getValue();
+
+  await LastSnapshotHashItem.setValue(await hashString(JSON.stringify(tabs)));
 
   const cd = new Date();
   let dateString: string = ""

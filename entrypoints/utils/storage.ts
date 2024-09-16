@@ -13,6 +13,24 @@ export const LastSnapshotDateItem = storage.defineItem<number>("local:last_snaps
   fallback: 0,
 });
 
+export const LastSnapshotHashItem = storage.defineItem<string>("local:last_snapshot_hash", {
+  fallback: "",
+});
+
+export type TGroup = "ungrouped" | "group_by_date" | "group_by_site";
+export const GroupItem = storage.defineItem<TGroup>("local:dashboard_group", {
+  fallback: "ungrouped",
+});
+
+export type TSort = "sort_by_date" | "sort_by_name" | "sort_by_url";
+export const SortItem = storage.defineItem<TSort>("local:dashboard_sort", {
+  fallback: "sort_by_date",
+});
+
+export const ReverseItem = storage.defineItem<boolean>("local:dashboard_reverse", {
+  fallback: false,
+});
+
 type SnapshotFrequencyType = "never" |
   "only_funnel" |
   "every_change" |
