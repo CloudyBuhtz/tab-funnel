@@ -19,4 +19,17 @@
     padding: 0.5rem;
     font-family: inherit;
   }
+
+  .cog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 1ch;
+    color: light-dark(#171717, #f7f7f7);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--theme-fg-o0);
+    }
+  }
 }

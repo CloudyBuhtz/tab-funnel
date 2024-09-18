@@ -15,8 +15,8 @@
       flex-direction: column;
       gap: 1ch;
       padding: 1rem;
-      background-color: var(--danger-bg);
-      color: var(--dark-fgo0);
+      background-color: var(--theme-danger-bg);
+      color: var(--theme-danger-fg);
     }
 
     .option {
@@ -27,7 +27,7 @@
       height: 2.5rem;
 
       &:hover {
-        color: light-dark(var(--light-fgo0), var(--dark-fgo0));
+        color: var(--theme-fg-o0);
       }
 
       label {

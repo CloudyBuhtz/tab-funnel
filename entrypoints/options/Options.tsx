@@ -14,17 +14,17 @@ export default () => {
     return options.map(([_, option]) => {
       switch (option.type) {
         case "text":
-          return <TextInput key={option.name} option={option as TextOption}></TextInput>
+          return <TextInput key={option.name} option={option as TextOption}></TextInput>;
         case "check":
-          return <CheckInput key={option.name} option={option as CheckOption}></CheckInput>
+          return <CheckInput key={option.name} option={option as CheckOption}></CheckInput>;
         case "multi":
-          return <MultiInput key={option.name} option={option as MultiOption}></MultiInput>
+          return <MultiInput key={option.name} option={option as MultiOption}></MultiInput>;
       };
     });
   };
 
   const renderDanger = (danger: boolean) => {
-    if (!danger) { return (<></>) } else {
+    if (!danger) { return (<></>); } else {
       return (
         <div className="danger-zone">
           <button onClick={removeDuplicates}>Remove ALL Duplicates</button>
@@ -42,7 +42,7 @@ export default () => {
             <div>Clicking this will reset the date of the last snapshot to Never, making the next timed snapshot happen the next time it's checked.</div>
           </div>
         </div>
-      )
+      );
     };
   };
 

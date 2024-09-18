@@ -57,7 +57,7 @@
     --theme-fg-o1: light-dark(#e98a00, #da8957);
 
     --theme-danger-bg: #43242b;
-    --theme-danger-fg: #ff00ff77;
+    --theme-danger-fg: #dcd7ba;
   }
 
   html {
@@ -101,8 +101,7 @@
     }
   }
 
-  input[type="checkbox"] {
-    appearance: none;
+  input[type="checkbox"]:not(.direction) {
     width: 1.25rem;
     height: 1.25rem;
     border-radius: 0.5ch;
@@ -130,6 +129,33 @@
       border-bottom: 3px solid var(--theme-bg0);
       border-right: 3px solid var(--theme-bg0);
       transform: translate(50%, 0) rotate(45deg);
+    }
+  }
+
+  input[type="checkbox"].direction {
+    width: 2rem;
+    height: 1rem;
+    position: relative;
+    color: var(--theme-fg-i0);
+    transition: color 100ms linear;
+
+    &:hover {
+      color: var(--theme-fg-o0);
+      text-shadow: 0 0 1ch var(--theme-fg-o0);
+    }
+    
+    &::after {
+      content: "A-Z";
+      text-align: center;
+      transition: rotate 1000ms linear;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+    &:checked::after {
+      content: "Z-A"
     }
   }
 

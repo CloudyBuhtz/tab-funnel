@@ -4,7 +4,8 @@ import { RemoveTabsRestoredItem, SwitchTabRestoredItem, TSort } from "@/entrypoi
 export type TabViewProps = {
   tabs: Tab[];
   sort: TSort;
-  reverse: boolean;
+  groupReverse: boolean;
+  sortReverse: boolean;
 };
 
 export const openTabs = async (opTabs: Tab[]) => {
@@ -17,14 +18,13 @@ export const openTabs = async (opTabs: Tab[]) => {
     });
   });
 
-  // Optionally remove tab
   if (removeTabsRestored) {
     removeTabs(opTabs);
   }
 };
 
 export const confirmRemoveTabs = (remTabs: Tab[]) => {
-  if (remTabs.length > 1 && !confirm(`Are you sure you want to remove ${remTabs.length} Tabs?`)) return
+  if (remTabs.length > 1 && !confirm(`Are you sure you want to remove ${remTabs.length} Tabs?`)) return;
   removeTabs(remTabs);
 };
 
@@ -32,20 +32,25 @@ const getFavIconURL = (url: string) => {
   const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
   const domain = matches && matches[1];
   return "https://www.google.com/s2/favicons?domain=" + domain;
-}
+};
 
-export const SortedTabView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
+type SortedTabViewProps = {
+  tabs: Tab[];
+  sort: TSort;
+  reverse: boolean;
+};
+export const SortedTabView = ({ tabs, sort, reverse }: SortedTabViewProps): JSX.Element => {
   let sortedTabs: Tab[] = tabs.slice(0);
 
   switch (sort) {
     case "sort_by_date":
-      sortedTabs.sort((a, b) => { return parseInt(a.date) - parseInt(b.date) });
+      sortedTabs.sort((a, b) => { return parseInt(a.date) - parseInt(b.date); });
       break;
     case "sort_by_name":
-      sortedTabs.sort((a, b) => { return a.title.localeCompare(b.title) });
+      sortedTabs.sort((a, b) => { return a.title.localeCompare(b.title); });
       break;
     case "sort_by_url":
-      sortedTabs.sort((a, b) => { return a.url.localeCompare(b.url) });
+      sortedTabs.sort((a, b) => { return a.url.localeCompare(b.url); });
       break;
   }
 
@@ -62,5 +67,5 @@ export const SortedTabView = ({ tabs, sort, reverse }: TabViewProps): JSX.Elemen
       </div>
     ))}
     </>
-  )
+  );
 };
