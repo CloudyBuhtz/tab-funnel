@@ -2,55 +2,31 @@ import { ReactEventHandler, useEffect } from "react";
 import type { Management } from "webextension-polyfill/namespaces/management";
 import { browser, Tabs } from "wxt/browser";
 import type { Tab } from "../utils/data";
-import { removeTabs, storeTabs } from "../utils/data";
+import { storeTabs } from "../utils/data";
 import { convertBytes } from "../utils/misc";
 import {
   LastSnapshotDateItem,
-  RemoveTabsRestoredItem,
-  SwitchTabRestoredItem,
   TabCountItem,
   TabItem,
   GroupItem,
   SortItem,
-  ReverseItem
+  SortReverseItem,
+  GroupReverseItem,
 } from "../utils/storage";
 import type { TGroup, TSort } from "../utils/storage";
 import "./Dashboard.css";
-
-function getFavIconURL(url: string) {
-  const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-  const domain = matches && matches[1];
-  return "https://www.google.com/s2/favicons?domain=" + domain;
-};
-
-const openTabs = async (opTabs: Tab[]) => {
-  const switchTabRestored = await SwitchTabRestoredItem.getValue();
-  const removeTabsRestored = await RemoveTabsRestoredItem.getValue();
-  opTabs.forEach((tab) => {
-    browser.tabs.create({
-      url: tab.url,
-      active: switchTabRestored
-    });
-  });
-
-  // Optionally remove tab
-  if (removeTabsRestored) {
-    removeTabs(opTabs);
-  };
-};
-
-const confirmRemoveTabs = (remTabs: Tab[]) => {
-  if (remTabs.length > 1 && !confirm(`Are you sure you want to remove ${remTabs.length} Tabs?`)) return
-  removeTabs(remTabs);
-}
+import { UngroupedTabView } from "@/components/UngroupedTabView";
+import { SiteGroupTabView } from "@/components/SiteGroupTabView";
+import { DateGroupTabView } from "@/components/DateGroupTabView";
 
 export default () => {
   const [tabs, setTabs] = useState<Tab[]>(TabItem.fallback);
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
   const [info, setInfo] = useState<Management.ExtensionInfo>();
   const [group, setGroup] = useState<string>(GroupItem.fallback);
+  const [groupReverse, setGroupReverse] = useState<boolean>(GroupReverseItem.fallback);
   const [sort, setSort] = useState<string>(SortItem.fallback);
-  const [reverse, setReverse] = useState<boolean>(ReverseItem.fallback);
+  const [sortReverse, setSortReverse] = useState<boolean>(SortReverseItem.fallback);
 
   const [showImportSnapshot, setShowImportSnapshot] = useState<boolean>(false);
   const [showImportList, setShowImportList] = useState<boolean>(false);
@@ -58,9 +34,11 @@ export default () => {
 
   const [lastSnapshotDate, setLastSnapshotDate] = useState(LastSnapshotDateItem.fallback);
 
-  const unwatchTabCount = TabCountItem.watch(v => setTabCount(v));
-  const unwatchTabs = TabItem.watch(v => setTabs(v));
-  const unwatchLastSnapshotDate = LastSnapshotDateItem.watch(v => setLastSnapshotDate(v))
+  const unwatchTabCount = TabCountItem.watch((v) => setTabCount(v));
+  const unwatchTabs = TabItem.watch((v) => setTabs(v));
+  const unwatchLastSnapshotDate = LastSnapshotDateItem.watch((v) =>
+    setLastSnapshotDate(v),
+  );
 
   useEffect(() => {
     const setup = async () => {
@@ -72,24 +50,29 @@ export default () => {
 
       setGroup(await GroupItem.getValue());
       setSort(await SortItem.getValue());
-      setReverse(await ReverseItem.getValue());
+      setSortReverse(await SortReverseItem.getValue());
     };
     setup();
   }, []);
 
   const changeGroup = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setGroup(e.target.value);
-    await GroupItem.setValue(e.target.value as TGroup);
+    await GroupItem.setValue(e.target.value as TGroup)
   };
+
+  const changeGroupReverse = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setGroupReverse(e.target.checked);
+    await GroupReverseItem.setValue(e.target.checked);
+  }
 
   const changeSort = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(e.target.value);
     await SortItem.setValue(e.target.value as TSort);
   };
 
-  const reverseChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setReverse(e.target.checked);
-    await ReverseItem.setValue(e.target.checked);
+  const changeSortReverse = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSortReverse(e.target.checked);
+    await SortReverseItem.setValue(e.target.checked);
   };
 
   const storeSize = new Blob([JSON.stringify(tabs)]).size;
@@ -130,12 +113,12 @@ export default () => {
         </div>
         <span className="spacer"></span>
         <label htmlFor="reverse_sort">Reverse:</label>
-        <input onChange={reverseChange} checked={reverse} type="checkbox" name="reverse_sort" id="reverse_sort" />
+        <input onChange={changeSortReverse} checked={sortReverse} type="checkbox" name="reverse_sort" id="reverse_sort" />
       </div>
       <main>
-        {group === "ungrouped" ? <UngroupedView sort={sort as TSort} reverse={reverse} tabs={tabs}></UngroupedView> : null}
-        {group === "group_by_date" ? <DateGroupView sort={sort as TSort} reverse={reverse} tabs={tabs}></DateGroupView> : null}
-        {group === "group_by_site" ? <SiteGroupView sort={sort as TSort} reverse={reverse} tabs={tabs}></SiteGroupView> : null}
+        {group === "ungrouped" ? <UngroupedTabView sort={sort as TSort} reverse={sortReverse} tabs={tabs}></UngroupedTabView> : null}
+        {group === "group_by_date" ? <DateGroupTabView sort={sort as TSort} reverse={sortReverse} tabs={tabs}></DateGroupTabView> : null}
+        {group === "group_by_site" ? <SiteGroupTabView sort={sort as TSort} reverse={sortReverse} tabs={tabs}></SiteGroupTabView> : null}
       </main>
       <ImportSnapshotModal openModal={showImportSnapshot} closeModal={() => setShowImportSnapshot(false)}></ImportSnapshotModal>
       <ImportListModal openModal={showImportList} closeModal={() => setShowImportList(false)}></ImportListModal>
@@ -144,109 +127,7 @@ export default () => {
   );
 };
 
-type TabViewProps = {
-  tabs: Tab[],
-  sort: TSort;
-  reverse: boolean;
-};
-
-const SortedTabView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
-  let sortedTabs: Tab[] = tabs.slice(0);
-
-  switch (sort) {
-    case "sort_by_date":
-      sortedTabs.sort((a, b) => { return parseInt(a.date) - parseInt(b.date) });
-      break;
-    case "sort_by_name":
-      sortedTabs.sort((a, b) => { return a.title.localeCompare(b.title) });
-      break;
-    case "sort_by_url":
-      sortedTabs.sort((a, b) => { return a.url.localeCompare(b.url) });
-      break;
-  }
-
-  if (reverse) {
-    sortedTabs.reverse()
-  }
-
-  return (
-    <>{sortedTabs.map((tab: Tab) => (
-      <div key={tab.hash} className="tab">
-        <div onClick={() => confirmRemoveTabs([tab])} className="close">X</div>
-        <img className="icon" src={getFavIconURL(tab.url)} alt={tab.title} />
-        <span onClick={() => openTabs([tab])} className="title">{tab.title}</span>
-      </div>
-    ))}
-    </>
-  )
-};
-
-const UngroupedView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
-  return (
-    <>
-      <div className="group">
-        <div className="info">
-          <div className="name">All Tabs</div>
-          <div className="spacer"></div>
-          <div className="openAll" onClick={() => openTabs(tabs)}>Open All</div>
-          <div className="removeAll" onClick={() => confirmRemoveTabs(tabs)}>Remove All</div>
-        </div>
-        <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
-      </div>
-    </>
-  )
-};
-
-const SiteGroupView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
-  const regex = /^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i;
-
-  const groupedTabs = Object.entries(tabs.reduce((ob: { [key: string]: Tab[] }, item) => {
-    const matches = item.url.match(regex)!;
-    const domain: string = matches && matches[1];
-    return { ...ob, [domain]: [...ob[domain] ?? [], item] }
-  }, {})).sort(([a, _]: [string, Tab[]], [b, __]: [string, Tab[]]) => {
-    return a.replace("www.", "").localeCompare(b.replace("www.", ""));
-  });
-
-  return (
-    <>
-      {groupedTabs.map(([domain, tabs]: [string, Tab[]]) => (
-        <div className="group" key={domain}>
-          <div className="info">
-            <div className="name">{domain}</div>
-            <div className="tabCount">{tabs.length} Tab{tabs.length > 1 ? "s" : undefined}</div>
-            <div className="spacer"></div>
-            <div className="openAll" onClick={() => openTabs(tabs)}>Open Group</div>
-            <div className="removeAll" onClick={() => confirmRemoveTabs(tabs)}>Remove Group</div>
-          </div>
-          <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
-        </div>
-      ))}
-    </>
-  );
-};
-
-const DateGroupView = ({ tabs, sort, reverse }: TabViewProps): JSX.Element => {
-  const groupedTabs = tabs.reduce((ob: { [key: string]: Tab[] }, item) => ({ ...ob, [item.date]: [...ob[item.date] ?? [], item] }), {});
-  return (
-    <>
-      {Object.entries(groupedTabs).reverse().map(([date, tabs]: [string, Tab[]]) => (
-        <div className="group" key={date}>
-          <div className="info">
-            <div className="name">{new Date(parseInt(date)).toUTCString()}</div>
-            <div className="tabCount">{tabs.length} Tab{tabs.length > 1 ? "s" : undefined}</div>
-            <div className="spacer"></div>
-            <div className="openAll" onClick={() => openTabs(tabs)}>Open Group</div>
-            <div className="removeAll" onClick={() => confirmRemoveTabs(tabs)}>Remove Group</div>
-          </div>
-          <SortedTabView tabs={tabs} sort={sort} reverse={reverse}></SortedTabView>
-        </div>
-      ))}
-    </>
-  );
-};
-
-const ImportSnapshotModal = ({ openModal, closeModal }: { openModal: boolean, closeModal: ReactEventHandler }) => {
+const ImportSnapshotModal = ({ openModal, closeModal }: { openModal: boolean; closeModal: ReactEventHandler; }) => {
   const [importActive, setImportActive] = useState(false);
   const [importInfo, setImportInfo] = useState<string>();
   const [importError, setImportError] = useState<boolean>(false);
@@ -268,7 +149,7 @@ const ImportSnapshotModal = ({ openModal, closeModal }: { openModal: boolean, cl
 
     setImportActive(false);
     if (!fileFound) {
-      return
+      return;
     }
 
     // Validate file
@@ -280,7 +161,7 @@ const ImportSnapshotModal = ({ openModal, closeModal }: { openModal: boolean, cl
         throw new SyntaxError("Invalid JSON");
       }
       const valid: boolean = tabs.reduce((acc: boolean, tab: Tab) => {
-        return acc && validateTab(tab)
+        return acc && validateTab(tab);
       }, true);
 
       if (valid && tabs.length < 1) {
@@ -304,11 +185,13 @@ const ImportSnapshotModal = ({ openModal, closeModal }: { openModal: boolean, cl
   };
 
   const validateTab = (tab: any): boolean => {
-    return tab !== undefined &&
+    return (
+      tab !== undefined &&
       tab.title !== undefined &&
       tab.url !== undefined &&
       tab.date !== undefined &&
       tab.hash !== undefined
+    );
   };
 
   const importTabs = async () => {
@@ -321,7 +204,7 @@ const ImportSnapshotModal = ({ openModal, closeModal }: { openModal: boolean, cl
       TabCountItem.setValue(tabs.length);
     } else {
       storeTabs(tabs);
-      TabCountItem.setValue(await TabCountItem.getValue() + tabs.length);
+      TabCountItem.setValue((await TabCountItem.getValue()) + tabs.length);
     }
   };
 
@@ -359,10 +242,13 @@ const ImportListModal = ({ openModal, closeModal }: { openModal: boolean, closeM
   }, [openModal]);
 
   const textChange = () => {
-    const lines = listRef.current?.value.split("\n").filter(v => v.match(/^http[s]*:\/\/.*/)).map((v) => v.split(" ")[0]);
-    if (lines === undefined) return
+    const lines = listRef.current?.value
+      .split("\n")
+      .filter((v) => v.match(/^http[s]*:\/\/.*/))
+      .map((v) => v.split(" ")[0]);
+    if (lines === undefined) return;
 
-    const tabCount = lines[0] === '' ? 0 : lines?.length;
+    const tabCount = lines[0] === "" ? 0 : lines?.length;
 
     if (tabCount! > 0) {
       setImportInfo(`${tabCount} Tabs`);
@@ -374,8 +260,14 @@ const ImportListModal = ({ openModal, closeModal }: { openModal: boolean, closeM
   };
 
   const importTabs = async () => {
-    const lines = listRef.current?.value.split("\n").filter(v => v.match(/^http[s]*:\/\/.*/)).map((v) => v.split(" ")[0]);
-    setImportInfo(`Importing ${lines?.length} Tabs. This will take ~${lines?.length! / 2} seconds.`);
+    const lines = listRef.current?.value
+      .split("\n")
+      .filter((v) => v.match(/^http[s]*:\/\/.*/))
+      .map((v) => v.split(" ")[0]);
+    setImportInfo(
+      `Importing ${lines?.length} Tabs. This will take ~${lines?.length! / 2
+      } seconds.`,
+    );
 
     if (overwriteRef.current?.checked) {
       TabItem.setValue([]);
@@ -391,14 +283,16 @@ const ImportListModal = ({ openModal, closeModal }: { openModal: boolean, closeM
       if (collectedTabs.size === lines?.length) {
         const funnelDate = Date.now().toString();
         const tabArray = Array.from(collectedTabs);
-        const tabsToFunnel: Tab[] = await Promise.all(tabArray.map(async ([id, tab]: [number, Tabs.Tab], index) => {
-          return {
-            title: tab.title!,
-            url: tab.url!.toString(),
-            date: funnelDate,
-            hash: crypto.randomUUID()
-          } satisfies Tab;
-        }));
+        const tabsToFunnel: Tab[] = await Promise.all(
+          tabArray.map(async ([id, tab]: [number, Tabs.Tab], index) => {
+            return {
+              title: tab.title!,
+              url: tab.url!.toString(),
+              date: funnelDate,
+              hash: crypto.randomUUID(),
+            } satisfies Tab;
+          }),
+        );
 
         storeTabs(tabsToFunnel);
         const tabCount = await TabCountItem.getValue();
@@ -415,7 +309,7 @@ const ImportListModal = ({ openModal, closeModal }: { openModal: boolean, closeM
         browser.tabs.create({
           url: line,
           active: false,
-        })
+        });
       }, index * 500);
     })!;
   };
@@ -442,10 +336,10 @@ const ExportListModal = ({ openModal, closeModal }: { openModal: boolean, closeM
 
   useEffect(() => {
     const loadTabs = async () => {
-      if (listRef.current === undefined || listRef.current === null) return
+      if (listRef.current === undefined || listRef.current === null) return;
       const tabs = await TabItem.getValue();
-      listRef.current.value = tabs.map(t => t.url).join("\n");
-    }
+      listRef.current.value = tabs.map((t) => t.url).join("\n");
+    };
 
     if (openModal) {
       loadTabs();

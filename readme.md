@@ -20,16 +20,10 @@
 - ### 0.1.5
 - [x] Investigate using UUID instead of hash (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [x] Check if tabs have changed since last backup (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
-  - [x] Store value for last snapshot hash
-  - [x] Check current tabs against it
-  - [x] Update if true
 - [x] Remove console.log's (`all`)
 - [x] Investigate Chrome light mode problems (`@/public/global.css`)
 - [x] Support OneTab list natively as import (`@/dashboard/Dashboard.tsx`)
-  - [x] Ignore everything after the end of URL for that line
 - [x] Reduce CPU / RAM usage during list import (`@/dashboard/Dashboard.tsx`)
-  - [x] Open tabs ever 500ms
-  - [x] Close tabs as they're added loaded
 - [x] Pull Group / Sort / Reverse into `storage.ts` (`@/dashboard/Dashboard.tsx`, `@/utils/storage.ts`)
 - [x] Export doesn't always work first time (`@/dashboard/Dashboard.tsx`)
 - [x] List size of each group (`@/dashboard/Dashboard.tsx`)
@@ -38,13 +32,24 @@
 - [ ] Move Group View / Modal Views to components (`@/dashboard/Dashboard.tsx`)
 - [ ] Last snapshot as time since (seconds / minutes / hours / days / date) (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [ ] Clean up CSS (`*.css`)
-  - [ ] Use light-dark to make current variables
+  - [x] Use light-dark to make theme variables
   - [ ] Replace all other light-dark with those variables
   - [ ] Use kebab case for classes
-- [ ] Migrate tabs to use UUID
-- ### 0.1.7 Themes Update
+- [ ] Migrate `Tab` to use UUID (`@/utils/data.ts`)
+- [ ] Reverse Group / Sort independently (`@/dashboard/Dashboard.tsx`)
+  - [ ] Custom checkbox graphic arrow maybe to show direction
+- [ ] Add options cog to top right corner of popup (`@/popup/Popup.tsx`)
+- [ ] Danger Mode actions modals w/ warnings etc (`@/options/Options.tsx`)
+- [x] Add `.prettierrc`
+  - [ ] Fix all the weird problems
+  - [ ] Pretty every file
+- ### 0.1.7 Theming Update
 - [ ] Font Override
 - [ ] Multiple Themes
+- [ ] Improve Icon
+- ### 0.1.8
+- [ ] Suggest tabs from Address Bar
+  - [ ] Using the Omnibox API
 
 ## Verbiage
 
