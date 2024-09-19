@@ -4,7 +4,7 @@ import TextInput from "@/components/TextInput";
 import { snapshotTabs, Tab } from "../utils/data";
 import type { CheckOption, MultiOption, TextOption } from "../utils/options";
 import { Option, Options } from "../utils/options";
-import { LastSnapshotDateItem, TabCountItem, TabItem } from "../utils/storage";
+import { LastSnapshotDateItem, LastSnapshotHashItem, TabCountItem, TabItem } from "../utils/storage";
 import "./Options.css";
 
 export default () => {
@@ -48,16 +48,22 @@ export default () => {
 
   // Also make backup just before deleting
   const clearTabs = async () => {
+    if (!confirm("Are you sure you want to remove all Tabs, a Snapshot will be made")) return;
     await snapshotTabs();
     await TabCountItem.setValue(0);
     await TabItem.setValue([]);
   };
 
   const clearSnapshotDate = async () => {
+    if (!confirm("Are you sure you want to clear the last Snapshot date?")) return;
+    await LastSnapshotHashItem.setValue(LastSnapshotHashItem.fallback);
     await LastSnapshotDateItem.setValue(0);
   };
 
   const removeDuplicates = async () => {
+    if (!confirm("Are you sure you want to remove all duplicate Tabs, a Snapshot will be made")) return;
+    await snapshotTabs();
+
     const tabs = await TabItem.getValue();
     const tabMap = new Map<string, Tab>();
     tabs.forEach((tab: Tab) => {

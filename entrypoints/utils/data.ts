@@ -8,12 +8,13 @@ import {
 } from "../utils/storage";
 import { hashString } from "./misc";
 
-export interface Tab {
+type UUID = `${string}-${string}-${string}-${string}-${string}`;
+export type Tab = {
   title: string;
   url: string;
   date: string;
-  hash: string;
-}
+  hash: UUID;
+};
 
 export const storeTabs = async (newTabs: Tab[]): Promise<void> => {
   const currentTabs = await TabItem.getValue();

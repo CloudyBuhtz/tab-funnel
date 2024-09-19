@@ -5,7 +5,7 @@ import {
   SnapshotFrequencyItem,
   TabItem
 } from "./utils/storage";
-import { snapshotTabs } from "./utils/data";
+import { snapshotTabs, Tab } from "./utils/data";
 
 const checkSnapshot = async () => {
   const currentTime = Date.now();
@@ -16,7 +16,7 @@ const checkSnapshot = async () => {
   const snapshotDifference: number = currentTime - lastSnapshotDate;
 
   const currentTabsHash: string = await hashString(JSON.stringify(currentTabs));
-  if (currentTabsHash === lastSnapshotHash) return
+  if (currentTabsHash === lastSnapshotHash) return;
 
   const snapshotFrequency = await SnapshotFrequencyItem.getValue();
 
@@ -24,7 +24,7 @@ const checkSnapshot = async () => {
     case "never":
     case "only_funnel":
     case "every_change":
-      return
+      return;
     case "hourly":
       if (snapshotDifference >= 3600000) {
         snapshotTabs();
@@ -48,6 +48,21 @@ const checkSnapshot = async () => {
   };
 };
 
+//TODO: Unfinished / Untested
+const setupUpdateMigration = () => {
+  browser.runtime.onInstalled.addListener(async (object) => {
+    if (object.reason === "update") {
+      console.log("Updating Tabs to use UUID, Niche Fix");
+      const currentTabs = await TabItem.getValue();
+      await TabItem.setValue(currentTabs.map((tab: Tab) => {
+        tab.hash = crypto.randomUUID();
+        return tab;
+      }));
+    }
+  }, null);
+};
+
 export default defineBackground(() => {
+  setupUpdateMigration();
   setInterval(checkSnapshot, 60000);
 });

@@ -38,12 +38,9 @@
 - [x] Last snapshot as time since (seconds / minutes / hours / days / date) (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [x] Reverse Group / Sort independently (`@/dashboard/Dashboard.tsx`)
 - [x] Add options cog to top right corner of popup (`@/popup/Popup.tsx`)
-- [-] Clean up CSS (`*.css`)
-  - [x] Use light-dark to make theme variables
-  - [ ] Replace all other light-dark with those variables
-  - [ ] Use kebab case for all css classes
-- [ ] Migrate `Tab` to use UUID (`@/utils/data.ts`)
-- [ ] Danger Mode actions modals w/ warnings etc (`@/options/Options.tsx`)
+- [x] Clean up CSS (`*.css`)
+- [x] Danger Mode actions modals w/ warnings etc (`@/options/Options.tsx`)
+- [x] Migrate `Tab` to use UUID (`@/utils/data.ts`)
 
 - ### 0.1.7 Theming Update
 - [ ] Font Override
