@@ -42,23 +42,28 @@
 - [x] Danger Mode actions modals w/ warnings etc (`@/options/Options.tsx`)
 - [x] Migrate `Tab` to use UUID (`@/utils/data.ts`)
 
-- ### 0.1.7 Theming Update
+- ### 0.1.7 Hotfix
+- [x] Browser Runtime onInstalled trigger error (`@/background.ts`)
+
+- ### 0.2.0 Theming Update
 - [ ] Font Override
 - [ ] Multiple Themes
 - [ ] Improve Icon
 - [ ] Options `danger-zone` css theming
+- [ ] Remove UUID Migrate (`@/background.ts`)
 
-- ### 0.1.8 Functions Galore
-- [ ] Funnel tabs from menu
+- ### 0.3.0 Functions Galore
+- [ ] Funnel tabs from menu (`@/background.ts`)
   - [ ] Funnel single tab
   - [ ] Funnel tabs to the right
   - [ ] Funnel tabs to the left
-- [ ] Suggest tabs from Address Bar
+- [ ] Suggest tabs from Address Bar (`@/background.ts`)
   - [ ] Using the Omnibox API
 - [ ] Onboarding page (`@/onboarding/index.html`)
+- [ ] Re-pin itself if it was already before update (`@/background.ts`)
 
 - ### 1.0.0 Update 1.0
-- [ ] Figure it out
+- [ ] Public Release
 
 ## Onboarding
 ```typescript

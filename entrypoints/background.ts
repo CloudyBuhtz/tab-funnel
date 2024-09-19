@@ -6,6 +6,7 @@ import {
   TabItem
 } from "./utils/storage";
 import { snapshotTabs, Tab } from "./utils/data";
+import { browser } from 'wxt/browser';
 
 const checkSnapshot = async () => {
   const currentTime = Date.now();
@@ -50,6 +51,8 @@ const checkSnapshot = async () => {
 
 //TODO: Unfinished / Untested
 const setupUpdateMigration = () => {
+  console.log(browser.runtime.onInstalled);
+
   browser.runtime.onInstalled.addListener(async (object) => {
     if (object.reason === "update") {
       console.log("Updating Tabs to use UUID, Niche Fix");
@@ -59,7 +62,7 @@ const setupUpdateMigration = () => {
         return tab;
       }));
     }
-  }, null);
+  });
 };
 
 export default defineBackground(() => {
