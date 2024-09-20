@@ -7,7 +7,7 @@ interface TextInputProps {
 export default ({ option }: TextInputProps) => {
   const storageKey = `${option.area}:${option.name}` as StorageItemKey;
   const [value, setValue] = useState<string>(option.defaultValue);
-  const regex = new RegExp(option.pattern ?? /.*/);
+  const regex = new RegExp(option.pattern ?? /[]/);
 
   useEffect(() => {
     const setup = async () => {

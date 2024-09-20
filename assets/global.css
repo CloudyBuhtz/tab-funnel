@@ -90,73 +90,65 @@
     padding-block: 0.5ch;
     padding-inline: 1rem 3rem;
     background-color: var(--theme-bg4);
-    border: 1px solid var(--theme-fg-g0);
     color: var(--theme-fg-o0);
-    border-radius: 0.5ch;
+    border-radius: 0.25ch;
 
     &:hover,
     &:focus {
-      border: 1px solid var(--theme-fg-g1);
       background-color: var(--theme-bg5);
     }
   }
 
-  input[type="checkbox"]:not(.direction) {
+  label.checkbox {
     width: 1.25rem;
     height: 1.25rem;
-    border-radius: 0.5ch;
+    border-radius: 0.25ch;
     background-color: var(--theme-bg4);
-    border: 1px solid var(--theme-fg-g1);
     position: relative;
+    transition: background-color 100ms linear;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    &:checked {
+    &:has(+input:checked) {
       background-color: var(--theme-fg-o0);
 
       &:hover {
         background-color: var(--theme-fg-o1);
       }
+
+      svg {
+        opacity: 1;
+      }
     }
 
-    &:not(:checked):hover {
+    &:has(+ input):hover {
       background-color: var(--theme-bg5);
     }
 
-    &:checked::after {
-      content: "";
-      position: absolute;
-      height: 14px;
-      width: 7px;
-      border-bottom: 3px solid var(--theme-bg0);
-      border-right: 3px solid var(--theme-bg0);
-      transform: translate(50%, 0) rotate(45deg);
+    svg {
+      opacity: 0;
+      color: var(--theme-bg4);
+      transition: opacity 100ms linear;
+      font-family: monospace;
     }
   }
+  input[type="checkbox"].option {
+    display: none;
+  }
 
-  input[type="checkbox"].direction {
-    width: 2rem;
-    height: 1rem;
-    position: relative;
+  label.sort {
+    padding-inline: 1ch;
     color: var(--theme-fg-i0);
     transition: color 100ms linear;
+    height: 1.5rem;
 
     &:hover {
       color: var(--theme-fg-o0);
-      text-shadow: 0 0 1ch var(--theme-fg-o0);
     }
-    
-    &::after {
-      content: "A-Z";
-      text-align: center;
-      transition: rotate 1000ms linear;
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-    }
-    &:checked::after {
-      content: "Z-A"
-    }
+  }
+  input[type="checkbox"].sort {
+    display: none;
   }
 
   button,
@@ -166,18 +158,12 @@
     padding-block: 0.5ch;
     padding-inline: 2rem;
     background-color: var(--theme-bg4);
-    border: 1px solid var(--theme-fg-g0);
     color: var(--theme-fg-o0);
-    border-radius: 0.5ch;
     transition:
       color 100ms linear,
       background-color 100ms linear;
     text-align: center;
-
-    &:hover,
-    &:active {
-      border: 1px solid var(--theme-fg-g1);
-    }
+    border-radius: 0.25ch;
 
     &:hover {
       background-color: var(--theme-bg5);
@@ -205,9 +191,9 @@
     padding-block: 0.5ch;
     padding-inline: 1rem;
     background-color: var(--theme-bg4);
-    border: 1px solid var(--theme-fg-g0);
     color: var(--theme-fg-o0);
-    border-radius: 0.5ch;
+    border-radius: 0.25ch;
+    cursor: text;
     transition:
       color 100ms linear,
       background-color 100ms linear;
@@ -215,7 +201,6 @@
     &:hover,
     &:active,
     &:focus {
-      border: 1px solid var(--theme-fg-g1);
       background-color: var(--theme-bg5);
     }
   }

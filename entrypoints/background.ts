@@ -1,12 +1,12 @@
-import { hashString } from './utils/misc';
+import { browser } from "wxt/browser";
+import { snapshotTabs, Tab } from "./utils/data";
+import { hashString } from "./utils/misc";
 import {
   LastSnapshotDateItem,
   LastSnapshotHashItem,
   SnapshotFrequencyItem,
-  TabItem
+  TabItem,
 } from "./utils/storage";
-import { snapshotTabs, Tab } from "./utils/data";
-import { browser } from 'wxt/browser';
 
 const checkSnapshot = async () => {
   const currentTime = Date.now();
@@ -46,26 +46,9 @@ const checkSnapshot = async () => {
         snapshotTabs();
       }
       break;
-  };
-};
-
-//TODO: Unfinished / Untested
-const setupUpdateMigration = () => {
-  console.log(browser.runtime.onInstalled);
-
-  browser.runtime.onInstalled.addListener(async (object) => {
-    if (object.reason === "update") {
-      console.log("Updating Tabs to use UUID, Niche Fix");
-      const currentTabs = await TabItem.getValue();
-      await TabItem.setValue(currentTabs.map((tab: Tab) => {
-        tab.hash = crypto.randomUUID();
-        return tab;
-      }));
-    }
-  });
+  }
 };
 
 export default defineBackground(() => {
-  setupUpdateMigration();
   setInterval(checkSnapshot, 60000);
 });

@@ -46,11 +46,19 @@
 - [x] Browser Runtime onInstalled trigger error (`@/background.ts`)
 
 - ### 0.2.0 Theming Update
+- [x] Remove UUID Migrate (`@/background.ts`)
+- [x] Change theming of inputs
+- [x] Change checkboxes
+- [x] Fix: Text Input (`@/components/TextInput.tsx`)
+- [x] Context dependant sort icons
+- [ ] Option Grouping
 - [ ] Font Override
 - [ ] Multiple Themes
+  - [ ] Theme switcher
+  - [ ] Theme options
 - [ ] Improve Icon
 - [ ] Options `danger-zone` css theming
-- [ ] Remove UUID Migrate (`@/background.ts`)
+- [ ] Change `xyxInput` to `xyzOption`
 
 - ### 0.3.0 Functions Galore
 - [ ] Funnel tabs from menu (`@/background.ts`)
@@ -62,20 +70,23 @@
 - [ ] Onboarding page (`@/onboarding/index.html`)
 - [ ] Re-pin itself if it was already before update (`@/background.ts`)
 
+
 - ### 1.0.0 Update 1.0
 - [ ] Public Release
+- [ ] Public Github
+  - [ ] Figure out license
 
 ## Onboarding
 ```typescript
 chrome.runtime.onInstalled.addListener(function (object) {
-    let externalUrl = "http://yoursite.com/";
-    let internalUrl = chrome.runtime.getURL("views/onboarding.html");
+  let externalUrl = "http://yoursite.com/";
+  let internalUrl = chrome.runtime.getURL("views/onboarding.html");
 
-    if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-        chrome.tabs.create({ url: externalUrl }, function (tab) {
-            console.log("New tab launched with http://yoursite.com/");
-        });
-    }
+  if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    chrome.tabs.create({ url: externalUrl }, function (tab) {
+      console.log("New tab launched with http://yoursite.com/");
+    });
+  }
 });
 ```
 

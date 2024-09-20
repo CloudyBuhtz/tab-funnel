@@ -19,7 +19,7 @@
       color: var(--theme-danger-fg);
     }
 
-    .option {
+    & > .option {
       display: flex;
       flex-direction: row;
       gap: 1rem;
@@ -30,7 +30,7 @@
         color: var(--theme-fg-o0);
       }
 
-      label {
+      label:not(.checkbox) {
         min-width: 16rem;
         user-select: none;
       }

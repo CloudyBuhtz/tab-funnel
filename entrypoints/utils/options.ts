@@ -110,4 +110,16 @@ export const Options = {
     ],
     pattern: /[^a-zA-Z0-9\-]/g,
   } as TextOption,
+  FONT_OVERRIDE: {
+    name: "font_override",
+    label: "Font Override",
+    area: "local",
+    type: "text",
+    defaultValue: "",
+    placeholder: "",
+    description: [
+      "Defines a custom Font name you want to use for the entire UI",
+      "No guarantees on non-breaking changes to UI",
+    ]
+  } as TextOption,
 };
