@@ -1,22 +1,6 @@
 @layer reset, base, inputs, page, components, utility;
 
 @layer reset {
-  * {
-    font-size: 1rem;
-  }
-
-  *,
-  *::before,
-  *::after {
-    margin: 0;
-    box-sizing: border-box;
-  }
-
-  *::before,
-  *::after {
-    all: unset;
-  }
-
   input,
   button,
   select {
@@ -64,6 +48,7 @@
     accent-color: var(--theme-fg-o0);
     background-color: var(--theme-bg0);
     color: var(--theme-fg-i0);
+    font-size: 1rem;
   }
 }
 
@@ -109,6 +94,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 
     &:has(+input:checked) {
       background-color: var(--theme-fg-o0);
@@ -142,6 +128,7 @@
     color: var(--theme-fg-i0);
     transition: color 100ms linear;
     height: 1.5rem;
+    cursor: pointer;
 
     &:hover {
       color: var(--theme-fg-o0);
@@ -164,6 +151,7 @@
       background-color 100ms linear;
     text-align: center;
     border-radius: 0.25ch;
+    border: none;
 
     &:hover {
       background-color: var(--theme-bg5);
@@ -180,8 +168,13 @@
     }
   }
 
+  input:hover::file-selector-button {
+    background-color: var(--theme-bg5);
+  }
+
   input[type="file"]::file-selector-button {
     margin-right: 1rem;
+    font-family: inherit;
   }
 
   input[type="text"],
@@ -194,6 +187,7 @@
     color: var(--theme-fg-o0);
     border-radius: 0.25ch;
     cursor: text;
+    border: none;
     transition:
       color 100ms linear,
       background-color 100ms linear;
@@ -211,4 +205,10 @@
     font-weight: normal;
     padding-inline: 0.5ch;
   }
+}
+
+/* Chrome Fix */
+body {
+  font-size: inherit;
+  font-family: inherit;
 }

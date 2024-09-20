@@ -89,8 +89,8 @@ export const ImportSnapshotModal = ({ openModal, closeModal }: { openModal: bool
       <input onChange={fileChange} ref={fileRef} accept="application/json" type="file" name="import_filename" id="import_filename" />
       <div className="buttons">
         <button disabled={!importActive} onClick={importTabs}>Import</button>
-        <label htmlFor="import_overwrite">Overwrite:</label>
-        <input ref={overwriteRef} type="checkbox" name="import_overwrite" id="import_overwrite" />
+        <label htmlFor="import_snapshot_overwrite">Overwrite:</label>
+        <input ref={overwriteRef} type="checkbox" name="import_snapshot_overwrite" id="import_snapshot_overwrite" />
         <div className="spacer"></div>
         <button onClick={closeModal}>Close</button>
       </div>

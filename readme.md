@@ -48,18 +48,17 @@
 - ### 0.2.0 Theming Update
 - [x] Remove UUID Migrate (`@/background.ts`)
 - [x] Change theming of inputs
+  - [x] Fix Modal Buttons
 - [x] Change checkboxes
+  - [x] Fix Modal Checkbox
 - [x] Fix: Text Input (`@/components/TextInput.tsx`)
 - [x] Context dependant sort icons
-- [ ] Option Grouping
+- [x] Chrome specific css inject fix
 - [ ] Font Override
-- [ ] Multiple Themes
-  - [ ] Theme switcher
-  - [ ] Theme options
 - [ ] Improve Icon
 - [ ] Options `danger-zone` css theming
-- [ ] Change `xyxInput` to `xyzOption`
-
+- [ ] Rename `xyxInput` to `xyzOption`
+ 
 - ### 0.3.0 Functions Galore
 - [ ] Funnel tabs from menu (`@/background.ts`)
   - [ ] Funnel single tab
@@ -70,6 +69,11 @@
 - [ ] Onboarding page (`@/onboarding/index.html`)
 - [ ] Re-pin itself if it was already before update (`@/background.ts`)
 
+- ### 0.4.0 Can Kicking
+- [ ] Multiple Themes
+  - [ ] Theme switcher
+  - [ ] Theme options
+- [ ] Option Grouping
 
 - ### 1.0.0 Update 1.0
 - [ ] Public Release

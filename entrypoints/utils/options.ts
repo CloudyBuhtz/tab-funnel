@@ -120,6 +120,7 @@ export const Options = {
     description: [
       "Defines a custom Font name you want to use for the entire UI",
       "No guarantees on non-breaking changes to UI",
+      "Default Font (first occurrence of list): Bahnschrift, DIN Alternate, Franklin Gothic Medium, Nimbus Sans Narrow, sans-serif-condensed, sans-serif"
     ]
   } as TextOption,
 };

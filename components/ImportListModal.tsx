@@ -96,8 +96,11 @@ export const ImportListModal = ({ openModal, closeModal }: { openModal: boolean;
       <textarea ref={listRef} onChange={textChange} rows={24}></textarea>
       <div className="buttons">
         <button disabled={!importActive} onClick={importTabs}>Import</button>
-        <label htmlFor="import_overwrite">Overwrite:</label>
-        <input ref={overwriteRef} type="checkbox" name="import_overwrite" id="import_overwrite" />
+        <label>Overwrite:</label>
+        <label className="checkbox" htmlFor="import_list_overwrite">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="m9 20.42l-6.21-6.21l2.83-2.83L9 14.77l9.88-9.89l2.83 2.83z"></path></svg>
+        </label>
+        <input className="test" ref={overwriteRef} type="checkbox" name="import_list_overwrite" id="import_list_overwrite" />
         <div className="spacer"></div>
         <button onClick={closeModal}>Close</button>
       </div>
