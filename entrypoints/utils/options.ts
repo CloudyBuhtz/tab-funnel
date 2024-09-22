@@ -123,4 +123,18 @@ export const Options = {
       "Default Font (first occurrence of list): Bahnschrift, DIN Alternate, Franklin Gothic Medium, Nimbus Sans Narrow, sans-serif-condensed, sans-serif"
     ]
   } as TextOption,
+  CURRENT_THEME: {
+    name: "current_theme",
+    label: "Choose Theme",
+    area: "local",
+    type: "multi",
+    options: [
+      "basic",
+      "kanagawa"
+    ],
+    defaultValue: "kanagawa",
+    description: [
+      "Choose a theme for the entirety of TabFunnel, each have a light and dark theme that auto switches with your browser theme."
+    ]
+  } as MultiOption,
 };

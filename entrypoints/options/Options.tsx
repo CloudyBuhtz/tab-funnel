@@ -1,10 +1,19 @@
-import CheckInput from "@/components/CheckInput";
-import MultiInput from "@/components/MultiInput";
-import TextInput from "@/components/TextInput";
+import CheckOption from "@/components/CheckOption";
+import MultiOption from "@/components/MultiOption";
+import TextOption from "@/components/TextOption";
 import { snapshotTabs, Tab } from "../utils/data";
-import type { CheckOption, MultiOption, TextOption } from "../utils/options";
+import type {
+  CheckOption as CheckOptionType,
+  MultiOption as MultiOptionType,
+  TextOption as TextOptionType
+} from "../utils/options";
 import { Option, Options } from "../utils/options";
-import { LastSnapshotDateItem, LastSnapshotHashItem, TabCountItem, TabItem } from "../utils/storage";
+import {
+  LastSnapshotDateItem,
+  LastSnapshotHashItem,
+  TabCountItem,
+  TabItem,
+} from "../utils/storage";
 import "./Options.css";
 
 export default () => {
@@ -14,11 +23,11 @@ export default () => {
     return options.map(([_, option]) => {
       switch (option.type) {
         case "text":
-          return <TextInput key={option.name} option={option as TextOption}></TextInput>;
+          return <TextOption key={option.name} option={option as TextOptionType}></TextOption>;
         case "check":
-          return <CheckInput key={option.name} option={option as CheckOption}></CheckInput>;
+          return <CheckOption key={option.name} option={option as CheckOptionType}></CheckOption>;
         case "multi":
-          return <MultiInput key={option.name} option={option as MultiOption}></MultiInput>;
+          return <MultiOption key={option.name} option={option as MultiOptionType}></MultiOption>;
       };
     });
   };

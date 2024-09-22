@@ -1,7 +1,7 @@
 import { Tab } from "@/entrypoints/utils/data";
 import { confirmRemoveTabs, openTabs, SortedTabView, TabViewProps } from "./BaseTabView";
 
-export const DateGroupTabView = ({ tabs, sort, sortReverse, groupReverse }: TabViewProps): JSX.Element => {
+export default ({ tabs, sort, sortReverse, groupReverse }: TabViewProps): JSX.Element => {
   const groupedTabs = tabs.reduce((ob: { [key: string]: Tab[]; }, item) => ({ ...ob, [item.date]: [...ob[item.date] ?? [], item] }), {});
   const groupedArray = Object.entries(groupedTabs).reverse();
 

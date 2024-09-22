@@ -3,7 +3,7 @@ import { Tabs, browser } from "wxt/browser";
 import { type Tab, storeTabs } from "../entrypoints/utils/data";
 import { TabItem, TabCountItem } from "../entrypoints/utils/storage";
 
-export const ImportListModal = ({ openModal, closeModal }: { openModal: boolean; closeModal: ReactEventHandler; }) => {
+export default ({ openModal, closeModal }: { openModal: boolean; closeModal: ReactEventHandler; }) => {
   const [importActive, setImportActive] = useState(false);
   const [importInfo, setImportInfo] = useState<string>();
   const [importError, setImportError] = useState<boolean>(false);

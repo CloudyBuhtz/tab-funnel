@@ -1,7 +1,7 @@
 import { ReactEventHandler, useEffect } from "react";
 import { TabItem } from "../entrypoints/utils/storage";
 
-export const ExportListModal = ({ openModal, closeModal }: { openModal: boolean; closeModal: ReactEventHandler; }) => {
+export default ({ openModal, closeModal }: { openModal: boolean; closeModal: ReactEventHandler; }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const listRef = useRef<HTMLTextAreaElement>(null);
 

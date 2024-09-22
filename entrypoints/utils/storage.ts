@@ -77,3 +77,13 @@ const SnapshotLocationOption = Options.SNAPSHOT_LOCATION;
 export const SnapshotLocationItem = storage.defineItem<string>(`${SnapshotLocationOption.area}:${SnapshotLocationOption.name}`, {
   fallback: SnapshotLocationOption.defaultValue,
 });
+
+const FontOverride = Options.FONT_OVERRIDE;
+export const FontOverrideItem = storage.defineItem<string>(`${FontOverride.area}:${FontOverride.name}`, {
+  fallback: FontOverride.defaultValue,
+});
+
+const CurrentTheme = Options.CURRENT_THEME;
+export const CurrentThemeItem = storage.defineItem<string>(`${CurrentTheme.area}:${CurrentTheme.name}`, {
+  fallback: CurrentTheme.defaultValue,
+});

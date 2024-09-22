@@ -1,6 +1,6 @@
 import { confirmRemoveTabs, openTabs, SortedTabView, TabViewProps } from "./BaseTabView";
 
-export const UngroupedTabView = ({ tabs, sort, sortReverse: reverse }: TabViewProps): JSX.Element => {
+export default ({ tabs, sort, sortReverse: reverse }: TabViewProps): JSX.Element => {
   return (
     <>
       <div className="group">

@@ -1,7 +1,7 @@
 import { Tab } from "@/entrypoints/utils/data";
 import { confirmRemoveTabs, openTabs, SortedTabView, TabViewProps } from "./BaseTabView";
 
-export const SiteGroupTabView = ({ tabs, sort, sortReverse, groupReverse }: TabViewProps): JSX.Element => {
+export default ({ tabs, sort, sortReverse, groupReverse }: TabViewProps): JSX.Element => {
   const regex = /^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i;
 
   let groupedTabs = Object.entries(tabs.reduce((ob: { [key: string]: Tab[]; }, item) => {

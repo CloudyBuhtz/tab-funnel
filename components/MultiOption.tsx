@@ -1,5 +1,6 @@
 import type { MultiOption } from "@/entrypoints/utils/options";
 import { StorageItemKey } from "wxt/storage";
+import SelectInput from "./SelectInput";
 
 interface MultiInputProps {
   option: MultiOption;
@@ -30,11 +31,9 @@ export default ({ option }: MultiInputProps) => {
     <>
       <div className="option">
         <label htmlFor={option.name}>{option.label}</label>
-        <div className="select-wrapper">
-          <select onChange={changeHandler} name={option.name} id={option.name} value={value}>
-            {option.options.map((item) => (<option key={item} value={item}>{item.replaceAll("_", " ").split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</option>))}
-          </select>
-        </div>
+        <SelectInput onChange={changeHandler} name={option.name} id={option.name} value={value}>
+          {option.options.map((item) => (<option key={item} value={item}>{item.replaceAll("_", " ").split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</option>))}
+        </SelectInput>
       </div>
       {option.description && <div className="description">
         {option.description.map((line, index) => (

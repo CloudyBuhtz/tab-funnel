@@ -45,20 +45,33 @@
 - ### 0.1.7 Hotfix
 - [x] Browser Runtime onInstalled trigger error (`@/background.ts`)
 
-- ### 0.2.0 Theming Update
+- ### 0.2.0 Theme Update
 - [x] Remove UUID Migrate (`@/background.ts`)
-- [x] Change theming of inputs
-  - [x] Fix Modal Buttons
-- [x] Change checkboxes
-  - [x] Fix Modal Checkbox
+- [x] Change theming of inputs (`@/assets/global.css`)
+- [x] Change checkboxes (`@/assets/global.css`)
 - [x] Fix: Text Input (`@/components/TextInput.tsx`)
-- [x] Context dependant sort icons
-- [x] Chrome specific css inject fix
-- [ ] Font Override
-- [ ] Improve Icon
-- [ ] Options `danger-zone` css theming
-- [ ] Rename `xyxInput` to `xyzOption`
- 
+- [x] Context dependant sort icons (`@/dashboard/Dashboard.tsx`)
+- [x] Chrome specific css inject fix (`@/assets/global.css`)
+- [x] Custom select element wraps select (`@/dashboard/Dashboard.tsx`, `@/assets/global.css`)
+- [x] Options `danger-zone` css theming (`@/options/Options.tsx`, `@/options/Options.css`)
+- [x] Font Override
+- [x] Change components to default exports where possible
+- [x] Improve Icon
+- [x] Rename `xyxInput` to `xyzOption`
+- [x] Fix Button Styling
+- [x] Multiple Themes
+- [x] Clean-up CSS theme
+
+- ### 0.2.1 Options!
+- [ ] Option Grouping
+- [ ] Clean-up basic theme
+- [ ] Add more themes
+  - [ ] Gruv
+  - [ ] Catpuccin
+  - [ ] Nord
+  - [ ] Tokyo Night
+
+
 - ### 0.3.0 Functions Galore
 - [ ] Funnel tabs from menu (`@/background.ts`)
   - [ ] Funnel single tab
@@ -68,12 +81,7 @@
   - [ ] Using the Omnibox API
 - [ ] Onboarding page (`@/onboarding/index.html`)
 - [ ] Re-pin itself if it was already before update (`@/background.ts`)
-
-- ### 0.4.0 Can Kicking
-- [ ] Multiple Themes
-  - [ ] Theme switcher
-  - [ ] Theme options
-- [ ] Option Grouping
+- [ ] Investigate using browser.theme API to set accent color?
 
 - ### 1.0.0 Update 1.0
 - [ ] Public Release

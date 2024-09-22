@@ -21,7 +21,7 @@
 
       & div {
         font-size: 0.8rem;
-        color: var(--theme-fg-i1);
+        color: var(--theme-fg-ink1);
         opacity: 0.7;
       }
     }
@@ -37,6 +37,7 @@
     gap: 1ch;
     text-align: end;
     transition: color 100ms linear;
+    margin: 0;
 
     div {
       user-select: none;
@@ -45,8 +46,8 @@
       cursor: pointer;
 
       &:hover {
-        color: var(--theme-fg-o0);
-        text-shadow: 0 0 1ch var(--theme-fg-o0);
+        color: var(--theme-fg-accent0);
+        text-shadow: 0 0 1ch var(--theme-fg-accent0);
       }
     }
   }
@@ -58,8 +59,8 @@
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    background-color: var(--theme-bg2);
-    color: var(--theme-fg-o0);
+    background-color: var(--theme-bg1);
+    color: var(--theme-fg-accent0);
 
     label {
       font-size: 0.8rem;
@@ -68,7 +69,7 @@
     .spacer {
       max-width: 0;
       height: 1rem;
-      border: 1px solid var(--theme-fg-g0);
+      border: 1px solid var(--theme-fg-grey0);
     }
   }
 
@@ -81,7 +82,7 @@
       &:not(:last-child) {
         margin-block: 0 1rem;
         padding-block: 0 1rem;
-        border-bottom: 2px solid var(--theme-fg-g1);
+        border-bottom: 2px solid var(--theme-fg-grey1);
       }
 
       .info {
@@ -90,7 +91,7 @@
         gap: 1rem;
 
         .name {
-          color: var(--theme-fg-o0);
+          color: var(--theme-fg-accent0);
         }
 
         .tab-count {
@@ -108,8 +109,8 @@
           cursor: pointer;
 
           &:hover {
-            color: var(--theme-fg-o0);
-            text-shadow: 0 0 1ch var(--theme-fg-o0);
+            color: var(--theme-fg-accent0);
+            text-shadow: 0 0 1ch var(--theme-fg-accent0);
           }
         }
       }
@@ -128,6 +129,7 @@
           color: light-dark(#000, #fff);
           opacity: 1;
         }
+
         .title {
           text-decoration: underline;
         }
@@ -159,14 +161,14 @@
 
   dialog {
     min-width: 75%;
-    border: 2px solid var(--theme-fg-o0);
+    border: 2px solid var(--theme-fg-accent0);
     border-radius: 1ch;
     margin: auto;
     flex-direction: column;
     gap: 1rem;
-    box-shadow: 0 0 1ch var(--theme-fg-o0);
+    box-shadow: 0 0 1ch var(--theme-fg-accent0);
     background-color: var(--theme-bg0);
-    color: var(--theme-fg-i0);
+    color: var(--theme-fg-ink0);
 
     &[open] {
       display: flex;
@@ -183,6 +185,7 @@
     .info {
       text-align: center;
     }
+
     .info.error {
       color: #f00;
     }

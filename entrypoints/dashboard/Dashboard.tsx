@@ -14,12 +14,13 @@ import {
 } from "../utils/storage";
 import type { TGroup, TSort } from "../utils/storage";
 import "./Dashboard.css";
-import { UngroupedTabView } from "@/components/UngroupedTabView";
-import { SiteGroupTabView } from "@/components/SiteGroupTabView";
-import { DateGroupTabView } from "@/components/DateGroupTabView";
-import { ImportSnapshotModal } from "@/components/ImportSnapshotModal";
-import { ExportListModal } from "@/components/ExportListModal";
-import { ImportListModal } from "@/components/ImportListModal";
+import UngroupedTabView from "@/components/UngroupedTabView";
+import SiteGroupTabView from "@/components/SiteGroupTabView";
+import DateGroupTabView from "@/components/DateGroupTabView";
+import ImportSnapshotModal from "@/components/ImportSnapshotModal";
+import ImportListModal from "@/components/ImportListModal";
+import ExportListModal from "@/components/ExportListModal";
+import SelectInput from "@/components/SelectInput";
 
 export default () => {
   const [tabs, setTabs] = useState<Tab[]>(TabItem.fallback);
@@ -38,9 +39,7 @@ export default () => {
 
   const unwatchTabCount = TabCountItem.watch((v) => setTabCount(v));
   const unwatchTabs = TabItem.watch((v) => setTabs(v));
-  const unwatchLastSnapshotDate = LastSnapshotDateItem.watch((v) =>
-    setLastSnapshotDate(v),
-  );
+  const unwatchLastSnapshotDate = LastSnapshotDateItem.watch((v) => setLastSnapshotDate(v));
 
   useEffect(() => {
     const setup = async () => {
@@ -142,23 +141,19 @@ export default () => {
         </menu>
       </header>
       <div className="controls">
-        <div className="select-wrapper">
-          <select onChange={changeGroup} value={group} name="group_by" id="group_by">
-            <option value="ungrouped">Ungrouped</option>
-            <option value="group_by_date">Group by Date</option>
-            <option value="group_by_site">Group by Site</option>
-          </select>
-        </div>
+        <SelectInput onChange={changeGroup} value={group} name="group_by" id="group_by">
+          <option value="ungrouped">Ungrouped</option>
+          <option value="group_by_date">Group by Date</option>
+          <option value="group_by_site">Group by Site</option>
+        </SelectInput>
         <SortLabel sort={group as TGroup | TSort} name="reverse_group" checked={groupReverse}></SortLabel>
         <input className="sort" onChange={changeGroupReverse} checked={groupReverse} type="checkbox" name="reverse_group" id="reverse_group" />
         <span className="spacer"></span>
-        <div className="select-wrapper">
-          <select onChange={changeSort} value={sort} name="sort_by" id="sort_by">
-            <option value="sort_by_date">Sort by Date</option>
-            <option value="sort_by_name">Sort by Name</option>
-            <option value="sort_by_url">Sort by URL</option>
-          </select>
-        </div>
+        <SelectInput onChange={changeSort} value={sort} name="sort_by" id="sort_by">
+          <option value="sort_by_date">Sort by Date</option>
+          <option value="sort_by_name">Sort by Name</option>
+          <option value="sort_by_url">Sort by URL</option>
+        </SelectInput>
         <SortLabel sort={sort as TGroup | TSort} name="reverse_sort" checked={sortReverse}></SortLabel>
         <input className="sort" onChange={changeSortReverse} checked={sortReverse} type="checkbox" name="reverse_sort" id="reverse_sort" />
       </div>

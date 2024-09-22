@@ -15,11 +15,11 @@
       flex-direction: column;
       gap: 1ch;
       padding: 1rem;
-      background-color: var(--theme-danger-bg);
-      color: var(--theme-danger-fg);
+      background-color: var(--theme-bg5);
+      color: var(--theme-fg-ink1);
     }
 
-    & > .option {
+    &>.option {
       display: flex;
       flex-direction: row;
       gap: 1rem;
@@ -27,7 +27,7 @@
       height: 2.5rem;
 
       &:hover {
-        color: var(--theme-fg-o0);
+        color: var(--theme-fg-accent0);
       }
 
       label:not(.checkbox) {
@@ -50,9 +50,11 @@
   .pointer {
     cursor: pointer;
   }
+
   .fix-padding {
     margin-block: 0;
   }
+
   .center {
     align-self: center;
   }

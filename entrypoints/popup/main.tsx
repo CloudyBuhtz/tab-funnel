@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./Popup.tsx";
+import Popup from "./Popup.tsx";
 import "@/assets/normalize.css";
 import "@/assets/global.css";
+import FontSwitcher from "@/components/FontSwitcher.tsx";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <Popup />
+    <ThemeSwitcher />
+    <FontSwitcher />
+  </React.StrictMode>
 );
