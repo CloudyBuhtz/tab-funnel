@@ -62,15 +62,24 @@
 - [x] Multiple Themes
 - [x] Clean-up CSS theme
 
-- ### 0.2.1 Options!
-- [ ] Option Grouping
-- [ ] Clean-up basic theme
+- ### 0.2.1 Clean-Up
+- [x] Option Grouping
+- [x] Clean-up basic theme
+- [x] Remove console logs
+
+- ### 0.2.2 Options!
+- [ ] Make icon slightly smaller?
 - [ ] Add more themes
   - [ ] Gruv
   - [ ] Catpuccin
   - [ ] Nord
   - [ ] Tokyo Night
-
+- [ ] Possibly move to non-auto light-dark switching
+  - [ ] Kanagawa Wave
+  - [ ] Kanagawa Lotus
+  - [ ] Kanagawa Dragon
+  - [ ] Basic Dark
+  - [ ] Basic Light
 
 - ### 0.3.0 Functions Galore
 - [ ] Funnel tabs from menu (`@/background.ts`)

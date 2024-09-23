@@ -7,7 +7,7 @@ import type {
   MultiOption as MultiOptionType,
   TextOption as TextOptionType
 } from "../utils/options";
-import { Option, Options } from "../utils/options";
+import { Option, Options, OptionsGroup } from "../utils/options";
 import {
   LastSnapshotDateItem,
   LastSnapshotHashItem,
@@ -15,12 +15,13 @@ import {
   TabItem,
 } from "../utils/storage";
 import "./Options.css";
+import { Fragment } from "react/jsx-runtime";
 
 export default () => {
   const [showDanger, setShowDanger] = useState(false);
 
-  const renderInputs = (options: [string, Option][]) => {
-    return options.map(([_, option]) => {
+  const renderOptions = (options: Option[]) => {
+    return options.map((option) => {
       switch (option.type) {
         case "text":
           return <TextOption key={option.name} option={option as TextOptionType}></TextOption>;
@@ -55,7 +56,6 @@ export default () => {
     };
   };
 
-  // Also make backup just before deleting
   const clearTabs = async () => {
     if (!confirm("Are you sure you want to remove all Tabs, a Snapshot will be made")) return;
     await snapshotTabs();
@@ -93,7 +93,16 @@ export default () => {
 
   return (
     <main>
-      {renderInputs(Object.entries(Options))}
+      {OptionsGroup.map(group => {
+        const optionList: Option[] = [];
+        group.options.forEach((o) => optionList.push(Options[o]));
+        return (
+          <Fragment key={group.key}>
+            <div className="group">{group.name}</div>
+            {renderOptions(optionList)}
+          </Fragment>
+        );
+      })}
       <div className="option pointer center" onClick={dangerHandler}>-- Show / Hide Dangerous Options --</div>
       {renderDanger(showDanger)}
     </main>

@@ -33,7 +33,6 @@ export default (): JSX.Element => {
 
   const switchTheme = (theme: Theme): void => {
     Object.entries(theme.style).forEach(([key, val]) => {
-      console.log(key, val);
       document.body.style.setProperty(key, val);
     });
   };

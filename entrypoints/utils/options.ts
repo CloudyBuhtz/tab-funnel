@@ -25,6 +25,30 @@ export type MultiOption = BasicOption & {
   defaultValue: string;
 };
 
+export const OptionsGroup = [
+  {
+    key: "general",
+    name: "General Settings",
+    options: [
+      "SNAPSHOT_FREQUENCY",
+      "REMOVE_TABS_RESTORED",
+      "REMOVE_TABS_FUNNELLED",
+      "IGNORE_DUPLICATE_TABS",
+      "SWITCH_TAB_RESTORED",
+      "FUNNEL_PINNED_TABS",
+      "SNAPSHOT_LOCATION"
+    ]
+  },
+  {
+    key: "appearance",
+    name: "Appearance Settings",
+    options: [
+      "FONT_OVERRIDE",
+      "CURRENT_THEME",
+    ]
+  }
+] as const;
+
 export const Options = {
   SNAPSHOT_FREQUENCY: {
     name: "snapshot_frequency",
@@ -84,7 +108,7 @@ export const Options = {
     type: "check",
     defaultValue: false,
     description: [
-      "When checked, clicking a Tab in the TabFunnel are immediately made active.",
+      "When checked, Tabs clicked in the Dashboard will be immediately switched to.",
     ],
   } as CheckOption,
   FUNNEL_PINNED_TABS: {

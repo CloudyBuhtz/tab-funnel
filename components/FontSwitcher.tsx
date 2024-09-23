@@ -5,7 +5,6 @@ export default (): JSX.Element => {
 
   const setFont = (val: string) => {
     document.body.style.fontFamily = val ?? undefined;
-    console.log(window.getComputedStyle(document.body).fontFamily);
   };
 
   useEffect(() => {

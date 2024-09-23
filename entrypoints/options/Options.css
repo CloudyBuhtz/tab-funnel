@@ -19,6 +19,15 @@
       color: var(--theme-fg-ink1);
     }
 
+    .group {
+      font-size: 1.2rem;
+      color: var(--theme-fg-ink1);
+
+      &:not(:first-child) {
+        margin-top: 2rem;
+      }
+    }
+
     &>.option {
       display: flex;
       flex-direction: row;
