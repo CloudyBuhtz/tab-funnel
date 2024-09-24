@@ -54,32 +54,28 @@
 - [x] Chrome specific css inject fix (`@/assets/global.css`)
 - [x] Custom select element wraps select (`@/dashboard/Dashboard.tsx`, `@/assets/global.css`)
 - [x] Options `danger-zone` css theming (`@/options/Options.tsx`, `@/options/Options.css`)
-- [x] Font Override
-- [x] Change components to default exports where possible
+- [x] Font Override (`@/components/FontSwitcher.tsx`)
+- [x] Change components to default exports where possible (`@/components/*.tsx`)
 - [x] Improve Icon
-- [x] Rename `xyxInput` to `xyzOption`
-- [x] Fix Button Styling
-- [x] Multiple Themes
-- [x] Clean-up CSS theme
+- [x] Rename `xyxInput` to `xyzOption` (`@/components/*Input.tsx`)
+- [x] Fix Button Styling (`@/assets/global.css`)
+- [x] Multiple Themes (`@/themes/*.ts`)
+- [x] Clean-up CSS theme (`@/assets/global.css`)
 
 - ### 0.2.1 Clean-Up
-- [x] Option Grouping
+- [x] Option Grouping (`@/utils/options.ts`, `@/assets/global.css`)
 - [x] Clean-up basic theme
 - [x] Remove console logs
 
-- ### 0.2.2 Options!
-- [ ] Make icon slightly smaller?
-- [ ] Add more themes
-  - [ ] Gruv
-  - [ ] Catpuccin
-  - [ ] Nord
-  - [ ] Tokyo Night
-- [ ] Possibly move to non-auto light-dark switching
-  - [ ] Kanagawa Wave
-  - [ ] Kanagawa Lotus
-  - [ ] Kanagawa Dragon
-  - [ ] Basic Dark
-  - [ ] Basic Light
+- ### 0.2.2 Themes!
+- [x] Make icon slightly smaller? (`@/public/icon/*.png`)
+- [x] Fix overwrite checkbox on Snapshot Import (`@/components/ImportSnapshotModal.tsx`)
+- [x] Themes Added (`@/components/themes/*.ts`)
+  - [x] One Dark (dark)
+  - [x] One Light (light)
+  - [x] Kanagawa Wave (dark)
+  - [x] Kanagawa Dragon (dark)
+  - [x] Kanagawa Lotus (light)
 
 - ### 0.3.0 Functions Galore
 - [ ] Funnel tabs from menu (`@/background.ts`)
@@ -91,6 +87,7 @@
 - [ ] Onboarding page (`@/onboarding/index.html`)
 - [ ] Re-pin itself if it was already before update (`@/background.ts`)
 - [ ] Investigate using browser.theme API to set accent color?
+- [ ] Sync storage
 
 - ### 1.0.0 Update 1.0
 - [ ] Public Release
@@ -110,31 +107,3 @@ chrome.runtime.onInstalled.addListener(function (object) {
   }
 });
 ```
-
-## Verbiage
-
-- Funnel(led): To put a tab into TabFunnel
-- Tab: Browser tab
-- Snapshot: The state of tabs at a certain time
-
-## Goals
-
-- Add tabs with click of button
-  - Title
-  - URL
-  - Favicon
-  - Date Added
-- Store tabs in big list sectioned by date / name / site
-- Store using addon storage
-- Save snapshots
-  - Every Change
-  - Daily
-  - Weekly
-  - Manual
-- Import snapshots
-
-## Stretch
-
-- Auto Funnel
-- Import OneTab
-- Firefox / Chrome addon storage

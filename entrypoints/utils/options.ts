@@ -153,10 +153,13 @@ export const Options = {
     area: "local",
     type: "multi",
     options: [
-      "basic",
-      "kanagawa"
+      "one_dark",
+      "one_light",
+      "kanagawa_wave",
+      "kanagawa_dragon",
+      "kanagawa_lotus",
     ],
-    defaultValue: "kanagawa",
+    defaultValue: "kanagawa_wave",
     description: [
       "Choose a theme for the entirety of TabFunnel, each have a light and dark theme that auto switches with your browser theme."
     ]

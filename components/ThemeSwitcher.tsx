@@ -1,6 +1,9 @@
 import { CurrentThemeItem } from "@/entrypoints/utils/storage";
-import BasicTheme from "./themes/BasicTheme";
-import KanagawaTheme from "./themes/KanagawaTheme";
+import KanagawaWave from "./themes/KanagawaWaveTheme";
+import KanagawaLotus from "./themes/KanagawaLotusTheme";
+import KanagawaDragon from "./themes/KanagawaDragonTheme";
+import OneDark from "./themes/OneDarkTheme";
+import OneLight from "./themes/OneLightTheme";
 
 type Theme = {
   id: string,
@@ -22,12 +25,18 @@ export default (): JSX.Element => {
 
   const getTheme = (theme: string): Theme => {
     switch (theme) {
-      case "basic":
-        return BasicTheme;
-      case "kanagawa":
-        return KanagawaTheme;
+      case "kanagawa_wave":
+        return KanagawaWave;
+      case "kanagawa_dragon":
+        return KanagawaDragon;
+      case "kanagawa_lotus":
+        return KanagawaLotus;
+      case "one_dark":
+        return OneDark;
+      case "one_light":
+        return OneLight;
       default:
-        return KanagawaTheme;
+        return KanagawaWave;
     }
   };
 

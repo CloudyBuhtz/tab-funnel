@@ -100,7 +100,7 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
         <label className="checkbox" htmlFor="import_list_overwrite">
           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="m9 20.42l-6.21-6.21l2.83-2.83L9 14.77l9.88-9.89l2.83 2.83z"></path></svg>
         </label>
-        <input className="test" ref={overwriteRef} type="checkbox" name="import_list_overwrite" id="import_list_overwrite" />
+        <input ref={overwriteRef} type="checkbox" name="import_list_overwrite" id="import_list_overwrite" />
         <div className="spacer"></div>
         <button onClick={closeModal}>Close</button>
       </div>

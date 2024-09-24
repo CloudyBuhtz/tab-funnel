@@ -89,7 +89,10 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
       <input onChange={fileChange} ref={fileRef} accept="application/json" type="file" name="import_filename" id="import_filename" />
       <div className="buttons">
         <button disabled={!importActive} onClick={importTabs}>Import</button>
-        <label htmlFor="import_snapshot_overwrite">Overwrite:</label>
+        <label>Overwrite:</label>
+        <label className="checkbox" htmlFor="import_snapshot_overwrite">
+          <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="m9 20.42l-6.21-6.21l2.83-2.83L9 14.77l9.88-9.89l2.83 2.83z"></path></svg>
+        </label>
         <input ref={overwriteRef} type="checkbox" name="import_snapshot_overwrite" id="import_snapshot_overwrite" />
         <div className="spacer"></div>
         <button onClick={closeModal}>Close</button>
