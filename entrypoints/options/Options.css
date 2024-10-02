@@ -15,6 +15,7 @@
       flex-direction: column;
       gap: 1ch;
       padding: 1rem;
+      margin: -1rem;
       background-color: var(--theme-bg5);
       color: var(--theme-fg-ink1);
     }

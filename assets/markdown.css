@@ -1,0 +1,43 @@
+body {
+  width: 900px;
+  margin-inline: auto;
+  padding-block: 2rem;
+}
+
+main {
+  background-color: var(--theme-bg1);
+  padding: 2rem;
+  border-radius: 1ch;
+}
+
+h1 {
+  color: var(--theme-fg-accent0);
+  text-align: center;
+  padding: 1rem;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--theme-fg-accent1);
+}
+
+strong {
+  font-weight: bold;
+  color: var(--theme-fg-accent1);
+}
+
+code {
+  color: var(--theme-fg-accent0);
+  background-color: var(--theme-bg-2);
+}
+
+hr {
+  color: var(--theme-fg-grey0);
+}
+
+em {
+  color: var(--theme-fg-grey0);
+}

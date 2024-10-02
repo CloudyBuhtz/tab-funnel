@@ -53,7 +53,7 @@ export const Options = {
   SNAPSHOT_FREQUENCY: {
     name: "snapshot_frequency",
     label: "Automatic Snapshot Frequency",
-    area: "local",
+    area: "sync",
     type: "multi",
     options: [
       "never",
@@ -74,7 +74,7 @@ export const Options = {
   REMOVE_TABS_RESTORED: {
     name: "remove_tabs_restored",
     label: "Remove Tab when Restored",
-    area: "local",
+    area: "sync",
     type: "check",
     defaultValue: false,
     description: [
@@ -84,7 +84,7 @@ export const Options = {
   REMOVE_TABS_FUNNELLED: {
     name: "remove_tab_funnelled",
     label: "Remove Tab when Funnelled",
-    area: "local",
+    area: "sync",
     type: "check",
     defaultValue: true,
     description: [
@@ -94,7 +94,7 @@ export const Options = {
   IGNORE_DUPLICATE_TABS: {
     name: "ignore_duplicate_tabs",
     label: "Ignore Duplicate Funnelled Tabs",
-    area: "local",
+    area: "sync",
     type: "check",
     defaultValue: false,
     description: [
@@ -104,7 +104,7 @@ export const Options = {
   SWITCH_TAB_RESTORED: {
     name: "switch_tab_restored",
     label: "Switch to Restored Tab",
-    area: "local",
+    area: "sync",
     type: "check",
     defaultValue: false,
     description: [
@@ -114,7 +114,7 @@ export const Options = {
   FUNNEL_PINNED_TABS: {
     name: "funnel_pinned_tabs",
     label: "Funnel Pinned Tabs",
-    area: "local",
+    area: "sync",
     type: "check",
     defaultValue: false,
     description: [
@@ -124,7 +124,7 @@ export const Options = {
   SNAPSHOT_LOCATION: {
     name: "snapshot_location",
     label: "Snapshot location",
-    area: "local",
+    area: "sync",
     type: "text",
     defaultValue: "tab-funnel",
     placeholder: "tab-funnel",
@@ -137,7 +137,7 @@ export const Options = {
   FONT_OVERRIDE: {
     name: "font_override",
     label: "Font Override",
-    area: "local",
+    area: "sync",
     type: "text",
     defaultValue: "",
     placeholder: "",
@@ -150,7 +150,7 @@ export const Options = {
   CURRENT_THEME: {
     name: "current_theme",
     label: "Choose Theme",
-    area: "local",
+    area: "sync",
     type: "multi",
     options: [
       "one_dark",

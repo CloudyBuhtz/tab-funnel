@@ -78,32 +78,24 @@
   - [x] Kanagawa Lotus (light)
 
 - ### 0.3.0 Functions Galore
-- [ ] Funnel tabs from menu (`@/background.ts`)
-  - [ ] Funnel single tab
-  - [ ] Funnel tabs to the right
-  - [ ] Funnel tabs to the left
-- [ ] Suggest tabs from Address Bar (`@/background.ts`)
-  - [ ] Using the Omnibox API
-- [ ] Onboarding page (`@/onboarding/index.html`)
-- [ ] Re-pin itself if it was already before update (`@/background.ts`)
-- [ ] Investigate using browser.theme API to set accent color?
-- [ ] Sync storage
+- [x] Suggest tabs from Address Bar (`@/background.ts`)
+- [x] Sync storage
+- [-] Re-pin itself if it was already before update (`@/background.ts`)
+  - [x] Currently reopens the dashboard when updated
+- [x] Funnel tabs from menu (`@/background.ts`)
+  - [x] Funnel single tab
+  - [x] Funnel other tabs
+  - [x] Funnel tabs to the right
+  - [x] Funnel tabs to the left
+- [x] Onboarding page (`@/onboarding/index.html`)
+  - [x] Load markdown pages
+  - [x] Added react-markdown dependency
+  - [x] Write onboarding info
+
+- ### 0.4.0 Internationalization Time
+- [ ] Move all strings to /locale/en or whatever
 
 - ### 1.0.0 Update 1.0
 - [ ] Public Release
 - [ ] Public Github
   - [ ] Figure out license
-
-## Onboarding
-```typescript
-chrome.runtime.onInstalled.addListener(function (object) {
-  let externalUrl = "http://yoursite.com/";
-  let internalUrl = chrome.runtime.getURL("views/onboarding.html");
-
-  if (object.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-    chrome.tabs.create({ url: externalUrl }, function (tab) {
-      console.log("New tab launched with http://yoursite.com/");
-    });
-  }
-});
-```
