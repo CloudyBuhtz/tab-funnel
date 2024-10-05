@@ -5,13 +5,12 @@ import "@/assets/normalize.css";
 import "@/assets/global.css";
 import "@/assets/markdown.css";
 import FontSwitcher from "@/components/FontSwitcher.tsx";
-import onboarding from "./onboarding.md";
-import rehypeRaw from "rehype-raw";
+import versions from "./versions.md";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <main>
-      <ReactMarkdown skipHtml={true} rehypePlugins={[rehypeRaw]}>{onboarding}</ReactMarkdown>
+      <ReactMarkdown skipHtml={true}>{versions}</ReactMarkdown>
     </main>
     <ThemeSwitcher />
     <FontSwitcher />

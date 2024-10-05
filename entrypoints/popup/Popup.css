@@ -17,6 +17,11 @@
     opacity: 0.7;
   }
 
+  .info.version {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   button {
     padding: 0.5rem;
     font-family: inherit;

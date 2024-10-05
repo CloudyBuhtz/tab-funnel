@@ -91,20 +91,33 @@ export default () => {
     setShowDanger(!showDanger);
   };
 
+  const showOnboarding = () => {
+    const url = browser.runtime.getURL("/onboarding.html");
+    const newTab = browser.tabs.create({
+      url: url,
+      active: true
+    });
+  };
+
   return (
-    <main>
-      {OptionsGroup.map(group => {
-        const optionList: Option[] = [];
-        group.options.forEach((o) => optionList.push(Options[o]));
-        return (
-          <Fragment key={group.key}>
-            <div className="group">{group.name}</div>
-            {renderOptions(optionList)}
-          </Fragment>
-        );
-      })}
-      <div className="option pointer center" onClick={dangerHandler}>-- Show / Hide Dangerous Options --</div>
-      {renderDanger(showDanger)}
-    </main>
+    <>
+      <menu>
+        <div onClick={showOnboarding}>Show Welcome Page</div>
+      </menu>
+      <main>
+        {OptionsGroup.map(group => {
+          const optionList: Option[] = [];
+          group.options.forEach((o) => optionList.push(Options[o]));
+          return (
+            <Fragment key={group.key}>
+              <div className="group">{group.name}</div>
+              {renderOptions(optionList)}
+            </Fragment>
+          );
+        })}
+        <div className="option pointer center" onClick={dangerHandler}>-- Show / Hide Dangerous Options --</div>
+        {renderDanger(showDanger)}
+      </main>
+    </>
   );
 };

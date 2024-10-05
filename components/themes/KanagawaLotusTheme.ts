@@ -1,4 +1,4 @@
-// Redo this sometime
+/* Source: https://github.com/rebelot/kanagawa.nvim */
 export default {
   "id": "kanagawa_lotus",
   "name": "Kanagawa Lotus",

@@ -205,6 +205,35 @@ const setupMenus = () => {
       browser.tabs.remove(tabs.map(t => t.id!));
     },
   });
+
+  const funnelSelectedMenu = browser.menus.create({
+    id: "menu_funnel_selected",
+    title: "Funnel &Selected Tabs",
+    contexts: ["tab"],
+    parentId: "menu_funnel_parent",
+    type: "normal",
+    onclick: async (info, tab) => {
+      const now = Date.now().toString();
+      const tabs = (await browser.tabs.query({
+        currentWindow: true,
+        url: "*://*/*",
+        windowType: "normal",
+        active: true,
+      }));
+      const newTabs = tabs.map((t) => {
+        return {
+          title: t.title!,
+          url: t.url!,
+          date: now,
+          hash: crypto.randomUUID()
+        } satisfies Tab;
+      });
+
+      await storeTabs(newTabs);
+      await TabCountItem.setValue(await TabCountItem.getValue() + newTabs.length);
+      browser.tabs.remove(tabs.map(t => t.id!));
+    },
+  });
 };
 
 const setupInstalled = () => {

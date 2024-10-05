@@ -1,0 +1,33 @@
+main:
+  tabs:
+    '0': No Tabs
+    '1': 1 Tab
+    'n': $1 Tabs
+dashboard:
+  info:
+    lastSnapshot: Last Snapshot
+    version: Version $1
+    never: Never
+  menu:
+    importSnapshot: Import Snapshot
+    importList: Import List
+    exportList: Export List
+  controls:
+    ungrouped: Ungrouped
+    groupByDate: Group by Date
+    groupBySite: Group by Site
+    sortByDate: Sort by Date
+    sortByName: Sort by Name
+    sortByURL: Sort by URL
+  modal:
+    overwrite: Overwrite
+    tabsFound: $1 Tabs Found
+    import: Import
+    close: Close
+  tabs:
+    allTabs: All Tabs
+    openAll: Open All
+    removeAll: Remove All
+    openGroup: Open Group
+    removeGroup: Remove Group
+    confirm: Are you sure you want to remove $1?

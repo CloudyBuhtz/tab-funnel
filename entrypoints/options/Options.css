@@ -1,6 +1,24 @@
 @layer reset, base, inputs, page, components, utility;
 
 @layer page {
+  menu {
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    margin: 0;
+
+    & div {
+      cursor: pointer;
+    }
+
+    & div:hover {
+      color: var(--theme-fg-accent0);
+    }
+  }
+
   main {
     display: flex;
     flex-direction: column;

@@ -1,7 +1,7 @@
 ## Notes
 
 My own builds are made using Bun, the `bun.lockb` is included in the repo
-Uses `wxt`, `React` and `ts-md5`
+Uses `wxt`, `react` and `react-markdown`.
 
 ## Instructions to build
 

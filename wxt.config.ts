@@ -5,7 +5,7 @@ import { defineConfig } from 'wxt';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
-  modules: ["@wxt-dev/module-react"],
+  modules: ["@wxt-dev/module-react", "@wxt-dev/i18n/module"],
   manifest: {
     permissions: ["storage", "unlimitedStorage", "tabs", "downloads", "menus"],
     name: "Tab Funnel",
@@ -16,7 +16,8 @@ export default defineConfig({
       gecko: {
         id: "{322171a2-2a66-4ecf-9dcc-bd84b282d352}"
       }
-    }
+    },
+    default_locale: "en",
   },
   vite: () => ({
     plugins: [

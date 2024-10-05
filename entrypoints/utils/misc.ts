@@ -21,7 +21,7 @@ export const hashString = async (s: string): Promise<string> => {
 
 export const timeAgo = (input: Date | number) => {
   const date = (input instanceof Date) ? input : new Date(input);
-  const formatter = new Intl.RelativeTimeFormat('en');
+  const formatter = new Intl.RelativeTimeFormat();
   const ranges = [
     ['years', 3600 * 24 * 365],
     ['months', 3600 * 24 * 30],

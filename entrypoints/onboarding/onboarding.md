@@ -1,6 +1,6 @@
 # Welcome to Tab Funnel
 
-<div>## [What's new in v0.3.0](/dashboard.html) [unfinished]</div>
+## [What's new in v0.3.0](/versions.html#030)
 
 Thanks for installing Tab Funnel! I appreciate you checking this out; this document outlines functions and concepts of the addon. If you know what you're doing or are happy to figure it out without lots of reading feel free to close this tab or continue on to see all the features of this addon.
 
@@ -9,7 +9,11 @@ Tab Funnel was made mostly for myself, as a solution to cleaning up my Tabs. It'
 ## What is Tab Funnel?
 Tab Funnel is an addon that can be used to clear up your tabs from your browser, freeing space while also being able to organise, manage and sort them.
 
-Instead of having tons of tabs filling up your bar, you can put them in a neat list.
+Instead of having tons of tabs filling up your bar, you can put them in a neat list. It's similar to other addons that will put all of your tabs into one single tab.
+
+Set it as your homepage, pin it or do whatever you please.
+
+//TODO: Dashboard Image
 
 ` `  
 ` `
@@ -25,21 +29,28 @@ Instead of having tons of tabs filling up your bar, you can put them in a neat l
 ### Funnel Tabs
 The main function of this Addon, clicking the funnel on your toolbar will open a small menu. Clicking `Funnel All Tabs` will move all the tabs in your current window into the Funnel.
 
+//TODO: Popup Image, Funnel all Highlighted
+
 You can even funnel tabs individually or in a more fine grained manner by right clicking on any tab in your tab bar. From here you can:
 - Funnel This Tab
 - Funnel Other Tabs
 - Funnel Tabs to Left
 - Funnel Tabs to Right
 
+//TODO: Context Menu Image
+
 ### Dashboard
 The Dashboard is the home for all your funnelled tabs! Opening the menu from the Funnel icon and clicking `Show Dashboard` will bring it up.
 
 Clicking any Tab title in this list will restore it back to your tab bar.
 
+//TODO: Dashboard Image
+
 ### Sorting / Grouping
 By default, the dashboard shows all your tabs in a big long list, sorted by when they Funnelled. There are a few options for ways to group the tabs and then sort those tabs in each group.
 
 #### Grouping
+//TODO: Dashboard Group by Dropdown
 - **Ungrouped** is the default where all your tabs are show in one big list, this can be a bit daunting once you have tons of tabs so there are better options.
 
 - **Group by Date** shows tabs grouped by individual times the `Funnel All Tabs` was clicked. This can essentially snapshot the tab-bar in that state, letting you look at what you were doing at that particular time.
@@ -47,6 +58,7 @@ By default, the dashboard shows all your tabs in a big long list, sorted by when
 - **Group by Site** shows tabs grouped by sites. This can be useful to find other tabs for a particular site you may have looked at in the past or just find a specific site easier.
 
 #### Sorting
+//TODO: Dashboard Sort by Dropdown
 - **Sort by Date** displays the tabs ordered by the date and time they were Funnelled. If you also use **Group by Date** it essentially shows tabs in the order they were on the tab bar when originally Funnelled.
 
 - **Sort by Name** displays tabs sorted by their title displayed in the Dashboard.
@@ -56,6 +68,7 @@ By default, the dashboard shows all your tabs in a big long list, sorted by when
 Each of the group and sort options can be done ascending and descending by using the little icons next to the drop down for each sort / group.
 
 ### Searching Tabs
+//TODO: Omnibox Image
 There are two ways you can search through your tabs:
 
 First you can just simply use `Ctrl+f` with the Dashboard open using your browsers default search.
@@ -104,7 +117,8 @@ There is a possibility that moving tabs within the `Group by Date` option will c
 #### Custom Groups
 Tab Funnel does not allow the user to create custom groups, name them or move Tabs around within them. This is fundamentally not the aim for the Addon and there are better alternatives.
 
-*- Alternatives coming soon -*
+- Tab Stash (https://addons.mozilla.org/en-US/firefox/addon/tab-stash/)
+- OneTab (https://addons.mozilla.org/en-US/firefox/addon/onetab/)
 
 #### Sync Between Installs
 Tabs are currently not synced between installs, if you want to keep your Dashboard synced between say a laptop and a computer you will need to sync the backups using a external program and then import the Snapshot between each of them.
@@ -138,7 +152,11 @@ Syncing between multiple installs of the Addon, for example between a laptop, co
 
 An alternate plan for syncing changes as they are made using the browsers setting sync to save changes as they are made and those to be watched by the other install. This may take a while to get working and all the edge cases dealt with.
 
-The final option is to setup a third party server to keep things synced, I don't want to handle user data as it comes with lots of extra effort, checks and balances. This would be the most difficult to implement as I would want to make sure everything was encrypted and sensitive Tab data would be preserved and kept private for the user.
+The third option is to setup a third party server to keep things synced, I don't want to handle user data as it comes with lots of extra effort, checks and balances. This would be the most difficult to implement as I would want to make sure everything was encrypted and sensitive Tab data would be preserved and kept private for the user.
+
+Alternatively, we would use a file upload service to keep the files ourselves; hopefully encrypting them using some sort of user only key or something.
+
+The last solution will be to add separate third-party specific syncing options that the user would need to login to and the file will be synced by them directly with the addon. Eg. UploadThing, S3
 
 #### Mobile Version
 A Mobile version of the addon will be investigated and worked on.

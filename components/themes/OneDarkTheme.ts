@@ -1,3 +1,4 @@
+/* Source: https://github.com/akamud/vscode-theme-onedark */
 export default {
   "id": "one_dark",
   "name": "One Dark",

@@ -22,6 +22,8 @@ import ImportListModal from "@/components/ImportListModal";
 import ExportListModal from "@/components/ExportListModal";
 import SelectInput from "@/components/SelectInput";
 
+const t = i18n.t;
+
 export default () => {
   const [tabs, setTabs] = useState<Tab[]>(TabItem.fallback);
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
@@ -129,30 +131,30 @@ export default () => {
       <header>
         <div className="logo">TabFunnel</div>
         <div className="v-stack">
-          <div className="count">{tabCount} Tabs | {convertBytes(storeSize)}</div>
-          <div className="info">Last Snapshot: {lastSnapshotDate === 0 ? "Never" : timeAgo(lastSnapshotDate)}</div>
-          <div className="info">Version {browser.runtime.getManifest().version}</div>
+          <div className="count">{t("main.tabs", tabCount)} | {convertBytes(storeSize)}</div>
+          <div className="info">{t("dashboard.info.lastSnapshot")}: {lastSnapshotDate === 0 ? t("dashboard.info.never") : timeAgo(lastSnapshotDate)}</div>
+          <div className="info">{t("dashboard.info.version", [browser.runtime.getManifest().version])}</div>
         </div>
         <div className="spacer"></div>
         <menu>
-          <div onClick={() => setShowImportSnapshot(true)}>Import Snapshot</div>
-          <div onClick={() => setShowImportList(true)}>Import List</div>
-          <div onClick={() => setShowExportList(true)}>Export List</div>
+          <div onClick={() => setShowImportSnapshot(true)}>{t("dashboard.menu.importSnapshot")}</div>
+          <div onClick={() => setShowImportList(true)}>{t("dashboard.menu.importList")}</div>
+          <div onClick={() => setShowExportList(true)}>{t("dashboard.menu.exportList")}</div>
         </menu>
       </header>
       <div className="controls">
         <SelectInput onChange={changeGroup} value={group} name="group_by" id="group_by">
-          <option value="ungrouped">Ungrouped</option>
-          <option value="group_by_date">Group by Date</option>
-          <option value="group_by_site">Group by Site</option>
+          <option value="ungrouped">{t("dashboard.controls.ungrouped")}</option>
+          <option value="group_by_date">{t("dashboard.controls.groupByDate")}</option>
+          <option value="group_by_site">{t("dashboard.controls.groupBySite")}</option>
         </SelectInput>
         <SortLabel sort={group as TGroup | TSort} name="reverse_group" checked={groupReverse}></SortLabel>
-        <input className="sort" onChange={changeGroupReverse} checked={groupReverse} type="checkbox" name="reverse_group" id="reverse_group" />
+        <input className="sort" disabled={group as TGroup === "ungrouped"} onChange={changeGroupReverse} checked={groupReverse} type="checkbox" name="reverse_group" id="reverse_group" />
         <span className="spacer"></span>
         <SelectInput onChange={changeSort} value={sort} name="sort_by" id="sort_by">
-          <option value="sort_by_date">Sort by Date</option>
-          <option value="sort_by_name">Sort by Name</option>
-          <option value="sort_by_url">Sort by URL</option>
+          <option value="sort_by_date">{t("dashboard.controls.sortByDate")}</option>
+          <option value="sort_by_name">{t("dashboard.controls.sortByName")}</option>
+          <option value="sort_by_url">{t("dashboard.controls.sortByURL")}</option>
         </SelectInput>
         <SortLabel sort={sort as TGroup | TSort} name="reverse_sort" checked={sortReverse}></SortLabel>
         <input className="sort" onChange={changeSortReverse} checked={sortReverse} type="checkbox" name="reverse_sort" id="reverse_sort" />

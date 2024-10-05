@@ -92,10 +92,28 @@
   - [x] Added react-markdown dependency
   - [x] Write onboarding info
 
-- ### 0.4.0 Internationalization Time
-- [ ] Move all strings to /locale/en or whatever
+- ### 0.4.0 Internationalization Update
+- [x] Add link to onboarding on Options (`@/Options/Options.tsx`)
+- [ ] Add link to version on version text in popup / dashboard (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
+- [x] Source all Themes (`@/components/themes/*.ts`)
+- [ ] Add images to onboarding
+- [ ] Add logo to onboarding
+- [ ] Move all strings to /locale/en
 
 - ### 1.0.0 Update 1.0
 - [ ] Public Release
 - [ ] Public Github
   - [ ] Figure out license
+
+### 1.1.0 Group by Granularity
+
+### 1.2.0 Mobile Version
+
+### 1.3.0 Syncing
+
+### 1.4.0 Themes
+- [ ] Monokai
+- [ ] Tokyo Night (All Flavours)
+- [ ] Nord
+- [ ] Catpuccino
+- [ ] Dracula

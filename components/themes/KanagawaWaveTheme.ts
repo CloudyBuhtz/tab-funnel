@@ -1,3 +1,4 @@
+/* Source: https://github.com/rebelot/kanagawa.nvim */
 export default {
   "id": "kanagawa_wave",
   "name": "Kanagawa Wave",

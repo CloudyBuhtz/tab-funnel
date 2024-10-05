@@ -1,3 +1,4 @@
+/* Source: https://github.com/akamud/vscode-theme-onelight */
 export default {
   "id": "one_light",
   "name": "One Light",
