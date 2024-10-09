@@ -19,7 +19,9 @@
 
   .info.version {
     text-decoration: underline;
+    margin-inline: auto;
     cursor: pointer;
+    width: fit-content;
   }
 
   button {

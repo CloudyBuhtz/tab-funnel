@@ -42,3 +42,9 @@ hr {
 em {
   color: var(--theme-fg-grey0);
 }
+
+img {
+  max-width: 90%;
+  display: block;
+  margin-inline: auto;
+}

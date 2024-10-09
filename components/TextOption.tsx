@@ -30,7 +30,7 @@ export default ({ option }: TextInputProps) => {
   return (
     <>
       <div className="option">
-        <label htmlFor={option.name}>{option.label}</label>
+        <label htmlFor={option.name}>{i18n.t(option.label as any)}</label>
         <input
           onInput={changeHandler}
           type="text"
@@ -41,7 +41,7 @@ export default ({ option }: TextInputProps) => {
       </div>
       {option.description && <div className="description">
         {option.description.map((line, index) => (
-          <div key={index}>{line}</div>
+          <div key={index}>{i18n.t(line as any)}</div>
         ))}
       </div>}
     </>

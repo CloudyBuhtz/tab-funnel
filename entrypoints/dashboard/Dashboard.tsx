@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { Management } from "webextension-polyfill/namespaces/management";
 import { browser } from "wxt/browser";
-import type { Tab } from "../utils/data";
+import type { TabV2 } from "../utils/data";
 import { convertBytes, timeAgo } from "../utils/misc";
 import {
   LastSnapshotDateItem,
@@ -22,10 +22,8 @@ import ImportListModal from "@/components/ImportListModal";
 import ExportListModal from "@/components/ExportListModal";
 import SelectInput from "@/components/SelectInput";
 
-const t = i18n.t;
-
 export default () => {
-  const [tabs, setTabs] = useState<Tab[]>(TabItem.fallback);
+  const [tabs, setTabs] = useState<TabV2[]>(TabItem.fallback);
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
   const [info, setInfo] = useState<Management.ExtensionInfo>();
   const [group, setGroup] = useState<string>(GroupItem.fallback);
@@ -125,36 +123,44 @@ export default () => {
   };
 
   const storeSize = new Blob([JSON.stringify(tabs)]).size;
+  
+  const showVersions = async () => {
+    const url = browser.runtime.getURL("/versions.html");
+    browser.tabs.create({
+      url: url,
+      active: true,
+    });
+  };
 
   return (
     <>
       <header>
         <div className="logo">TabFunnel</div>
         <div className="v-stack">
-          <div className="count">{t("main.tabs", tabCount)} | {convertBytes(storeSize)}</div>
-          <div className="info">{t("dashboard.info.lastSnapshot")}: {lastSnapshotDate === 0 ? t("dashboard.info.never") : timeAgo(lastSnapshotDate)}</div>
-          <div className="info">{t("dashboard.info.version", [browser.runtime.getManifest().version])}</div>
+          <div className="count">{i18n.t("main.tabs", tabCount)} | {convertBytes(storeSize)}</div>
+          <div className="info">{i18n.t("dashboard.info.lastSnapshot")}: {lastSnapshotDate === 0 ? i18n.t("dashboard.info.never") : timeAgo(lastSnapshotDate)}</div>
+          <div className="info version" onClick={showVersions}>{i18n.t("main.version", [browser.runtime.getManifest().version])}</div>
         </div>
         <div className="spacer"></div>
         <menu>
-          <div onClick={() => setShowImportSnapshot(true)}>{t("dashboard.menu.importSnapshot")}</div>
-          <div onClick={() => setShowImportList(true)}>{t("dashboard.menu.importList")}</div>
-          <div onClick={() => setShowExportList(true)}>{t("dashboard.menu.exportList")}</div>
+          <div onClick={() => setShowImportSnapshot(true)}>{i18n.t("dashboard.menu.importSnapshot")}</div>
+          <div onClick={() => setShowImportList(true)}>{i18n.t("dashboard.menu.importList")}</div>
+          <div onClick={() => setShowExportList(true)}>{i18n.t("dashboard.menu.exportList")}</div>
         </menu>
       </header>
       <div className="controls">
         <SelectInput onChange={changeGroup} value={group} name="group_by" id="group_by">
-          <option value="ungrouped">{t("dashboard.controls.ungrouped")}</option>
-          <option value="group_by_date">{t("dashboard.controls.groupByDate")}</option>
-          <option value="group_by_site">{t("dashboard.controls.groupBySite")}</option>
+          <option value="ungrouped">{i18n.t("dashboard.controls.ungrouped")}</option>
+          <option value="group_by_date">{i18n.t("dashboard.controls.groupByDate")}</option>
+          <option value="group_by_site">{i18n.t("dashboard.controls.groupBySite")}</option>
         </SelectInput>
         <SortLabel sort={group as TGroup | TSort} name="reverse_group" checked={groupReverse}></SortLabel>
         <input className="sort" disabled={group as TGroup === "ungrouped"} onChange={changeGroupReverse} checked={groupReverse} type="checkbox" name="reverse_group" id="reverse_group" />
         <span className="spacer"></span>
         <SelectInput onChange={changeSort} value={sort} name="sort_by" id="sort_by">
-          <option value="sort_by_date">{t("dashboard.controls.sortByDate")}</option>
-          <option value="sort_by_name">{t("dashboard.controls.sortByName")}</option>
-          <option value="sort_by_url">{t("dashboard.controls.sortByURL")}</option>
+          <option value="sort_by_date">{i18n.t("dashboard.controls.sortByDate")}</option>
+          <option value="sort_by_name">{i18n.t("dashboard.controls.sortByName")}</option>
+          <option value="sort_by_url">{i18n.t("dashboard.controls.sortByURL")}</option>
         </SelectInput>
         <SortLabel sort={sort as TGroup | TSort} name="reverse_sort" checked={sortReverse}></SortLabel>
         <input className="sort" onChange={changeSortReverse} checked={sortReverse} type="checkbox" name="reverse_sort" id="reverse_sort" />

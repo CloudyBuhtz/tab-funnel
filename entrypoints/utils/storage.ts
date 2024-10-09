@@ -1,8 +1,22 @@
 import { Options } from "./options";
-import type { Tab } from "./data";
+import type { Tab, TabV2 } from "./data";
 
-export const TabItem = storage.defineItem<Tab[]>("local:tabs", {
+export const TabItem = storage.defineItem<TabV2[]>("local:tabs", {
   fallback: [],
+  version: 2,
+  migrations: {
+    2: (tabs: Tab[]): TabV2[] => {
+      return tabs.map((tab) => {
+        return {
+          title: tab.title,
+          url: tab.url,
+          date: tab.date,
+          hash: tab.hash,
+          pinned: tab.pinned ?? false,
+        } as TabV2;
+      });
+    }
+  }
 });
 
 export const TabCountItem = storage.defineItem<number>("local:tab_count", {
@@ -86,4 +100,9 @@ export const FontOverrideItem = storage.defineItem<string>(`${FontOverride.area}
 const CurrentTheme = Options.CURRENT_THEME;
 export const CurrentThemeItem = storage.defineItem<string>(`${CurrentTheme.area}:${CurrentTheme.name}`, {
   fallback: CurrentTheme.defaultValue,
+});
+
+const RestoreAsPinned = Options.RESTORE_AS_PINNED;
+export const RestoreAsPinnedItem = storage.defineItem<boolean>(`${RestoreAsPinned.area}:${RestoreAsPinned.name}`, {
+  fallback: RestoreAsPinned.defaultValue,
 });

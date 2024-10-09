@@ -30,14 +30,14 @@ export default ({ option }: MultiInputProps) => {
   return (
     <>
       <div className="option">
-        <label htmlFor={option.name}>{option.label}</label>
+        <label htmlFor={option.name}>{i18n.t(option.label)}</label>
         <SelectInput onChange={changeHandler} name={option.name} id={option.name} value={value}>
           {option.options.map((item) => (<option key={item} value={item}>{item.replaceAll("_", " ").split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</option>))}
         </SelectInput>
       </div>
       {option.description && <div className="description">
         {option.description.map((line, index) => (
-          <div key={index}>{line}</div>
+          <div key={index}>{i18n.t(line)}</div>
         ))}
       </div>}
     </>

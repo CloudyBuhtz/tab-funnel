@@ -7,6 +7,14 @@ Link to Version Page on Popup / Dashboard
 
 Setup internationalisation (English)
 
+Pinned Tabs are now shown in the dashboard as Pinned
+
+Restore Pinned tabs back to their pinned status
+
+Use DuckDuckGo as the favicon provider instead of Google
+
+Group by Date sorting fix
+
 ` `  
 ` `
 ` `  

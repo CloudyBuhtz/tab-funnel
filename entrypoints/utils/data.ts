@@ -14,9 +14,17 @@ export type Tab = {
   url: string;
   date: string;
   hash: UUID;
+  pinned?: boolean;
+};
+export type TabV2 = {
+  title: string;
+  url: string;
+  date: string;
+  hash: UUID;
+  pinned: boolean;
 };
 
-export const storeTabs = async (newTabs: Tab[]): Promise<void> => {
+export const storeTabs = async (newTabs: TabV2[]): Promise<void> => {
   const currentTabs = await TabItem.getValue();
   await TabItem.setValue([...currentTabs, ...newTabs]);
 

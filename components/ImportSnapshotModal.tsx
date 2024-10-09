@@ -1,5 +1,5 @@
 import { ReactEventHandler, useEffect } from "react";
-import { type Tab, storeTabs } from "../entrypoints/utils/data";
+import { type TabV2, storeTabs } from "../entrypoints/utils/data";
 import { TabItem, TabCountItem } from "../entrypoints/utils/storage";
 
 export default ({ openModal, closeModal }: { openModal: boolean; closeModal: ReactEventHandler; }) => {
@@ -31,30 +31,30 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
     try {
       const file = fileRef.current?.files![0];
       const json = await file?.text();
-      const tabs: Tab[] = JSON.parse(json!) as Tab[];
+      const tabs: TabV2[] = JSON.parse(json!) as TabV2[];
       if (tabs.reduce === undefined) {
-        throw new SyntaxError("Invalid JSON");
+        throw new SyntaxError(i18n.t("dashboard.modal.validate.invalidJson"));
       }
-      const valid: boolean = tabs.reduce((acc: boolean, tab: Tab) => {
+      const valid: boolean = tabs.reduce((acc: boolean, tab: TabV2) => {
         return acc && validateTab(tab);
       }, true);
 
       if (valid && tabs.length < 1) {
-        throw new SyntaxError("No Tabs Found");
+        throw new SyntaxError(i18n.t("dashboard.modal.validate.tabsFound", 0));
       }
 
       if (valid) {
         // Set tabs
-        setImportInfo(`${tabs.length} Tabs Found`);
+        setImportInfo(i18n.t("dashboard.modal.validate.tabsFound", tabs.length));
         setImportError(false);
         setImportActive(true);
       } else {
-        throw new SyntaxError("Invalid JSON");
+        throw new SyntaxError(i18n.t("dashboard.modal.validate.invalidJson"));
       }
     } catch (err) {
       if (err instanceof SyntaxError) {
         setImportError(true);
-        setImportInfo(`Error: ${err.message}`);
+        setImportInfo(`${i18n.t("dashboard.modal.validate.error")}: ${err.message}`);
       }
     }
   };
@@ -72,10 +72,10 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
   const importTabs = async () => {
     const file = fileRef.current?.files![0];
     const json = await file?.text();
-    const tabs: Tab[] = JSON.parse(json!) as Tab[];
+    const tabs: TabV2[] = JSON.parse(json!) as TabV2[];
 
     if (overwriteRef.current?.checked) {
-      TabItem.setValue(tabs);
+      await TabItem.setValue(tabs);
       TabCountItem.setValue(tabs.length);
     } else {
       storeTabs(tabs);
@@ -85,11 +85,11 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
 
   return (
     <dialog onCancel={closeModal} ref={dialogRef}>
-      <div className="title">Import Snapshot</div>
+      <div className="title">{i18n.t("dashboard.menu.importSnapshot")}</div>
       <input onChange={fileChange} ref={fileRef} accept="application/json" type="file" name="import_filename" id="import_filename" />
       <div className="buttons">
-        <button disabled={!importActive} onClick={importTabs}>Import</button>
-        <label>Overwrite:</label>
+        <button disabled={!importActive} onClick={importTabs}>{i18n.t("dashboard.modal.import")}</button>
+        <label>{i18n.t("dashboard.modal.overwrite")}:</label>
         <label className="checkbox" htmlFor="import_snapshot_overwrite">
           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="m9 20.42l-6.21-6.21l2.83-2.83L9 14.77l9.88-9.89l2.83 2.83z"></path></svg>
         </label>

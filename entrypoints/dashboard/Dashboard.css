@@ -14,6 +14,15 @@
       text-shadow: 0 0 5px #000;
     }
 
+    .info.version {
+      cursor: pointer;
+      width: fit-content;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
     .v-stack {
       display: flex;
       flex-direction: column;
@@ -119,7 +128,7 @@
     .tab {
       display: flex;
       flex-direction: row;
-      gap: 1rem;
+      gap: 1ch;
       align-items: center;
       padding: 0.5ch;
 

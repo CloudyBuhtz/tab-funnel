@@ -1,7 +1,7 @@
 import CheckOption from "@/components/CheckOption";
 import MultiOption from "@/components/MultiOption";
 import TextOption from "@/components/TextOption";
-import { snapshotTabs, Tab } from "../utils/data";
+import { snapshotTabs, type TabV2 } from "../utils/data";
 import type {
   CheckOption as CheckOptionType,
   MultiOption as MultiOptionType,
@@ -37,19 +37,19 @@ export default () => {
     if (!danger) { return (<></>); } else {
       return (
         <div className="danger-zone">
-          <button onClick={removeDuplicates}>Remove ALL Duplicates</button>
-          <div className="description fix-padding">
-            <div>Clicking this remove all duplicate Tabs based on their URL.</div>
-            <div>Warning: This is a permanent change to the data.</div>
+          <button onClick={removeDuplicates}>{i18n.t("options.danger.removeAllDuplicates.button")}</button>
+          <div className="description">
+            <div>{i18n.t("options.danger.removeAllDuplicates.description.A")}</div>
+            <div>{i18n.t("options.danger.removeAllDuplicates.description.B")}</div>
           </div>
-          <button onClick={clearTabs}>Clear ALL Tabs</button>
-          <div className="description fix-padding">
-            <div>Clicking this will remove all stored tabs, a backup will be made just before in case you didn't mean it / want to undo this action.</div>
-            <div>Warning: This is a permanent change to the data.</div>
+          <button onClick={clearTabs}>{i18n.t("options.danger.clearAllTabs.button")}</button>
+          <div className="description">
+            <div>{i18n.t("options.danger.clearAllTabs.description.A")}</div>
+            <div>{i18n.t("options.danger.clearAllTabs.description.B")}</div>
           </div>
-          <button onClick={clearSnapshotDate}>Clear Snapshot Date</button>
-          <div className="description fix-padding">
-            <div>Clicking this will reset the date of the last snapshot to Never, making the next timed snapshot happen the next time it's checked.</div>
+          <button onClick={clearSnapshotDate}>{i18n.t("options.danger.clearSnapshotDate.button")}</button>
+          <div className="description">
+            <div>{i18n.t("options.danger.clearSnapshotDate.description.A")}</div>
           </div>
         </div>
       );
@@ -57,29 +57,29 @@ export default () => {
   };
 
   const clearTabs = async () => {
-    if (!confirm("Are you sure you want to remove all Tabs, a Snapshot will be made")) return;
+    if (!confirm(i18n.t("options.danger.clearAllTabs.confirm"))) return;
     await snapshotTabs();
     await TabCountItem.setValue(0);
     await TabItem.setValue([]);
   };
 
   const clearSnapshotDate = async () => {
-    if (!confirm("Are you sure you want to clear the last Snapshot date?")) return;
+    if (!confirm(i18n.t("options.danger.clearSnapshotDate.confirm"))) return;
     await LastSnapshotHashItem.setValue(LastSnapshotHashItem.fallback);
     await LastSnapshotDateItem.setValue(0);
   };
 
   const removeDuplicates = async () => {
-    if (!confirm("Are you sure you want to remove all duplicate Tabs, a Snapshot will be made")) return;
+    if (!confirm(i18n.t("options.danger.removeAllDuplicates.confirm"))) return;
     await snapshotTabs();
 
     const tabs = await TabItem.getValue();
-    const tabMap = new Map<string, Tab>();
-    tabs.forEach((tab: Tab) => {
+    const tabMap = new Map<string, TabV2>();
+    tabs.forEach((tab: TabV2) => {
       tabMap.set(tab.url, tab);
     });
-    const filteredTabs: Tab[] = [];
-    tabMap.forEach((tab: Tab, url: string) => {
+    const filteredTabs: TabV2[] = [];
+    tabMap.forEach((tab: TabV2, url: string) => {
       filteredTabs.push(tab);
     });
 
@@ -102,7 +102,7 @@ export default () => {
   return (
     <>
       <menu>
-        <div onClick={showOnboarding}>Show Welcome Page</div>
+        <div onClick={showOnboarding}>{i18n.t("options.showOnboarding")}</div>
       </menu>
       <main>
         {OptionsGroup.map(group => {
@@ -115,7 +115,7 @@ export default () => {
             </Fragment>
           );
         })}
-        <div className="option pointer center" onClick={dangerHandler}>-- Show / Hide Dangerous Options --</div>
+        <div className="option danger" onClick={dangerHandler}>{i18n.t("options.danger.show")}</div>
         {renderDanger(showDanger)}
       </main>
     </>

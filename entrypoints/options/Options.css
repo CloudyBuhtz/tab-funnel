@@ -24,6 +24,7 @@
     flex-direction: column;
     gap: 1ch;
     padding: 1rem;
+    padding-top: 5rem;
     margin-inline: auto;
     width: 60%;
     min-width: 25rem;
@@ -31,11 +32,24 @@
     .danger-zone {
       display: flex;
       flex-direction: column;
-      gap: 1ch;
+      gap: 1rem;
       padding: 1rem;
       margin: -1rem;
       background-color: var(--theme-bg5);
       color: var(--theme-fg-ink1);
+
+      margin-bottom: 5rem;
+
+      .description {
+        margin-block: 0;
+        padding-bottom: 1ch;
+      }
+    }
+
+    .danger {
+      align-self: center;
+      cursor: pointer;
+      padding-block: 1rem;
     }
 
     .group {
@@ -66,24 +80,11 @@
 
     .description {
       font-size: 0.8rem;
-      opacity: 0.6;
+      opacity: 0.7;
       margin-block: -0.5rem 0.5rem;
       display: flex;
       flex-direction: column;
+      line-height: 1.2rem;
     }
-  }
-}
-
-@layer utility {
-  .pointer {
-    cursor: pointer;
-  }
-
-  .fix-padding {
-    margin-block: 0;
-  }
-
-  .center {
-    align-self: center;
   }
 }

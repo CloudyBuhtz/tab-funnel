@@ -31,7 +31,7 @@ export default ({ option }: CheckInputProps) => {
   return (
     <>
       <div className="option">
-        <label>{option.label}</label>
+        <label>{i18n.t(option.label)}</label>
         <label className="checkbox" htmlFor={option.name}>
           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="m9 20.42l-6.21-6.21l2.83-2.83L9 14.77l9.88-9.89l2.83 2.83z"></path></svg>
         </label>
@@ -39,7 +39,7 @@ export default ({ option }: CheckInputProps) => {
       </div>
       {option.description && <div className="description">
         {option.description.map((line, index) => (
-          <div key={index}>{line}</div>
+          <div key={index}>{i18n.t(line)}</div>
         ))}
       </div>}
     </>

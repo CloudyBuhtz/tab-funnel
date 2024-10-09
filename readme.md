@@ -92,13 +92,18 @@
   - [x] Added react-markdown dependency
   - [x] Write onboarding info
 
-- ### 0.4.0 Internationalization Update
-- [x] Add link to onboarding on Options (`@/Options/Options.tsx`)
-- [ ] Add link to version on version text in popup / dashboard (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
+- ### 0.4.0 Internationalization Update / Pinned Tabs
+- [x] Add link to onboarding on Options (`@/ptions/Options.tsx`)
+- [x] Add link to version on version text in popup / dashboard (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [x] Source all Themes (`@/components/themes/*.ts`)
-- [ ] Add images to onboarding
-- [ ] Add logo to onboarding
-- [ ] Move all strings to /locale/en
+- [x] Add i18n support (`@/locales/en.yml`, `*.tsx`)
+- [x] Display pin icon beside pinned tabs (`@/dashboard/Dashboard.tsx`)
+- [x] Add pinned as boolean to Tab Type
+- [x] Restore pinned tabs to pinned status
+- [x] Option to restore as pin or not
+- [x] Fix date sorting, when importing old tabs
+- [x] Change favicon URL to DuckDuckGo (`@/components/BaseTabView.tsx`)
+- [x] Add images to onboarding
 
 - ### 1.0.0 Update 1.0
 - [ ] Public Release

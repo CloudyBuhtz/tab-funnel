@@ -22,11 +22,11 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
 
   return (
     <dialog onCancel={closeModal} ref={dialogRef}>
-      <div className="title">Export List</div>
+      <div className="title">{i18n.t("dashboard.menu.exportList")}</div>
       <textarea ref={listRef} rows={24}></textarea>
       <div className="buttons">
         <div className="spacer"></div>
-        <button onClick={closeModal}>Close</button>
+        <button onClick={closeModal}>{i18n.t("dashboard.modal.close")}</button>
       </div>
     </dialog>
   );

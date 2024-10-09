@@ -1,7 +1,8 @@
 import { Omnibox } from "wxt/browser";
-import { snapshotTabs, storeTabs, Tab } from "./utils/data";
+import { snapshotTabs, storeTabs, type TabV2 } from "./utils/data";
 import { hashString } from "./utils/misc";
 import {
+  FunnelPinnedTabsItem,
   LastSnapshotDateItem,
   LastSnapshotHashItem,
   SnapshotFrequencyItem,
@@ -57,8 +58,8 @@ const setupOmnibox = () => {
 
   browser.omnibox.onInputChanged.addListener(async (text: string, suggest) => {
     const tabs = await TabItem.getValue();
-    const filteredTabs = tabs.filter((t: Tab) => t.title.toLowerCase().includes(text.toLowerCase()));
-    const suggestions: Omnibox.SuggestResult[] = filteredTabs.map((t: Tab) => {
+    const filteredTabs = tabs.filter((t: TabV2) => t.title.toLowerCase().includes(text.toLowerCase()));
+    const suggestions: Omnibox.SuggestResult[] = filteredTabs.map((t: TabV2) => {
       return {
         content: t.url,
         description: t.title,
@@ -110,12 +111,14 @@ const setupMenus = () => {
     type: "normal",
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
+      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const newTab = {
         title: tab.title!,
         url: tab.url!,
         date: Date.now().toString(),
-        hash: crypto.randomUUID()
-      } satisfies Tab;
+        hash: crypto.randomUUID(),
+        pinned: funnelPinnedTabs && tab.pinned
+      } satisfies TabV2;
       await storeTabs([newTab]);
       await TabCountItem.setValue(await TabCountItem.getValue() + 1);
       browser.tabs.remove([tab.id!]);
@@ -130,6 +133,7 @@ const setupMenus = () => {
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
       const now = Date.now().toString();
+      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
@@ -140,8 +144,9 @@ const setupMenus = () => {
           title: t.title!,
           url: t.url!,
           date: now,
-          hash: crypto.randomUUID()
-        } satisfies Tab;
+          hash: crypto.randomUUID(),
+          pinned: funnelPinnedTabs && tab.pinned
+        } satisfies TabV2;
       });
 
       await storeTabs(newTabs);
@@ -158,6 +163,7 @@ const setupMenus = () => {
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
       const now = Date.now().toString();
+      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
@@ -168,8 +174,9 @@ const setupMenus = () => {
           title: t.title!,
           url: t.url!,
           date: now,
-          hash: crypto.randomUUID()
-        } satisfies Tab;
+          hash: crypto.randomUUID(),
+          pinned: funnelPinnedTabs && tab.pinned
+        } satisfies TabV2;
       });
 
       await storeTabs(newTabs);
@@ -186,6 +193,7 @@ const setupMenus = () => {
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
       const now = Date.now().toString();
+      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
@@ -196,8 +204,9 @@ const setupMenus = () => {
           title: t.title!,
           url: t.url!,
           date: now,
-          hash: crypto.randomUUID()
-        } satisfies Tab;
+          hash: crypto.randomUUID(),
+          pinned: funnelPinnedTabs && tab.pinned
+        } satisfies TabV2;
       });
 
       await storeTabs(newTabs);
@@ -214,6 +223,7 @@ const setupMenus = () => {
     type: "normal",
     onclick: async (info, tab) => {
       const now = Date.now().toString();
+      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
@@ -225,8 +235,9 @@ const setupMenus = () => {
           title: t.title!,
           url: t.url!,
           date: now,
-          hash: crypto.randomUUID()
-        } satisfies Tab;
+          hash: crypto.randomUUID(),
+          pinned: funnelPinnedTabs && tab.pinned
+        } satisfies TabV2;
       });
 
       await storeTabs(newTabs);

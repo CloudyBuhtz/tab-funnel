@@ -3,10 +3,10 @@ main:
     '0': No Tabs
     '1': 1 Tab
     'n': $1 Tabs
+  version: Version $1
 dashboard:
   info:
     lastSnapshot: Last Snapshot
-    version: Version $1
     never: Never
   menu:
     importSnapshot: Import Snapshot
@@ -24,6 +24,14 @@ dashboard:
     tabsFound: $1 Tabs Found
     import: Import
     close: Close
+    importListInfo: Importing $1 Tabs. This will take $2 seconds
+    validate:
+      error: Error
+      invalidJson: Invalid JSON
+      tabsFound:
+        '0': No Tabs Found
+        '1': 1 Tab Found
+        'n': $1 Tabs Found
   tabs:
     allTabs: All Tabs
     openAll: Open All
@@ -31,3 +39,97 @@ dashboard:
     openGroup: Open Group
     removeGroup: Remove Group
     confirm: Are you sure you want to remove $1?
+popup:
+  funnelAllTabs: Funnel All Tabs
+  showDashboard: Show Dashboard
+  manualSnapshot: Manual Snapshot
+options:
+  danger:
+    removeAllDuplicates:
+      button: Remove ALL Duplicates
+      description:
+        A: Clicking this remove all duplicate Tabs based on their URL.
+        B: 'Warning: This is a permanent change to the data.'
+      confirm: >-
+        Are you sure you want to remove all duplicate Tabs, a Snapshot will be
+        made
+    clearAllTabs:
+      button: Clear ALL Tabs
+      description:
+        A: >-
+          Clicking this will remove all stored tabs, a backup will be made just
+          before in case you didn't mean it / want to undo this action.
+        B: 'Warning: This is a permanent change to the data.'
+      confirm: Are you sure you want to remove all Tabs? A Snapshot will be made.
+    clearSnapshotDate:
+      button: Clear Snapshot Date
+      description:
+        A: >-
+          Clicking this will reset the date of the last snapshot to Never,
+          making the next timed snapshot happen the next time it's checked.
+      confirm: Are you sure you want to clear the last Snapshot date?
+    show: Show / Hide Dangerous Options
+  showOnboarding: Show Welcome Page
+  snapshot_frequency:
+    label: Automatic Snapshot Frequency
+    description:
+      A: >-
+        Calculated as absolute time between snapshots, not necessarily when the
+        date / time changes.
+      B: Only Funnel' activates only when tabs are Funnelled.
+      C: Every Change' activates when tabs are Funnelled and Removed.
+  remove_tabs_restored:
+    label: Remove Tab when Restored
+    description:
+      A: >-
+        When checked, tabs clicked in the TabFunnel are removed as the tab is
+        opened.
+  remove_tabs_funnelled:
+    label: Remove Tab when Funnelled
+    description:
+      A: When checked, Funnelled Tabs are Removed from the browser tab bar.
+  ignore_duplicate_tabs:
+    label: Ignore Duplicate Funnelled Tabs
+    description:
+      A: >-
+        When checked, Tabs with a duplicate URL are quietly ignored when
+        Funnelled.
+  switch_tab_restored:
+    label: Switch to Restored Tab
+    description:
+      A: >-
+        When checked, Tabs clicked in the Dashboard will be immediately switched
+        to.
+  funnel_pinned_tabs:
+    label: Funnel Pinned Tabs
+    description:
+      A: >-
+        When checked, pinned tabs are also Funnelled. (as long as it is
+        http/https)
+  snapshot_location:
+    label: Snapshot Location
+    description:
+      A: >-
+        Defines the folder location of Snapshots, stored within the downloads
+        folder.
+      B: Restricted to a-z, A-Z, 0-9 and '-'.
+  font_override:
+    label: Font Override
+    description:
+      A: Defines a custom Font name you want to use for the entire UI
+      B: No guarantees on non-breaking changes to UI
+      C: >-
+        Default Font (first occurrence of list): Bahnschrift, DIN Alternate,
+        Franklin Gothic Medium, Nimbus Sans Narrow, sans-serif-condensed,
+        sans-serif
+  current_theme:
+    label: Choose Theme
+    description:
+      A: >-
+        Choose a theme for the entirety of TabFunnel, some are light and some are dark. Pick your favourite!
+  restore_as_pinned:
+    label: Restore Pinned Tabs as Pinned
+    description:
+      A: >-
+        When checked, Pinned Tabs will return to being Pinned when Restored from
+        the Dashboard.

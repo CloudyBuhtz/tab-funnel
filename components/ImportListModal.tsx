@@ -1,6 +1,6 @@
 import { ReactEventHandler, useEffect } from "react";
 import { Tabs, browser } from "wxt/browser";
-import { type Tab, storeTabs } from "../entrypoints/utils/data";
+import { type TabV2, storeTabs } from "../entrypoints/utils/data";
 import { TabItem, TabCountItem } from "../entrypoints/utils/storage";
 
 export default ({ openModal, closeModal }: { openModal: boolean; closeModal: ReactEventHandler; }) => {
@@ -30,7 +30,7 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
     const tabCount = lines[0] === "" ? 0 : lines?.length;
 
     if (tabCount! > 0) {
-      setImportInfo(`${tabCount} Tabs`);
+      setImportInfo(i18n.t("main.tabs", tabCount));
       setImportActive(true);
     } else {
       setImportInfo(undefined);
@@ -43,7 +43,7 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
       .split("\n")
       .filter((v) => v.match(/^http[s]*:\/\/.*/))
       .map((v) => v.split(" ")[0]);
-    setImportInfo(`Importing ${lines?.length} Tabs. This will take ~${(lines?.length)! / 2} seconds.`);
+    setImportInfo(i18n.t("dashboard.modal.importListInfo", [lines?.length!, lines?.length! / 2]));
 
     if (overwriteRef.current?.checked) {
       TabItem.setValue([]);
@@ -59,14 +59,15 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
       if (collectedTabs.size === lines?.length) {
         const funnelDate = Date.now().toString();
         const tabArray = Array.from(collectedTabs);
-        const tabsToFunnel: Tab[] = await Promise.all(
+        const tabsToFunnel: TabV2[] = await Promise.all(
           tabArray.map(async ([id, tab]: [number, Tabs.Tab], index) => {
             return {
               title: tab.title!,
               url: tab.url!.toString(),
               date: funnelDate,
               hash: crypto.randomUUID(),
-            } satisfies Tab;
+              pinned: false
+            } satisfies TabV2;
           })
         );
 
@@ -92,17 +93,17 @@ export default ({ openModal, closeModal }: { openModal: boolean; closeModal: Rea
 
   return (
     <dialog onCancel={closeModal} ref={dialogRef}>
-      <div className="title">Import List</div>
+      <div className="title">{i18n.t("dashboard.menu.importList")}</div>
       <textarea ref={listRef} onChange={textChange} rows={24}></textarea>
       <div className="buttons">
-        <button disabled={!importActive} onClick={importTabs}>Import</button>
-        <label>Overwrite:</label>
+        <button disabled={!importActive} onClick={importTabs}>{i18n.t("dashboard.modal.import")}</button>
+        <label>{i18n.t("dashboard.modal.overwrite")}:</label>
         <label className="checkbox" htmlFor="import_list_overwrite">
           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="m9 20.42l-6.21-6.21l2.83-2.83L9 14.77l9.88-9.89l2.83 2.83z"></path></svg>
         </label>
         <input ref={overwriteRef} type="checkbox" name="import_list_overwrite" id="import_list_overwrite" />
         <div className="spacer"></div>
-        <button onClick={closeModal}>Close</button>
+        <button onClick={closeModal}>{i18n.t("dashboard.modal.close")}</button>
       </div>
       {importInfo && <div className={"info" + (importError ? " error" : "")}>{importInfo}</div>}
     </dialog>

@@ -27,15 +27,22 @@ export type MultiOption = BasicOption & {
 
 export const OptionsGroup = [
   {
-    key: "general",
-    name: "General Settings",
+    key: "tabs",
+    name: "Tab Settings",
     options: [
-      "SNAPSHOT_FREQUENCY",
       "REMOVE_TABS_RESTORED",
       "REMOVE_TABS_FUNNELLED",
       "IGNORE_DUPLICATE_TABS",
       "SWITCH_TAB_RESTORED",
       "FUNNEL_PINNED_TABS",
+      "RESTORE_AS_PINNED",
+    ]
+  },
+  {
+    key: "snapshots",
+    name: "Snapshot Settings",
+    options: [
+      "SNAPSHOT_FREQUENCY",
       "SNAPSHOT_LOCATION"
     ]
   },
@@ -52,7 +59,7 @@ export const OptionsGroup = [
 export const Options = {
   SNAPSHOT_FREQUENCY: {
     name: "snapshot_frequency",
-    label: "Automatic Snapshot Frequency",
+    label: "options.snapshot_frequency.label",
     area: "sync",
     type: "multi",
     options: [
@@ -66,90 +73,90 @@ export const Options = {
     ],
     defaultValue: "never",
     description: [
-      "Calculated as absolute time between snapshots, not necessarily when the date / time changes.",
-      "'Only Funnel' activates only when tabs are Funnelled.",
-      "'Every Change' activates when tabs are Funnelled and Removed.",
+      "options.snapshot_frequency.description.A",
+      "options.snapshot_frequency.description.B",
+      "options.snapshot_frequency.description.C",
     ],
   } as MultiOption,
   REMOVE_TABS_RESTORED: {
     name: "remove_tabs_restored",
-    label: "Remove Tab when Restored",
+    label: "options.remove_tabs_restored.label",
     area: "sync",
     type: "check",
     defaultValue: false,
     description: [
-      "When checked, tabs clicked in the TabFunnel are removed as the tab is opened.",
+      "options.remove_tabs_restored.description.A",
     ],
   } as CheckOption,
   REMOVE_TABS_FUNNELLED: {
     name: "remove_tab_funnelled",
-    label: "Remove Tab when Funnelled",
+    label: "options.remove_tabs_funnelled.label",
     area: "sync",
     type: "check",
     defaultValue: true,
     description: [
-      "When checked, Funnelled Tabs are Removed from the browser tab bar.",
+      "options.remove_tabs_funnelled.description.A",
     ],
   } as CheckOption,
   IGNORE_DUPLICATE_TABS: {
     name: "ignore_duplicate_tabs",
-    label: "Ignore Duplicate Funnelled Tabs",
+    label: "options.ignore_duplicate_tabs.label",
     area: "sync",
     type: "check",
     defaultValue: false,
     description: [
-      "When checked, Tabs with a duplicate URL are quietly ignored when Funnelled.",
+      "options.ignore_duplicate_tabs.description.A",
     ],
   } as CheckOption,
   SWITCH_TAB_RESTORED: {
     name: "switch_tab_restored",
-    label: "Switch to Restored Tab",
+    label: "options.switch_tab_restored.label",
     area: "sync",
     type: "check",
     defaultValue: false,
     description: [
-      "When checked, Tabs clicked in the Dashboard will be immediately switched to.",
+      "options.switch_tab_restored.description.A",
     ],
   } as CheckOption,
   FUNNEL_PINNED_TABS: {
     name: "funnel_pinned_tabs",
-    label: "Funnel Pinned Tabs",
+    label: "options.funnel_pinned_tabs.label",
     area: "sync",
     type: "check",
     defaultValue: false,
     description: [
-      "When checked, pinned tabs are also Funnelled. (as long as it is http/https)",
+      "options.funnel_pinned_tabs.description.A",
     ],
   } as CheckOption,
   SNAPSHOT_LOCATION: {
     name: "snapshot_location",
-    label: "Snapshot location",
+    label: "options.snapshot_location.label",
     area: "sync",
     type: "text",
     defaultValue: "tab-funnel",
     placeholder: "tab-funnel",
     description: [
-      "Defines the folder location of Snapshots, stored within the downloads folder.",
-      "Restricted to a-z, A-Z, 0-9 and '-'.",
+      "options.snapshot_location.description.A",
+      "options.snapshot_location.description.B",
     ],
     pattern: /[^a-zA-Z0-9\-]/g,
   } as TextOption,
   FONT_OVERRIDE: {
     name: "font_override",
-    label: "Font Override",
+    label: "options.font_override.label",
     area: "sync",
     type: "text",
     defaultValue: "",
     placeholder: "",
     description: [
-      "Defines a custom Font name you want to use for the entire UI",
-      "No guarantees on non-breaking changes to UI",
-      "Default Font (first occurrence of list): Bahnschrift, DIN Alternate, Franklin Gothic Medium, Nimbus Sans Narrow, sans-serif-condensed, sans-serif"
+      "options.font_override.description.A",
+      "options.font_override.description.B",
+      "options.font_override.description.C"
     ]
   } as TextOption,
   CURRENT_THEME: {
     name: "current_theme",
-    label: "Choose Theme",
+    label: "options.current_theme.label",
     area: "sync",
     type: "multi",
     options: [
@@ -161,7 +168,17 @@ export const Options = {
     ],
     defaultValue: "kanagawa_wave",
     description: [
-      "Choose a theme for the entirety of TabFunnel, each have a light and dark theme that auto switches with your browser theme."
+      "options.current_theme.description.A"
     ]
   } as MultiOption,
+  RESTORE_AS_PINNED: {
+    name: "restore_as_pinned",
+    label: "options.restore_as_pinned.label",
+    area: "sync",
+    type: "check",
+    defaultValue: true,
+    description: [
+      "options.restore_as_pinned.description.A"
+    ]
+  } as CheckOption
 };
