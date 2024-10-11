@@ -105,6 +105,9 @@
 - [x] Change favicon URL to DuckDuckGo (`@/components/BaseTabView.tsx`)
 - [x] Add images to onboarding
 
+### 0.4.1 Favicon Fix
+- [x] Add onerror fallback image
+
 - ### 1.0.0 Update 1.0
 - [ ] Public Release
 - [ ] Public Github
@@ -122,3 +125,13 @@
 - [ ] Nord
 - [ ] Catpuccino
 - [ ] Dracula
+
+### 2.0 Possible Additions
+- [ ] Store as Bookmarks
+  - [ ] Put into tabfunnel folder
+  - [ ] Save everything as tabs instead
+  - [ ] Backup as json still
+  - [ ] big work
+  - [ ] Synced using browser
+- [ ] Group by Name
+  - [ ] A-Z name based groups

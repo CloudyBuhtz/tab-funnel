@@ -66,7 +66,7 @@ export const SortedTabView = ({ tabs, sort, reverse }: SortedTabViewProps): JSX.
         <div onClick={() => confirmRemoveTabs([tab])} className="close">
           <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path></svg>
         </div>
-        <img className="icon" src={getFavIconURL(tab.url)} alt={tab.title} />
+        <img className="icon" src={getFavIconURL(tab.url)} alt={tab.title} onError={(e) => { e.currentTarget.src = '/fallback.png'; }} />
         {tab.pinned && <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2z"></path></svg>}
         <span onClick={() => openTabs([tab])} className="title">{tab.title}</span>
       </div>

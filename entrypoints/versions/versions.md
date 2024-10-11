@@ -1,5 +1,8 @@
 # What's New
 
+### Fix (0.4.1)
+Favicon Provider fallback fix
+
 ### i18n Update (0.4.0)
 Link to Onboarding on Options Page
 
