@@ -1,5 +1,15 @@
 # What's New
 
+### Public Release (1.0.0)
+Version Bump for Public Release
+
+Github is now Public
+
+Firefox Public Release
+
+Chrome Coming Soon
+
+
 ### Fix (0.4.1)
 Favicon Provider fallback fix
 

@@ -1,6 +1,6 @@
 # Welcome to Tab Funnel
 
-## [What's new!](/versions.html#040)
+## [What's new!](/versions.html#100)
 
 Thanks for installing Tab Funnel! I appreciate you checking this out; this document outlines functions and concepts of the addon. If you know what you're doing or are happy to figure it out without lots of reading feel free to close this tab or continue on to see all the features of this addon.
 

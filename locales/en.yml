@@ -76,8 +76,8 @@ options:
       A: >-
         Calculated as absolute time between snapshots, not necessarily when the
         date / time changes.
-      B: Only Funnel' activates only when tabs are Funnelled.
-      C: Every Change' activates when tabs are Funnelled and Removed.
+      B: "'Only Funnel' activates only when tabs are Funnelled."
+      C: "'Every Change' activates when tabs are Funnelled and Removed."
   remove_tabs_restored:
     label: Remove Tab when Restored
     description:

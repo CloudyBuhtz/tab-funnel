@@ -1,136 +1,23 @@
 # TabFunnel
 
-## TODO
+Tab Funnel is a browser addon to collect tabs into a single list that can be grouped and sorted.
 
-- ### 0.1.0
-- [x] Add import / export menu (`@/dashboard/Dashboard.tsx`)
-- [x] Show Bytes Used (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
+![Image](./public/screenshots/themes.png)
 
-- ### 0.1.1
-- [x] Remove Duplicate Tabs (`@/options/Options.tsx`)
-- [x] Actually Backup before Clearing (`@/options/Options.tsx`)
+## Features
+- Funnel Tabs from tab bar
+- List funnelled tabs in Dashboard
+- Group and Sort tabs in Dashboard
+- Context Menu Options
+- Theming Support
+- Search via Omnibox
+- Backups (Snapshots)
+- Snapshots Triggered Automatically (when data changes)
+- Regular Snapshots (Daily, Weekly, Monthly)
+- Import / Export
 
-- ### 0.1.2
-- [x] Sort Site Name (`@/dashboard/Dashboard.tsx`)
-- [x] Use ${tabCount} Tabs | ${tabSize} bytes Dashboard (`@/dashboard/Dashboard.tsx`)
-- [x] Use sensible memory units for tabSize (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
-
-- ### 0.1.4
-- [x] Key for description map (`@/options/Options.tsx`)
-- [x] Open All option in ungrouped (`@/dashboard/Dashboard.tsx`)
-- [x] Remove All option in ungrouped (`@/dashboard/Dashboard.tsx`)
-- [x] Investigate removing ts-md5 (`meta`)
-
-- ### 0.1.5
-- [x] Investigate using UUID instead of hash (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
-- [x] Check if tabs have changed since last backup (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
-- [x] Remove console.log's (`all`)
-- [x] Investigate Chrome light mode problems (`@/public/global.css`)
-- [x] Support OneTab list natively as import (`@/dashboard/Dashboard.tsx`)
-- [x] Reduce CPU / RAM usage during list import (`@/dashboard/Dashboard.tsx`)
-- [x] Pull Group / Sort / Reverse into `storage.ts` (`@/dashboard/Dashboard.tsx`, `@/utils/storage.ts`)
-- [x] Export doesn't always work first time (`@/dashboard/Dashboard.tsx`)
-- [x] List size of each group (`@/dashboard/Dashboard.tsx`)
-- [x] Confirm deletion of groups / all (`@/dashboard/Dashboard.tsx`)
-
-- ### 0.1.6 CSS Clean-up
-- [x] Move Group View / Modal Views to components (`@/dashboard/Dashboard.tsx`)
-- [x] Last snapshot as time since (seconds / minutes / hours / days / date) (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
-- [x] Reverse Group / Sort independently (`@/dashboard/Dashboard.tsx`)
-- [x] Add options cog to top right corner of popup (`@/popup/Popup.tsx`)
-- [x] Clean up CSS (`*.css`)
-- [x] Danger Mode actions modals w/ warnings etc (`@/options/Options.tsx`)
-- [x] Migrate `Tab` to use UUID (`@/utils/data.ts`)
-
-- ### 0.1.7 Hotfix
-- [x] Browser Runtime onInstalled trigger error (`@/background.ts`)
-
-- ### 0.2.0 Theme Update
-- [x] Remove UUID Migrate (`@/background.ts`)
-- [x] Change theming of inputs (`@/assets/global.css`)
-- [x] Change checkboxes (`@/assets/global.css`)
-- [x] Fix: Text Input (`@/components/TextInput.tsx`)
-- [x] Context dependant sort icons (`@/dashboard/Dashboard.tsx`)
-- [x] Chrome specific css inject fix (`@/assets/global.css`)
-- [x] Custom select element wraps select (`@/dashboard/Dashboard.tsx`, `@/assets/global.css`)
-- [x] Options `danger-zone` css theming (`@/options/Options.tsx`, `@/options/Options.css`)
-- [x] Font Override (`@/components/FontSwitcher.tsx`)
-- [x] Change components to default exports where possible (`@/components/*.tsx`)
-- [x] Improve Icon
-- [x] Rename `xyxInput` to `xyzOption` (`@/components/*Input.tsx`)
-- [x] Fix Button Styling (`@/assets/global.css`)
-- [x] Multiple Themes (`@/themes/*.ts`)
-- [x] Clean-up CSS theme (`@/assets/global.css`)
-
-- ### 0.2.1 Clean-Up
-- [x] Option Grouping (`@/utils/options.ts`, `@/assets/global.css`)
-- [x] Clean-up basic theme
-- [x] Remove console logs
-
-- ### 0.2.2 Themes!
-- [x] Make icon slightly smaller? (`@/public/icon/*.png`)
-- [x] Fix overwrite checkbox on Snapshot Import (`@/components/ImportSnapshotModal.tsx`)
-- [x] Themes Added (`@/components/themes/*.ts`)
-  - [x] One Dark (dark)
-  - [x] One Light (light)
-  - [x] Kanagawa Wave (dark)
-  - [x] Kanagawa Dragon (dark)
-  - [x] Kanagawa Lotus (light)
-
-- ### 0.3.0 Functions Galore
-- [x] Suggest tabs from Address Bar (`@/background.ts`)
-- [x] Sync storage
-- [x] Re-pin itself if it was already before update (`@/background.ts`)
-- [x] Funnel tabs from menu (`@/background.ts`)
-  - [x] Funnel single tab
-  - [x] Funnel other tabs
-  - [x] Funnel tabs to the right
-  - [x] Funnel tabs to the left
-- [x] Onboarding page (`@/onboarding/index.html`)
-  - [x] Load markdown pages
-  - [x] Added react-markdown dependency
-  - [x] Write onboarding info
-
-- ### 0.4.0 Internationalization Update / Pinned Tabs
-- [x] Add link to onboarding on Options (`@/ptions/Options.tsx`)
-- [x] Add link to version on version text in popup / dashboard (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
-- [x] Source all Themes (`@/components/themes/*.ts`)
-- [x] Add i18n support (`@/locales/en.yml`, `*.tsx`)
-- [x] Display pin icon beside pinned tabs (`@/dashboard/Dashboard.tsx`)
-- [x] Add pinned as boolean to Tab Type
-- [x] Restore pinned tabs to pinned status
-- [x] Option to restore as pin or not
-- [x] Fix date sorting, when importing old tabs
-- [x] Change favicon URL to DuckDuckGo (`@/components/BaseTabView.tsx`)
-- [x] Add images to onboarding
-
-### 0.4.1 Favicon Fix
-- [x] Add onerror fallback image
-
-- ### 1.0.0 Update 1.0
-- [ ] Public Release
-- [ ] Public Github
-  - [ ] Figure out license
-
-### 1.1.0 Group by Granularity
-
-### 1.2.0 Mobile Version
-
-### 1.3.0 Syncing
-
-### 1.4.0 Themes
-- [ ] Monokai
-- [ ] Tokyo Night (All Flavours)
-- [ ] Nord
-- [ ] Catpuccino
-- [ ] Dracula
-
-### 2.0 Possible Additions
-- [ ] Store as Bookmarks
-  - [ ] Put into tabfunnel folder
-  - [ ] Save everything as tabs instead
-  - [ ] Backup as json still
-  - [ ] big work
-  - [ ] Synced using browser
-- [ ] Group by Name
-  - [ ] A-Z name based groups
+## What isn't a Feature
+- Auto Syncing between separate PC's / Accounts
+- Custom Grouping / Sorting
+- Editing Tabs / Data
+- Mobile Version
