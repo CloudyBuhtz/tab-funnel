@@ -80,8 +80,7 @@
 - ### 0.3.0 Functions Galore
 - [x] Suggest tabs from Address Bar (`@/background.ts`)
 - [x] Sync storage
-- [-] Re-pin itself if it was already before update (`@/background.ts`)
-  - [x] Currently reopens the dashboard when updated
+- [x] Re-pin itself if it was already before update (`@/background.ts`)
 - [x] Funnel tabs from menu (`@/background.ts`)
   - [x] Funnel single tab
   - [x] Funnel other tabs
