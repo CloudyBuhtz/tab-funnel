@@ -165,6 +165,7 @@ export const Options = {
       "kanagawa_wave",
       "kanagawa_dragon",
       "kanagawa_lotus",
+      "gruvbox_dark",
     ],
     defaultValue: "kanagawa_wave",
     description: [

@@ -69,6 +69,10 @@ options:
           making the next timed snapshot happen the next time it's checked.
       confirm: Are you sure you want to clear the last Snapshot date?
     show: Show / Hide Dangerous Options
+    resetOptions:
+      button: Reset Options to Default
+      description:
+        A: Clicking this will reset all the options to their defaults.
   showOnboarding: Show Welcome Page
   snapshot_frequency:
     label: Automatic Snapshot Frequency
@@ -76,8 +80,8 @@ options:
       A: >-
         Calculated as absolute time between snapshots, not necessarily when the
         date / time changes.
-      B: "'Only Funnel' activates only when tabs are Funnelled."
-      C: "'Every Change' activates when tabs are Funnelled and Removed."
+      B: '''Only Funnel'' activates only when tabs are Funnelled.'
+      C: '''Every Change'' activates when tabs are Funnelled and Removed.'
   remove_tabs_restored:
     label: Remove Tab when Restored
     description:
@@ -126,10 +130,12 @@ options:
     label: Choose Theme
     description:
       A: >-
-        Choose a theme for the entirety of TabFunnel, some are light and some are dark. Pick your favourite!
+        Choose a theme for the entirety of TabFunnel, some are light and some
+        are dark. Pick your favourite!
   restore_as_pinned:
     label: Restore Pinned Tabs as Pinned
     description:
       A: >-
         When checked, Pinned Tabs will return to being Pinned when Restored from
         the Dashboard.
+  showGithub: Open GitHub Page

@@ -33,10 +33,21 @@ export default () => {
     });
   };
 
+  const resetOptions = async () => {
+    Object.entries(Options).forEach(([k, v]) => {
+      console.log(k, v);
+      storage.setItem(`${v.area}:${v.name}`, v.defaultValue);
+    });
+  };
+
   const renderDanger = (danger: boolean) => {
     if (!danger) { return (<></>); } else {
       return (
         <div className="danger-zone">
+          <button onClick={resetOptions}>{i18n.t("options.danger.resetOptions.button")}</button>
+          <div className="description">
+            <div>{i18n.t("options.danger.resetOptions.description.A")}</div>
+          </div>
           <button onClick={removeDuplicates}>{i18n.t("options.danger.removeAllDuplicates.button")}</button>
           <div className="description">
             <div>{i18n.t("options.danger.removeAllDuplicates.description.A")}</div>
@@ -95,7 +106,14 @@ export default () => {
     const url = browser.runtime.getURL("/onboarding.html");
     const newTab = browser.tabs.create({
       url: url,
-      active: true
+      active: true,
+    });
+  };
+
+  const showGithub = () => {
+    const newTab = browser.tabs.create({
+      url: "https://github.com/CloudyBuhtz/tab-funnel",
+      active: true,
     });
   };
 
@@ -103,6 +121,7 @@ export default () => {
     <>
       <menu>
         <div onClick={showOnboarding}>{i18n.t("options.showOnboarding")}</div>
+        <div onClick={showGithub}>{i18n.t("options.showGithub")}</div>
       </menu>
       <main>
         {OptionsGroup.map(group => {

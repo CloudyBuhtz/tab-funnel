@@ -111,13 +111,12 @@ const setupMenus = () => {
     type: "normal",
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
-      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const newTab = {
         title: tab.title!,
         url: tab.url!,
         date: Date.now().toString(),
         hash: crypto.randomUUID(),
-        pinned: funnelPinnedTabs && tab.pinned
+        pinned: tab.pinned,
       } satisfies TabV2;
       await storeTabs([newTab]);
       await TabCountItem.setValue(await TabCountItem.getValue() + 1);
@@ -137,7 +136,8 @@ const setupMenus = () => {
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
-        windowType: "normal"
+        windowType: "normal",
+        pinned: funnelPinnedTabs,
       })).filter((t) => t.id !== tab.id);
       const newTabs = tabs.map((t) => {
         return {
@@ -145,7 +145,7 @@ const setupMenus = () => {
           url: t.url!,
           date: now,
           hash: crypto.randomUUID(),
-          pinned: funnelPinnedTabs && tab.pinned
+          pinned: t.pinned,
         } satisfies TabV2;
       });
 
@@ -167,7 +167,8 @@ const setupMenus = () => {
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
-        windowType: "normal"
+        windowType: "normal",
+        pinned: funnelPinnedTabs,
       })).filter((t) => t.index < tab.index);
       const newTabs = tabs.map((t) => {
         return {
@@ -175,7 +176,7 @@ const setupMenus = () => {
           url: t.url!,
           date: now,
           hash: crypto.randomUUID(),
-          pinned: funnelPinnedTabs && tab.pinned
+          pinned: t.pinned,
         } satisfies TabV2;
       });
 
@@ -197,7 +198,8 @@ const setupMenus = () => {
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
-        windowType: "normal"
+        windowType: "normal",
+        pinned: funnelPinnedTabs,
       })).filter((t) => t.index > tab.index);
       const newTabs = tabs.map((t) => {
         return {
@@ -205,7 +207,7 @@ const setupMenus = () => {
           url: t.url!,
           date: now,
           hash: crypto.randomUUID(),
-          pinned: funnelPinnedTabs && tab.pinned
+          pinned: t.pinned
         } satisfies TabV2;
       });
 
@@ -229,6 +231,7 @@ const setupMenus = () => {
         url: "*://*/*",
         windowType: "normal",
         active: true,
+        pinned: funnelPinnedTabs
       }));
       const newTabs = tabs.map((t) => {
         return {
@@ -236,7 +239,7 @@ const setupMenus = () => {
           url: t.url!,
           date: now,
           hash: crypto.randomUUID(),
-          pinned: funnelPinnedTabs && tab.pinned
+          pinned: t.pinned
         } satisfies TabV2;
       });
 

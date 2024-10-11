@@ -1,35 +1,35 @@
-/* Source: https://github.com/akamud/vscode-theme-onedark */
+/* Source: https://github.com/rebelot/kanagawa.nvim */
 export default {
-  "id": "one_dark",
-  "name": "One Dark",
+  "id": "gruvbox_dark",
+  "name": "Gruvbox Dark",
   "style": {
     /* Dark / Light Theme */
     "color-scheme": "dark",
 
     /* Page Background */
-    "--theme-bg0": "#21252B",
+    "--theme-bg0": "#1d2021",
     /* Secondary Background */
-    "--theme-bg1": "#3E4451",
+    "--theme-bg1": "#282828",
     /* Inputs / Button Background */
-    "--theme-bg2": "#4E5666",
+    "--theme-bg2": "#3c3836",
     /* Inputs / Button Background Hover */
-    "--theme-bg3": "#626772",
+    "--theme-bg3": "#504945",
     /* Disabled Button Background */
-    "--theme-bg4": "#333842",
+    "--theme-bg4": "#32302f",
     /* Danger Zone Background */
-    "--theme-bg5": "#BE5046",
+    "--theme-bg5": "#32302f",
 
     /* Default Text */
-    "--theme-fg-ink0": "#ABB2BF",
+    "--theme-fg-ink0": "#d5c4a1",
     /* Secondary Text (Popup / Dashboard Info) */
-    "--theme-fg-ink1": "#D7DAE0",
+    "--theme-fg-ink1": "#fbf1c7",
     /* Dashboard Separator */
-    "--theme-fg-grey0": "#636D83",
+    "--theme-fg-grey0": "#ebdbb2",
     /* Tab Group Separator | Disabled Button Text */
-    "--theme-fg-grey1": "#D7DAE0",
+    "--theme-fg-grey1": "#a89984",
     /* Accent Text | Active Button Text */
-    "--theme-fg-accent0": "#E5C07B",
+    "--theme-fg-accent0": "#689d6a",
     /* Checkbox Hover Accent */
-    "--theme-fg-accent1": "#D19A66",
+    "--theme-fg-accent1": "#98971a",
   }
 };

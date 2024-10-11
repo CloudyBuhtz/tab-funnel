@@ -3,6 +3,9 @@ export default {
   "id": "kanagawa_lotus",
   "name": "Kanagawa Lotus",
   "style": {
+    /* Dark / Light Theme */
+    "color-scheme": "light",
+
     /* Page Background */
     "--theme-bg0": "#d5cea3",
     /* Secondary Background */

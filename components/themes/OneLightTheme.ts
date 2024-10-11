@@ -3,6 +3,9 @@ export default {
   "id": "one_light",
   "name": "One Light",
   "style": {
+    /* Dark / Light Theme */
+    "color-scheme": "light",
+
     /* Page Background */
     "--theme-bg0": "#FAFAFA",
     /* Secondary Background */

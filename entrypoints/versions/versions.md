@@ -1,5 +1,25 @@
 # What's New
 
+### Post Launch Fixes (1.0.1)
+Fixed Accidentally Funnelling Pinned Tabs from Context Menu
+
+Fix for light themes showing things from dark mode
+
+Button to reset all Options to default added to Danger-Zone
+
+GitHub link in options page
+
+Gruvbox Theme Added
+
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
+
 ### Public Release (1.0.0)
 Version Bump for Public Release
 
@@ -9,9 +29,26 @@ Firefox Public Release
 
 Chrome Coming Soon
 
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
 
 ### Fix (0.4.1)
 Favicon Provider fallback fix
+
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
 
 ### i18n Update (0.4.0)
 Link to Onboarding on Options Page

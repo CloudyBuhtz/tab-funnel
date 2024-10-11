@@ -1,3 +1,4 @@
+import { Tabs } from 'wxt/browser';
 import {
   TabItem,
   TabCountItem,
@@ -22,6 +23,10 @@ export type TabV2 = {
   date: string;
   hash: UUID;
   pinned: boolean;
+};
+
+export const funnelTabs = async (tabs: Tabs.Tab[]): Promise<TabV2[]> => {
+  return [];
 };
 
 export const storeTabs = async (newTabs: TabV2[]): Promise<void> => {

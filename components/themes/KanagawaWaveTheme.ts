@@ -3,6 +3,9 @@ export default {
   "id": "kanagawa_wave",
   "name": "Kanagawa Wave",
   "style": {
+    /* Dark / Light Theme */
+    "color-scheme": "dark",
+
     /* Page Background */
     "--theme-bg0": "#16161D",
     /* Secondary Background */

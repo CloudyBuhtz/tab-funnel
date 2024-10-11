@@ -4,6 +4,7 @@ import KanagawaLotus from "./themes/KanagawaLotusTheme";
 import KanagawaDragon from "./themes/KanagawaDragonTheme";
 import OneDark from "./themes/OneDarkTheme";
 import OneLight from "./themes/OneLightTheme";
+import GruvboxDark from "./themes/GruvboxDarkTheme";
 
 type Theme = {
   id: string,
@@ -35,6 +36,8 @@ export default (): JSX.Element => {
         return OneDark;
       case "one_light":
         return OneLight;
+      case "gruvbox_dark":
+        return GruvboxDark;
       default:
         return KanagawaWave;
     }

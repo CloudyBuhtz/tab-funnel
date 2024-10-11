@@ -3,6 +3,9 @@ export default {
   "id": "kanagawa_dragon",
   "name": "Kanagawa Dragon",
   "style": {
+    /* Dark / Light Theme */
+    "color-scheme": "dark",
+
     /* Page Background */
     "--theme-bg0": "#0D0C0C",
     /* Secondary Background */

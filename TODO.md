@@ -107,12 +107,15 @@
 - [x] Add onerror fallback image
 
 - ### 1.0.0 Update 1.0
-- [ ] Public Release
-- [ ] Public Github
-  - [ ] LICENSE file
+- [x] Public Release
+- [x] Public Github
 
-### 1.0.1 Github Link
-- [ ] Link to github on Options Page / Maybe popup as little icon
+### 1.0.1 Post Launch Fixes
+- [x] Link to GitHub on options page menu
+- [x] Add reset options to default under dangerous options
+- [x] Fix funnelling pinned tabs in context menus
+- [x] Add `color-scheme` to every theme to use `light-dark()` sections when present
+- [x] Gruvbox Theme Added
 
 ### 1.1.0 Group by Granularity
 - [ ] Add control on Dashboard to choose granularity
@@ -123,6 +126,9 @@
   - [ ] Years
 - [ ] Group by Date now uses the granularity
 - [ ] Only show granularity when date is selected
+- [ ] Move Funnelling tabs to separate function, should save tons of repetition and changes
+- [ ] Show URL on Tab Hover
+- [ ] Open `What's New` on Update
 
 ### 1.2.0 Mobile Version
 
