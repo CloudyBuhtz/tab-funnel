@@ -48,3 +48,12 @@ img {
   display: block;
   margin-inline: auto;
 }
+
+p {
+  margin-block: 1ch;
+}
+
+ul {
+  margin-block: 0;
+  padding-block: 0;
+}

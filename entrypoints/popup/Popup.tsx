@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { browser } from "wxt/browser";
-import { snapshotTabs, storeTabs, type TabV2 } from "../utils/data";
+import { funnelTabs, snapshotTabs, storeTabs, type TabV2 } from "../utils/data";
 import {
   FunnelPinnedTabsItem,
   IgnoreDuplicateTabsItem,
@@ -39,7 +39,7 @@ export default () => {
     getCount();
   }, []);
 
-  const funnelTabs = async () => {
+  const funnelAllTabs = async () => {
     // Get current tabs
     const storedTabs = await TabItem.getValue();
     const hasTab = (url: string) => {
@@ -51,41 +51,11 @@ export default () => {
     // Get tabs
     const tabs = await browser.tabs.query({
       currentWindow: true,
-      pinned: funnelPinnedTabs.current ? undefined : false,
       url: "*://*/*",
       windowType: "normal"
     });
 
-    // Create tab data
-    const funnelDate = Date.now().toString();
-    let tabsToFunnel: TabV2[] = await Promise.all(tabs.map(async (tab, index: number) => {
-      return {
-        title: tab.title!,
-        url: tab.url!.toString(),
-        date: funnelDate,
-        hash: crypto.randomUUID(),
-        pinned: tab.pinned
-      } satisfies TabV2;
-    }));
-
-    // Optionally remove duplicates
-    if (ignoreDuplicateTabs.current) {
-      tabsToFunnel = tabsToFunnel.filter((tab: TabV2) => {
-        return !hasTab(tab.url);
-      });
-    };
-    storeTabs(tabsToFunnel);
-    const newCount = tabCount + tabsToFunnel.length;
-    await TabCountItem.setValue(newCount);
-
-    // Optionally close tabs
-    if (removeTabFunnelled.current) {
-      browser.tabs.remove(
-        tabs.map((tab) => {
-          return tab.id!;
-        })
-      );
-    };
+    funnelTabs(tabs);
   };
 
   const showList = async () => {
@@ -142,7 +112,7 @@ export default () => {
     <main>
       <div className="info">{i18n.t("main.tabs", tabCount)} | {convertBytes(storeSize)}</div>
       <div className="info">{i18n.t("dashboard.info.lastSnapshot")}: {lastSnapshotDate === 0 ? i18n.t("dashboard.info.never") : timeAgo(lastSnapshotDate)}</div>
-      <button onClick={funnelTabs}>{i18n.t("popup.funnelAllTabs")}</button>
+      <button onClick={funnelAllTabs}>{i18n.t("popup.funnelAllTabs")}</button>
       <button onClick={showList}>{i18n.t("popup.showDashboard")}</button>
       <button onClick={manualSnapshot}>{i18n.t("popup.manualSnapshot")}</button>
       <div onClick={showVersions} className="info version">{i18n.t("main.version", [browser.runtime.getManifest().version])}</div>

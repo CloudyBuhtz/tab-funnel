@@ -78,17 +78,10 @@
 
 - ### 0.3.0 Functions Galore
 - [x] Suggest tabs from Address Bar (`@/background.ts`)
-- [x] Sync storage
+- [x] Sync storage (`@util/)
 - [x] Re-pin itself if it was already before update (`@/background.ts`)
 - [x] Funnel tabs from menu (`@/background.ts`)
-  - [x] Funnel single tab
-  - [x] Funnel other tabs
-  - [x] Funnel tabs to the right
-  - [x] Funnel tabs to the left
 - [x] Onboarding page (`@/onboarding/index.html`)
-  - [x] Load markdown pages
-  - [x] Added react-markdown dependency
-  - [x] Write onboarding info
 
 - ### 0.4.0 Internationalization Update / Pinned Tabs
 - [x] Add link to onboarding on Options (`@/options/Options.tsx`)
@@ -118,17 +111,19 @@
 - [x] Gruvbox Theme Added
 
 ### 1.1.0 Group by Granularity
-- [ ] Add control on Dashboard to choose granularity
-  - [ ] Hours
-  - [ ] Days
-  - [ ] Weeks
-  - [ ] Months
-  - [ ] Years
-- [ ] Group by Date now uses the granularity
-- [ ] Only show granularity when date is selected
-- [ ] Move Funnelling tabs to separate function, should save tons of repetition and changes
-- [ ] Show URL on Tab Hover
-- [ ] Open `What's New` on Update
+- [x] Add control on Dashboard to choose granularity
+- [x] Group by Date now uses the granularity
+- [x] Only show granularity when date is selected
+- [x] Text Entry Fix (Chrome)
+- [x] Omnibox Fix (Chrome)
+- [x] Alarms instead of `onInterval` (Chrome / MV3)
+- [x] Conditionally setup menus (Firefox)
+- [x] Conditionally add NewTab page (Firefox)
+- [x] Funnel Selected Tabs fix (All)
+- [x] Fix Alignment / Spacing on Dashboard
+- [x] Missing i18n string
+- [x] Show URL on Tab Hover
+- [x] Separate Download functionality between Firefox and Chrome
 
 ### 1.2.0 Mobile Version
 
@@ -155,3 +150,6 @@
   - [ ] Synced using browser
 - [ ] Group by Name
   - [ ] A-Z name based groups
+- [ ] Integrate with Tab-Style Tabs ( https://github.com/piroor/treestyletab/wiki/API-for-other-addons )
+- [ ] Opening Multiple Dashboards will de-sync
+- [ ] Drag Tabs from Dashboard, add URL as drag data

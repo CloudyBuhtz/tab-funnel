@@ -35,7 +35,6 @@ export default () => {
 
   const resetOptions = async () => {
     Object.entries(Options).forEach(([k, v]) => {
-      console.log(k, v);
       storage.setItem(`${v.area}:${v.name}`, v.defaultValue);
     });
   };

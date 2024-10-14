@@ -1,12 +1,11 @@
 import { Omnibox } from "wxt/browser";
-import { snapshotTabs, storeTabs, type TabV2 } from "./utils/data";
+import { funnelTabs, snapshotTabs, type TabV2 } from "./utils/data";
 import { hashString } from "./utils/misc";
 import {
   FunnelPinnedTabsItem,
   LastSnapshotDateItem,
   LastSnapshotHashItem,
   SnapshotFrequencyItem,
-  TabCountItem,
   TabItem,
 } from "./utils/storage";
 
@@ -62,11 +61,10 @@ const setupOmnibox = () => {
     const suggestions: Omnibox.SuggestResult[] = filteredTabs.map((t: TabV2) => {
       return {
         content: t.url,
-        description: t.title,
+        description: `${t.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')}`,
         deletable: false,
       } as Omnibox.SuggestResult;
     });
-
     suggest(suggestions);
   });
 
@@ -92,7 +90,6 @@ const setupOmnibox = () => {
         });
         break;
     }
-    console.log(text, disposition);
   });
 };
 
@@ -111,16 +108,9 @@ const setupMenus = () => {
     type: "normal",
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
-      const newTab = {
-        title: tab.title!,
-        url: tab.url!,
-        date: Date.now().toString(),
-        hash: crypto.randomUUID(),
-        pinned: tab.pinned,
-      } satisfies TabV2;
-      await storeTabs([newTab]);
-      await TabCountItem.setValue(await TabCountItem.getValue() + 1);
-      browser.tabs.remove([tab.id!]);
+      await funnelTabs([tab], {
+        funnelPinnedTabs: true
+      });
     },
   });
 
@@ -131,27 +121,13 @@ const setupMenus = () => {
     type: "normal",
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
-      const now = Date.now().toString();
-      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
         windowType: "normal",
-        pinned: funnelPinnedTabs,
       })).filter((t) => t.id !== tab.id);
-      const newTabs = tabs.map((t) => {
-        return {
-          title: t.title!,
-          url: t.url!,
-          date: now,
-          hash: crypto.randomUUID(),
-          pinned: t.pinned,
-        } satisfies TabV2;
-      });
 
-      await storeTabs(newTabs);
-      await TabCountItem.setValue(await TabCountItem.getValue() + newTabs.length);
-      browser.tabs.remove(tabs.map(t => t.id!));
+      await funnelTabs(tabs);
     },
   });
 
@@ -162,27 +138,14 @@ const setupMenus = () => {
     type: "normal",
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
-      const now = Date.now().toString();
       const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
         windowType: "normal",
-        pinned: funnelPinnedTabs,
       })).filter((t) => t.index < tab.index);
-      const newTabs = tabs.map((t) => {
-        return {
-          title: t.title!,
-          url: t.url!,
-          date: now,
-          hash: crypto.randomUUID(),
-          pinned: t.pinned,
-        } satisfies TabV2;
-      });
 
-      await storeTabs(newTabs);
-      await TabCountItem.setValue(await TabCountItem.getValue() + newTabs.length);
-      browser.tabs.remove(tabs.map(t => t.id!));
+      await funnelTabs(tabs);
     },
   });
 
@@ -193,27 +156,13 @@ const setupMenus = () => {
     type: "normal",
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
-      const now = Date.now().toString();
-      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
         windowType: "normal",
-        pinned: funnelPinnedTabs,
       })).filter((t) => t.index > tab.index);
-      const newTabs = tabs.map((t) => {
-        return {
-          title: t.title!,
-          url: t.url!,
-          date: now,
-          hash: crypto.randomUUID(),
-          pinned: t.pinned
-        } satisfies TabV2;
-      });
 
-      await storeTabs(newTabs);
-      await TabCountItem.setValue(await TabCountItem.getValue() + newTabs.length);
-      browser.tabs.remove(tabs.map(t => t.id!));
+      await funnelTabs(tabs);
     },
   });
 
@@ -224,28 +173,14 @@ const setupMenus = () => {
     parentId: "menu_funnel_parent",
     type: "normal",
     onclick: async (info, tab) => {
-      const now = Date.now().toString();
-      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",
         windowType: "normal",
-        active: true,
-        pinned: funnelPinnedTabs
+        highlighted: true
       }));
-      const newTabs = tabs.map((t) => {
-        return {
-          title: t.title!,
-          url: t.url!,
-          date: now,
-          hash: crypto.randomUUID(),
-          pinned: t.pinned
-        } satisfies TabV2;
-      });
 
-      await storeTabs(newTabs);
-      await TabCountItem.setValue(await TabCountItem.getValue() + newTabs.length);
-      browser.tabs.remove(tabs.map(t => t.id!));
+      await funnelTabs(tabs);
     },
   });
 };
@@ -281,11 +216,23 @@ const setupUpdated = () => {
   });
 };
 
-export default defineBackground(() => {
-  setInterval(checkSnapshot, 60000);
+const setupSnapshotAlarm = async () => {
+  browser.alarms.create("snapshot-alarm", {
+    periodInMinutes: 1
+  });
+  browser.alarms.onAlarm.addListener(a => {
+    if (a.name !== "snapshot-alarm") return;
+    checkSnapshot();
+  });
+};
 
+export default defineBackground(() => {
+  setupSnapshotAlarm();
   setupOmnibox();
-  setupMenus();
   setupInstalled();
   setupUpdated();
+
+  if (import.meta.env.FIREFOX) {
+    setupMenus();
+  }
 });

@@ -31,11 +31,13 @@ The main function of this Addon, clicking the funnel on your toolbar will open a
 
 <img src="/screenshots/funneltabs.png" />
 
+#### Context Menu (Firefox Only)
 You can even funnel tabs individually or in a more fine grained manner by right clicking on any tab in your tab bar. From here you can:
 - Funnel This Tab
 - Funnel Other Tabs
 - Funnel Tabs to Left
 - Funnel Tabs to Right
+- Funnel Selected Tabs
 
 <img src="/screenshots/contextmenu.png" />
 

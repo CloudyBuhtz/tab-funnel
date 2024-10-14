@@ -11,8 +11,9 @@ import {
   SortItem,
   SortReverseItem,
   GroupReverseItem,
+  GranularityItem,
 } from "../utils/storage";
-import type { TGroup, TSort } from "../utils/storage";
+import type { TGranularity, TGroup, TSort } from "../utils/storage";
 import "./Dashboard.css";
 import UngroupedTabView from "@/components/UngroupedTabView";
 import SiteGroupTabView from "@/components/SiteGroupTabView";
@@ -25,11 +26,11 @@ import SelectInput from "@/components/SelectInput";
 export default () => {
   const [tabs, setTabs] = useState<TabV2[]>(TabItem.fallback);
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
-  const [info, setInfo] = useState<Management.ExtensionInfo>();
   const [group, setGroup] = useState<string>(GroupItem.fallback);
   const [groupReverse, setGroupReverse] = useState<boolean>(GroupReverseItem.fallback);
   const [sort, setSort] = useState<string>(SortItem.fallback);
   const [sortReverse, setSortReverse] = useState<boolean>(SortReverseItem.fallback);
+  const [granularity, setGranularity] = useState<TGranularity>("seconds");
 
   const [showImportSnapshot, setShowImportSnapshot] = useState<boolean>(false);
   const [showImportList, setShowImportList] = useState<boolean>(false);
@@ -45,7 +46,6 @@ export default () => {
     const setup = async () => {
       setTabs(await TabItem.getValue());
       setTabCount(await TabCountItem.getValue());
-      setInfo(await browser.management.getSelf());
 
       setLastSnapshotDate(await LastSnapshotDateItem.getValue());
 
@@ -53,6 +53,7 @@ export default () => {
       setSort(await SortItem.getValue());
       setSortReverse(await SortReverseItem.getValue());
       setGroupReverse(await GroupReverseItem.getValue());
+      setGranularity(await GranularityItem.getValue());
     };
     setup();
   }, []);
@@ -75,6 +76,11 @@ export default () => {
   const changeSortReverse = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setSortReverse(e.target.checked);
     await SortReverseItem.setValue(e.target.checked);
+  };
+
+  const changeGranularity = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setGranularity(e.target.value as TGranularity);
+    await GranularityItem.setValue(e.target.value as TGranularity);
   };
 
   const SortLabel = ({ sort, name, checked }: { sort: TGroup | TSort, name: string, checked: boolean; }): JSX.Element => {
@@ -123,7 +129,7 @@ export default () => {
   };
 
   const storeSize = new Blob([JSON.stringify(tabs)]).size;
-  
+
   const showVersions = async () => {
     const url = browser.runtime.getURL("/versions.html");
     browser.tabs.create({
@@ -154,6 +160,17 @@ export default () => {
           <option value="group_by_date">{i18n.t("dashboard.controls.groupByDate")}</option>
           <option value="group_by_site">{i18n.t("dashboard.controls.groupBySite")}</option>
         </SelectInput>
+        {group === "group_by_date" &&
+          <SelectInput onChange={changeGranularity} value={granularity} name="date_granularity" id="date_granularity">
+            <option value="seconds">Second</option>
+            <option value="minutes">Minute</option>
+            <option value="hours">Hour</option>
+            <option value="days">Day</option>
+            <option value="weeks">Week</option>
+            <option value="months">Month</option>
+            <option value="years">Year</option>
+          </SelectInput>
+        }
         <SortLabel sort={group as TGroup | TSort} name="reverse_group" checked={groupReverse}></SortLabel>
         <input className="sort" disabled={group as TGroup === "ungrouped"} onChange={changeGroupReverse} checked={groupReverse} type="checkbox" name="reverse_group" id="reverse_group" />
         <span className="spacer"></span>
@@ -166,10 +183,11 @@ export default () => {
         <input className="sort" onChange={changeSortReverse} checked={sortReverse} type="checkbox" name="reverse_sort" id="reverse_sort" />
       </div>
       <main>
-        {group === "ungrouped" ? <UngroupedTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></UngroupedTabView> : null}
-        {group === "group_by_date" ? <DateGroupTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></DateGroupTabView> : null}
-        {group === "group_by_site" ? <SiteGroupTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></SiteGroupTabView> : null}
+        {group === "ungrouped" && <UngroupedTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></UngroupedTabView>}
+        {group === "group_by_date" && <DateGroupTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs} granularity={granularity}></DateGroupTabView>}
+        {group === "group_by_site" && <SiteGroupTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></SiteGroupTabView>}
       </main>
+      {/* <div className="urlPreview">{tabs.length > 0 && tabs[0].url}</div> */}
       <ImportSnapshotModal openModal={showImportSnapshot} closeModal={() => setShowImportSnapshot(false)}></ImportSnapshotModal>
       <ImportListModal openModal={showImportList} closeModal={() => setShowImportList(false)}></ImportListModal>
       <ExportListModal openModal={showExportList} closeModal={() => setShowExportList(false)}></ExportListModal>

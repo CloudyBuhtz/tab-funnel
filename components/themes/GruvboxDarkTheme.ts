@@ -1,4 +1,4 @@
-/* Source: https://github.com/rebelot/kanagawa.nvim */
+/* Source: https://github.com/morhetz/gruvbox */
 export default {
   "id": "gruvbox_dark",
   "name": "Gruvbox Dark",

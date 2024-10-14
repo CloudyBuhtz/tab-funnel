@@ -1,5 +1,28 @@
 # What's New
 
+### Date / Time Granularity (1.1.0)
+`Group by Date` has become `Group by Time` and with that comes the ability to choose how granular the grouping is, find tabs from the same hour, day, week, month or year.
+
+Show Tab URLs when you mouse over them.
+
+Fixes:
+- 'Funnel Selected Tabs' fix
+- Missing i18n strings
+- Options text input fix (Chrome)
+- Omnibox fix (Chrome)
+- Timed Snapshot fix (Chrome)
+- Dashboard Alignment / Spacing Fix
+- Download Snapshots Fix (Chrome / Firefox)
+
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
+
 ### Post Launch Fixes (1.0.1)
 Fixed Accidentally Funnelling Pinned Tabs from Context Menu
 

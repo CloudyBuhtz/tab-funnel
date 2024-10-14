@@ -14,9 +14,9 @@ dashboard:
     exportList: Export List
   controls:
     ungrouped: Ungrouped
-    groupByDate: Group by Date
+    groupByDate: Group by Time
     groupBySite: Group by Site
-    sortByDate: Sort by Date
+    sortByDate: Sort by Time
     sortByName: Sort by Name
     sortByURL: Sort by URL
   modal:
@@ -39,6 +39,7 @@ dashboard:
     openGroup: Open Group
     removeGroup: Remove Group
     confirm: Are you sure you want to remove $1?
+    weekStarting: Starting $1
 popup:
   funnelAllTabs: Funnel All Tabs
   showDashboard: Show Dashboard

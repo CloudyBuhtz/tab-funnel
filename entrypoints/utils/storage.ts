@@ -45,6 +45,11 @@ export const SortItem = storage.defineItem<TSort>("local:dashboard_sort", {
   fallback: "sort_by_date",
 });
 
+export type TGranularity = "seconds" | "minutes" | "hours" | "days" | "weeks" | "months" | "years";
+export const GranularityItem = storage.defineItem<TGranularity>("local:dashboard_granularity", {
+  fallback: "seconds",
+});
+
 export const SortReverseItem = storage.defineItem<boolean>("local:dashboard_sort_reverse", {
   fallback: false,
 });

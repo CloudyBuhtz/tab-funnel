@@ -12,8 +12,7 @@ export default ({ option }: TextInputProps) => {
   useEffect(() => {
     const setup = async () => {
       const value = await storage.getItem<string>(storageKey);
-      if (value === null) { return; };
-      setValue(value);
+      setValue(value!);
     };
     setup();
   }, []);
@@ -34,7 +33,7 @@ export default ({ option }: TextInputProps) => {
         <input
           onInput={changeHandler}
           type="text"
-          defaultValue={value}
+          value={value}
           placeholder={option.placeholder}
           name={option.name}
           id={option.name} />

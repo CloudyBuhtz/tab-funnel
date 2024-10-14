@@ -84,6 +84,7 @@
 
   main {
     padding: 1rem;
+    padding-bottom: 5rem;
     display: flex;
     flex-direction: column;
 
@@ -130,7 +131,7 @@
       flex-direction: row;
       gap: 1ch;
       align-items: center;
-      padding: 0.5ch;
+      padding: 0.75ch;
 
       &:hover {
         .close {
@@ -142,12 +143,32 @@
         .title {
           text-decoration: underline;
         }
+
+        &::after {
+          content: attr(data-url);
+          display: block;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          max-width: 95vw;
+          padding-block: 1ch;
+          padding-inline: 1rem;
+          transition: opacity 1000ms ease-out;
+          background-color: var(--theme-bg1);
+          color: var(--theme-fg-accent0);
+          font-size: 0.8rem;
+          text-overflow: ellipsis;
+          text-wrap: nowrap;
+          overflow-x: hidden;
+        }
       }
 
       .close {
         opacity: 0;
         pointer-events: none;
         cursor: pointer;
+        height: 1rem;
+        width: 1rem;
 
         &:hover {
           text-shadow: 0 0 5px light-dark(#000, #fff);
