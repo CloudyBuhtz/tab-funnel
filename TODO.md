@@ -1,26 +1,25 @@
-
 ## TODO
 
-- ### 0.1.0
+### 0.1.0
 - [x] Add import / export menu (`@/dashboard/Dashboard.tsx`)
 - [x] Show Bytes Used (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 
-- ### 0.1.1
+### 0.1.1
 - [x] Remove Duplicate Tabs (`@/options/Options.tsx`)
 - [x] Actually Backup before Clearing (`@/options/Options.tsx`)
 
-- ### 0.1.2
+### 0.1.2
 - [x] Sort Site Name (`@/dashboard/Dashboard.tsx`)
 - [x] Use ${tabCount} Tabs | ${tabSize} bytes Dashboard (`@/dashboard/Dashboard.tsx`)
 - [x] Use sensible memory units for tabSize (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 
-- ### 0.1.4
+### 0.1.4
 - [x] Key for description map (`@/options/Options.tsx`)
 - [x] Open All option in ungrouped (`@/dashboard/Dashboard.tsx`)
 - [x] Remove All option in ungrouped (`@/dashboard/Dashboard.tsx`)
 - [x] Investigate removing ts-md5 (`meta`)
 
-- ### 0.1.5
+### 0.1.5
 - [x] Investigate using UUID instead of hash (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [x] Check if tabs have changed since last backup (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [x] Remove console.log's (`all`)
@@ -32,7 +31,7 @@
 - [x] List size of each group (`@/dashboard/Dashboard.tsx`)
 - [x] Confirm deletion of groups / all (`@/dashboard/Dashboard.tsx`)
 
-- ### 0.1.6 CSS Clean-up
+### 0.1.6 CSS Clean-up
 - [x] Move Group View / Modal Views to components (`@/dashboard/Dashboard.tsx`)
 - [x] Last snapshot as time since (seconds / minutes / hours / days / date) (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [x] Reverse Group / Sort independently (`@/dashboard/Dashboard.tsx`)
@@ -41,10 +40,10 @@
 - [x] Danger Mode actions modals w/ warnings etc (`@/options/Options.tsx`)
 - [x] Migrate `Tab` to use UUID (`@/utils/data.ts`)
 
-- ### 0.1.7 Hotfix
+### 0.1.7 Hotfix
 - [x] Browser Runtime onInstalled trigger error (`@/background.ts`)
 
-- ### 0.2.0 Theme Update
+### 0.2.0 Theme Update
 - [x] Remove UUID Migrate (`@/background.ts`)
 - [x] Change theming of inputs (`@/assets/global.css`)
 - [x] Change checkboxes (`@/assets/global.css`)
@@ -61,12 +60,12 @@
 - [x] Multiple Themes (`@/themes/*.ts`)
 - [x] Clean-up CSS theme (`@/assets/global.css`)
 
-- ### 0.2.1 Clean-Up
+### 0.2.1 Clean-Up
 - [x] Option Grouping (`@/utils/options.ts`, `@/assets/global.css`)
 - [x] Clean-up basic theme
 - [x] Remove console logs
 
-- ### 0.2.2 Themes!
+### 0.2.2 Themes!
 - [x] Make icon slightly smaller? (`@/public/icon/*.png`)
 - [x] Fix overwrite checkbox on Snapshot Import (`@/components/ImportSnapshotModal.tsx`)
 - [x] Themes Added (`@/components/themes/*.ts`)
@@ -76,14 +75,14 @@
   - [x] Kanagawa Dragon (dark)
   - [x] Kanagawa Lotus (light)
 
-- ### 0.3.0 Functions Galore
+### 0.3.0 Functions Galore
 - [x] Suggest tabs from Address Bar (`@/background.ts`)
 - [x] Sync storage (`@util/)
 - [x] Re-pin itself if it was already before update (`@/background.ts`)
 - [x] Funnel tabs from menu (`@/background.ts`)
 - [x] Onboarding page (`@/onboarding/index.html`)
 
-- ### 0.4.0 Internationalization Update / Pinned Tabs
+### 0.4.0 Internationalization Update / Pinned Tabs
 - [x] Add link to onboarding on Options (`@/options/Options.tsx`)
 - [x] Add link to version on version text in popup / dashboard (`@/dashboard/Dashboard.tsx`, `@/popup/Popup.tsx`)
 - [x] Source all Themes (`@/components/themes/*.ts`)
@@ -99,7 +98,7 @@
 ### 0.4.1 Favicon Fix
 - [x] Add onerror fallback image
 
-- ### 1.0.0 Update 1.0
+### 1.0.0 Update 1.0
 - [x] Public Release
 - [x] Public Github
 
@@ -125,16 +124,19 @@
 - [x] Show URL on Tab Hover
 - [x] Separate Download functionality between Firefox and Chrome
 
-### 1.2.0 Mobile Version
+### 1.1.1 CSS Fix
+- [x] Dashboard z-index of Tab Hover
 
-### 1.3.0 Syncing
-
-### 1.4.0 Themes
+### 1.2.0 Themes
 - [ ] Monokai
 - [ ] Tokyo Night (All Flavours)
 - [ ] Nord
 - [ ] Catpuccino
 - [ ] Dracula
+
+### 1.3.0 Mobile Version
+
+### 1.4.0 Syncing
 
 ### 1.5.0 Import List 2.0
 - [ ] Investigate fetching the tabs instead of opening them natively

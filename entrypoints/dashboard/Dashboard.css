@@ -160,6 +160,7 @@
           text-overflow: ellipsis;
           text-wrap: nowrap;
           overflow-x: hidden;
+          z-index: 69;
         }
       }
 
