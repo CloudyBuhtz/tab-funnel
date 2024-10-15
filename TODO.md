@@ -127,12 +127,21 @@
 ### 1.1.1 CSS Fix
 - [x] Dashboard z-index of Tab Hover
 
+### 1.1.2 Omnibox Fix
+- [x] Divert behaviour between firefox and chrome
+
+### 1.2.0 Update Handling
+- [ ] Store whether dashboard was pinned, re-pin on update
+- [ ] Every time Dashboard is loaded, check whether it is pinned
+- [ ] On update, check this when re-opening Dashboard
+
 ### 1.2.0 Themes
 - [ ] Monokai
 - [ ] Tokyo Night (All Flavours)
 - [ ] Nord
 - [ ] Catpuccino
 - [ ] Dracula
+- [ ] Gruvbox Light
 
 ### 1.3.0 Mobile Version
 

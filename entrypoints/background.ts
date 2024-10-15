@@ -59,9 +59,15 @@ const setupOmnibox = () => {
     const tabs = await TabItem.getValue();
     const filteredTabs = tabs.filter((t: TabV2) => t.title.toLowerCase().includes(text.toLowerCase()));
     const suggestions: Omnibox.SuggestResult[] = filteredTabs.map((t: TabV2) => {
+      let description = t.title;
+
+      if (import.meta.env.CHROME) {
+        description = t.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+      }
+
       return {
         content: t.url,
-        description: `${t.title.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;')}`,
+        description: description,
         deletable: false,
       } as Omnibox.SuggestResult;
     });
