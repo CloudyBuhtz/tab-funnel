@@ -2,6 +2,7 @@ import { Omnibox } from "wxt/browser";
 import { funnelTabs, snapshotTabs, type TabV2 } from "./utils/data";
 import { hashString } from "./utils/misc";
 import {
+  DashboardPinnedItem,
   FunnelPinnedTabsItem,
   LastSnapshotDateItem,
   LastSnapshotHashItem,
@@ -205,10 +206,12 @@ const setupInstalled = () => {
 const setupUpdated = () => {
   browser.runtime.onInstalled.addListener(async (details) => {
     if (details.reason === "update") {
+      const dashboardPinned = await DashboardPinnedItem.getValue();
       const url = browser.runtime.getURL("/dashboard.html");
       const tabs = await browser.tabs.query({
         url: url,
         currentWindow: true,
+        pinned: dashboardPinned
       });
 
       if (tabs.length > 0) {

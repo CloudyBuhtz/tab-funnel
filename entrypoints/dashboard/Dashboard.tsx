@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import type { Management } from "webextension-polyfill/namespaces/management";
 import { browser } from "wxt/browser";
 import type { TabV2 } from "../utils/data";
 import { convertBytes, timeAgo } from "../utils/misc";
@@ -12,6 +11,7 @@ import {
   SortReverseItem,
   GroupReverseItem,
   GranularityItem,
+  DashboardPinnedItem,
 } from "../utils/storage";
 import type { TGranularity, TGroup, TSort } from "../utils/storage";
 import "./Dashboard.css";
@@ -22,6 +22,7 @@ import ImportSnapshotModal from "@/components/ImportSnapshotModal";
 import ImportListModal from "@/components/ImportListModal";
 import ExportListModal from "@/components/ExportListModal";
 import SelectInput from "@/components/SelectInput";
+import NameGroupTabView from "@/components/NameGroupTabView";
 
 export default () => {
   const [tabs, setTabs] = useState<TabV2[]>(TabItem.fallback);
@@ -31,6 +32,7 @@ export default () => {
   const [sort, setSort] = useState<string>(SortItem.fallback);
   const [sortReverse, setSortReverse] = useState<boolean>(SortReverseItem.fallback);
   const [granularity, setGranularity] = useState<TGranularity>("seconds");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [showImportSnapshot, setShowImportSnapshot] = useState<boolean>(false);
   const [showImportList, setShowImportList] = useState<boolean>(false);
@@ -54,6 +56,15 @@ export default () => {
       setSortReverse(await SortReverseItem.getValue());
       setGroupReverse(await GroupReverseItem.getValue());
       setGranularity(await GranularityItem.getValue());
+
+      // Check pinned
+      const dashboardTabs = await browser.tabs.query({
+        url: browser.runtime.getURL("/dashboard.html"),
+        pinned: true
+      });
+      await DashboardPinnedItem.setValue(dashboardTabs.length > 0);
+
+      setLoading(true);
     };
     setup();
   }, []);
@@ -110,6 +121,7 @@ export default () => {
         };
       // A-Z sorter
       case "group_by_site":
+      case "group_by_name":
       case "sort_by_name":
       case "sort_by_url":
         if (checked) {
@@ -138,6 +150,10 @@ export default () => {
     });
   };
 
+  if (!loading) {
+    return (<></>);
+  }
+
   return (
     <>
       <header>
@@ -159,6 +175,7 @@ export default () => {
           <option value="ungrouped">{i18n.t("dashboard.controls.ungrouped")}</option>
           <option value="group_by_date">{i18n.t("dashboard.controls.groupByDate")}</option>
           <option value="group_by_site">{i18n.t("dashboard.controls.groupBySite")}</option>
+          <option value="group_by_name">Group by Name</option>
         </SelectInput>
         {group === "group_by_date" &&
           <SelectInput onChange={changeGranularity} value={granularity} name="date_granularity" id="date_granularity">
@@ -186,8 +203,8 @@ export default () => {
         {group === "ungrouped" && <UngroupedTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></UngroupedTabView>}
         {group === "group_by_date" && <DateGroupTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs} granularity={granularity}></DateGroupTabView>}
         {group === "group_by_site" && <SiteGroupTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></SiteGroupTabView>}
+        {group === "group_by_name" && <NameGroupTabView sort={sort as TSort} groupReverse={groupReverse} sortReverse={sortReverse} tabs={tabs}></NameGroupTabView>}
       </main>
-      {/* <div className="urlPreview">{tabs.length > 0 && tabs[0].url}</div> */}
       <ImportSnapshotModal openModal={showImportSnapshot} closeModal={() => setShowImportSnapshot(false)}></ImportSnapshotModal>
       <ImportListModal openModal={showImportList} closeModal={() => setShowImportList(false)}></ImportListModal>
       <ExportListModal openModal={showExportList} closeModal={() => setShowExportList(false)}></ExportListModal>

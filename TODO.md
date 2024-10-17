@@ -130,23 +130,34 @@
 ### 1.1.2 Omnibox Fix
 - [x] Divert behaviour between firefox and chrome
 
-### 1.2.0 Update Handling
-- [ ] Store whether dashboard was pinned, re-pin on update
-- [ ] Every time Dashboard is loaded, check whether it is pinned
-- [ ] On update, check this when re-opening Dashboard
+### 1.2.0 Group by Name / Themes
+- [x] Store whether dashboard was pinned, re-pin on update
+- [x] Every time Dashboard is loaded, check whether it is pinned
+- [x] On update, check this when re-opening Dashboard
+- [x] Group by Name
+- [x] CSS Changes
+- [x] Catpuccin
+- [x] Tokyo Night
+- [x] Dracula
+- [x] Nord
+- [x] Gruvbox Light
 
-### 1.2.0 Themes
-- [ ] Monokai
-- [ ] Tokyo Night (All Flavours)
-- [ ] Nord
-- [ ] Catpuccino
-- [ ] Dracula
-- [ ] Gruvbox Light
+### 2.0.0 Syncing
+- [ ] Store in sync_tabs
+- [ ] Add listener to storage.sync.onChange
+- [ ] Go through sync tabs to update local ones
+- [ ] Changes can be examined using the storage.StorageChange object
+- [ ] Each install uses a UUID to identify changes made by it
 
-### 1.3.0 Mobile Version
+- [ ] Make new type that describes changes to data
+- [ ] Like new tab, remove tab
+- [ ] Timestamp changes
+- [ ] Every sink, these changes are collated and dealt with
 
-### 1.4.0 Syncing
+- [ ] Cross Chrome / Firefox?
+- [ ] Needs external server; encrypt traffic and use a UUID generated or entered?
 
+### 1.4.0 Mobile Version
 ### 1.5.0 Import List 2.0
 - [ ] Investigate fetching the tabs instead of opening them natively
 - [ ] Possibly open them hidden if that doesn't work
@@ -159,8 +170,8 @@
   - [ ] Backup as json still
   - [ ] big work
   - [ ] Synced using browser
-- [ ] Group by Name
-  - [ ] A-Z name based groups
+
 - [ ] Integrate with Tab-Style Tabs ( https://github.com/piroor/treestyletab/wiki/API-for-other-addons )
 - [ ] Opening Multiple Dashboards will de-sync
 - [ ] Drag Tabs from Dashboard, add URL as drag data
+- [ ] Multiple Windows Functions

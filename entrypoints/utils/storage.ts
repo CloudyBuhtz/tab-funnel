@@ -31,13 +31,17 @@ export const LastSnapshotHashItem = storage.defineItem<string>("local:last_snaps
   fallback: "",
 });
 
-export type TGroup = "ungrouped" | "group_by_date" | "group_by_site";
+export type TGroup = "ungrouped" | "group_by_date" | "group_by_site" | "group_by_name";
 export const GroupItem = storage.defineItem<TGroup>("local:dashboard_group", {
   fallback: "ungrouped",
 });
 
 export const GroupReverseItem = storage.defineItem<boolean>("local:dashboard_group_reverse", {
   fallback: false,
+});
+
+export const DashboardPinnedItem = storage.defineItem<boolean>("local:dashboard_pinned", {
+  fallback: false
 });
 
 export type TSort = "sort_by_date" | "sort_by_name" | "sort_by_url";
