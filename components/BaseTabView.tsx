@@ -1,5 +1,6 @@
+import { Options } from "@/entrypoints/utils/options";
 import { removeTabs, TabV2 } from "@/entrypoints/utils/data";
-import { RemoveTabsRestoredItem, RestoreAsPinnedItem, SwitchTabRestoredItem, type TGranularity, type TSort } from "@/entrypoints/utils/storage";
+import type { TGranularity, TSort } from "@/entrypoints/utils/storage";
 
 export type TabViewProps = {
   tabs: TabV2[];
@@ -10,9 +11,9 @@ export type TabViewProps = {
 };
 
 export const openTabs = async (opTabs: TabV2[]) => {
-  const switchTabRestored = await SwitchTabRestoredItem.getValue();
-  const removeTabsRestored = await RemoveTabsRestoredItem.getValue();
-  const restoreAsPinned = await RestoreAsPinnedItem.getValue();
+  const switchTabRestored = await Options.SWITCH_TAB_RESTORED.item.getValue();
+  const removeTabsRestored = await Options.REMOVE_TABS_RESTORED.item.getValue();
+  const restoreAsPinned = await Options.RESTORE_AS_PINNED.item.getValue();
   opTabs.forEach((tab) => {
     browser.tabs.create({
       url: tab.url,

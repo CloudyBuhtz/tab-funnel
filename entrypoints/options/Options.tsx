@@ -1,13 +1,15 @@
-import CheckOption from "@/components/CheckOption";
-import MultiOption from "@/components/MultiOption";
-import TextOption from "@/components/TextOption";
+import CheckOption from "@/components/options/CheckOption";
+import MultiOption from "@/components/options/MultiOption";
+import TextOption from "@/components/options/TextOption";
 import { snapshotTabs, type TabV2 } from "../utils/data";
 import type {
-  CheckOption as CheckOptionType,
-  MultiOption as MultiOptionType,
-  TextOption as TextOptionType
+  CheckOptionV2,
+  MultiOptionV2,
+  TextOptionV2,
+  ButtonOptionV2,
+  KeyOptionV2
 } from "../utils/options";
-import { Option, Options, OptionsGroup } from "../utils/options";
+import { OptionV2, Options, OptionsGroup } from "../utils/options";
 import {
   LastSnapshotDateItem,
   LastSnapshotHashItem,
@@ -16,54 +18,33 @@ import {
 } from "../utils/storage";
 import "./Options.css";
 import { Fragment } from "react/jsx-runtime";
+import ButtonOption from "@/components/options/ButtonOption";
+import KeyOption from "@/components/options/KeyOption";
 
 export default () => {
-  const [showDanger, setShowDanger] = useState(false);
-
-  const renderOptions = (options: Option[]) => {
+  const renderOptions = (options: OptionV2[]) => {
     return options.map((option) => {
       switch (option.type) {
         case "text":
-          return <TextOption key={option.name} option={option as TextOptionType}></TextOption>;
+          return <TextOption key={option.name} option={option as TextOptionV2}></TextOption>;
         case "check":
-          return <CheckOption key={option.name} option={option as CheckOptionType}></CheckOption>;
+          return <CheckOption key={option.name} option={option as CheckOptionV2}></CheckOption>;
         case "multi":
-          return <MultiOption key={option.name} option={option as MultiOptionType}></MultiOption>;
+          return <MultiOption key={option.name} option={option as MultiOptionV2}></MultiOption>;
+        case "button":
+          return <ButtonOption key={option.name} option={option as ButtonOptionV2}></ButtonOption>;
+        case "key":
+          return <KeyOption key={option.name} option={option as KeyOptionV2}></KeyOption>;
       };
     });
   };
 
   const resetOptions = async () => {
     Object.entries(Options).forEach(([k, v]) => {
-      storage.setItem(`${v.area}:${v.name}`, v.defaultValue);
+      if (v.reset && v.item) {
+        v.item.removeValue();
+      }
     });
-  };
-
-  const renderDanger = (danger: boolean) => {
-    if (!danger) { return (<></>); } else {
-      return (
-        <div className="danger-zone">
-          <button onClick={resetOptions}>{i18n.t("options.danger.resetOptions.button")}</button>
-          <div className="description">
-            <div>{i18n.t("options.danger.resetOptions.description.A")}</div>
-          </div>
-          <button onClick={removeDuplicates}>{i18n.t("options.danger.removeAllDuplicates.button")}</button>
-          <div className="description">
-            <div>{i18n.t("options.danger.removeAllDuplicates.description.A")}</div>
-            <div>{i18n.t("options.danger.removeAllDuplicates.description.B")}</div>
-          </div>
-          <button onClick={clearTabs}>{i18n.t("options.danger.clearAllTabs.button")}</button>
-          <div className="description">
-            <div>{i18n.t("options.danger.clearAllTabs.description.A")}</div>
-            <div>{i18n.t("options.danger.clearAllTabs.description.B")}</div>
-          </div>
-          <button onClick={clearSnapshotDate}>{i18n.t("options.danger.clearSnapshotDate.button")}</button>
-          <div className="description">
-            <div>{i18n.t("options.danger.clearSnapshotDate.description.A")}</div>
-          </div>
-        </div>
-      );
-    };
   };
 
   const clearTabs = async () => {
@@ -97,10 +78,6 @@ export default () => {
     TabCountItem.setValue(filteredTabs.length);
   };
 
-  const dangerHandler = async () => {
-    setShowDanger(!showDanger);
-  };
-
   const showOnboarding = () => {
     const url = browser.runtime.getURL("/onboarding.html");
     const newTab = browser.tabs.create({
@@ -124,7 +101,7 @@ export default () => {
       </menu>
       <main>
         {OptionsGroup.map(group => {
-          const optionList: Option[] = [];
+          const optionList: OptionV2[] = [];
           group.options.forEach((o) => optionList.push(Options[o]));
           return (
             <Fragment key={group.key}>
@@ -133,8 +110,6 @@ export default () => {
             </Fragment>
           );
         })}
-        <div className="option danger" onClick={dangerHandler}>{i18n.t("options.danger.show")}</div>
-        {renderDanger(showDanger)}
       </main>
     </>
   );

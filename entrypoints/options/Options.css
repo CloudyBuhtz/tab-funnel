@@ -30,6 +30,7 @@
     margin-inline: auto;
     width: 60%;
     min-width: 25rem;
+    max-width: 1280px;
 
     .danger-zone {
       display: flex;
@@ -70,6 +71,10 @@
       align-items: center;
       height: 2.5rem;
 
+      .spacer {
+        flex-grow: 1;
+      }
+
       &:hover {
         color: var(--theme-fg-accent0);
       }
@@ -77,6 +82,15 @@
       label:not(.checkbox) {
         min-width: 16rem;
         user-select: none;
+      }
+
+      button {
+        min-width: 20rem;
+      }
+
+      .key {
+        flex-grow: 1;
+        text-align: center;
       }
     }
 

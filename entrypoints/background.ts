@@ -3,12 +3,11 @@ import { funnelTabs, snapshotTabs, type TabV2 } from "./utils/data";
 import { hashString } from "./utils/misc";
 import {
   DashboardPinnedItem,
-  FunnelPinnedTabsItem,
   LastSnapshotDateItem,
   LastSnapshotHashItem,
-  SnapshotFrequencyItem,
   TabItem,
 } from "./utils/storage";
+import { Options } from "./utils/options";
 
 const checkSnapshot = async () => {
   const currentTime = Date.now();
@@ -21,7 +20,7 @@ const checkSnapshot = async () => {
   const currentTabsHash: string = await hashString(JSON.stringify(currentTabs));
   if (currentTabsHash === lastSnapshotHash) return;
 
-  const snapshotFrequency = await SnapshotFrequencyItem.getValue();
+  const snapshotFrequency = await Options.SNAPSHOT_FREQUENCY.item.getValue();
 
   switch (snapshotFrequency) {
     case "never":
@@ -145,7 +144,7 @@ const setupMenus = () => {
     type: "normal",
     parentId: "menu_funnel_parent",
     onclick: async (info, tab) => {
-      const funnelPinnedTabs = await FunnelPinnedTabsItem.getValue();
+      const funnelPinnedTabs = await Options.FUNNEL_PINNED_TABS.item.getValue();
       const tabs = (await browser.tabs.query({
         currentWindow: true,
         url: "*://*/*",

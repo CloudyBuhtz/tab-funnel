@@ -184,12 +184,14 @@
     transition:
       color 100ms linear,
       background-color 100ms linear;
+    width: 32ch;
 
     &:hover,
     &:active,
     &:focus {
       background-color: var(--theme-bg3);
     }
+
   }
 
   textarea {

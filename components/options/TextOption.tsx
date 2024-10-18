@@ -1,35 +1,34 @@
-import type { TextOption } from "@/entrypoints/utils/options";
-import { StorageItemKey } from "wxt/storage";
+import type { TextOptionV2 } from "@/entrypoints/utils/options";
 
 interface TextInputProps {
-  option: TextOption;
+  option: TextOptionV2;
 }
 export default ({ option }: TextInputProps) => {
-  const storageKey = `${option.area}:${option.name}` as StorageItemKey;
-  const [value, setValue] = useState<string>(option.defaultValue);
+  const [value, setValue] = useState<string>(option.item.fallback);
   const regex = new RegExp(option.pattern ?? /[]/);
 
   useEffect(() => {
     const setup = async () => {
-      const value = await storage.getItem<string>(storageKey);
-      setValue(value!);
+      const value = await option.item.getValue();
+      setValue(value);
     };
     setup();
   }, []);
 
-  const changeHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const val = event.target.value;
     const filtered = val.replace(regex, "");
-    event.target.value = filtered;
 
-    setValue(filtered || option.defaultValue);
-    await storage.setItem(storageKey, filtered || option.defaultValue);
+    setValue(filtered ?? option.item.fallback);
+    console.log(value);
+    option.item.setValue(filtered || option.item.fallback);
   };
 
   return (
     <>
       <div className="option">
         <label htmlFor={option.name}>{i18n.t(option.label as any)}</label>
+        <div className="spacer"></div>
         <input
           onInput={changeHandler}
           type="text"

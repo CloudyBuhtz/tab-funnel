@@ -1,14 +1,10 @@
 import { Tabs } from 'wxt/browser';
+import { Options } from './options';
 import {
   TabItem,
   TabCountItem,
-  SnapshotLocationItem,
   LastSnapshotDateItem,
-  SnapshotFrequencyItem,
   LastSnapshotHashItem,
-  FunnelPinnedTabsItem,
-  IgnoreDuplicateTabsItem,
-  RemoveTabsFunnelledItem,
 } from "../utils/storage";
 import { hashString } from "./misc";
 
@@ -34,9 +30,9 @@ type funnelOverrides = {
   removeTabsFunnelled?: boolean;
 };
 export const funnelTabs = async (tabs: Tabs.Tab[], overrides?: funnelOverrides): Promise<void> => {
-  const funnelPinnedTabs = overrides?.funnelPinnedTabs ?? await FunnelPinnedTabsItem.getValue();
-  const ignoreDuplicateTabs = overrides?.ignoreDuplicateTabs ?? await IgnoreDuplicateTabsItem.getValue();
-  const removeTabsFunnelled = overrides?.removeTabsFunnelled ?? await RemoveTabsFunnelledItem.getValue();
+  const funnelPinnedTabs = overrides?.funnelPinnedTabs ?? await Options.FUNNEL_PINNED_TABS.item.getValue();
+  const ignoreDuplicateTabs = overrides?.ignoreDuplicateTabs ?? await Options.IGNORE_DUPLICATE_TABS.item.getValue();
+  const removeTabsFunnelled = overrides?.removeTabsFunnelled ?? await Options.REMOVE_TABS_FUNNELLED.item.getValue();
 
   const now = Date.now().toString();
   const storedTabs = await TabItem.getValue();
@@ -82,7 +78,7 @@ export const storeTabs = async (newTabs: TabV2[]): Promise<void> => {
   await TabItem.setValue([...currentTabs, ...newTabs]);
   await TabCountItem.setValue(tabCount + newTabs.length);
 
-  const snapshotFrequency = await SnapshotFrequencyItem.getValue();
+  const snapshotFrequency = await Options.SNAPSHOT_FREQUENCY.item.getValue();
   if (
     snapshotFrequency === "only_funnel" ||
     snapshotFrequency === "every_change"
@@ -101,7 +97,7 @@ export const removeTabs = async (remTabs: Tab[]): Promise<void> => {
   const tabCount = await TabCountItem.getValue();
   await TabCountItem.setValue(tabCount - remTabs.length);
 
-  const snapshotFrequency = await SnapshotFrequencyItem.getValue();
+  const snapshotFrequency = await Options.SNAPSHOT_FREQUENCY.item.getValue();
   if (snapshotFrequency === "every_change") {
     await snapshotTabs();
   }
@@ -124,7 +120,7 @@ export const snapshotTabs = async () => {
   const json = JSON.stringify(tabs);
   const blob = new Blob([json], { type: "application/json" });
 
-  const snapshotLocation: string = await SnapshotLocationItem.getValue();
+  const snapshotLocation: string = await Options.SNAPSHOT_LOCATION.item.getValue();
 
   await LastSnapshotHashItem.setValue(await hashString(JSON.stringify(tabs)));
 

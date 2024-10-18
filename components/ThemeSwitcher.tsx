@@ -1,4 +1,5 @@
-import { CurrentThemeItem } from "@/entrypoints/utils/storage";
+import { Options } from "@/entrypoints/utils/options";
+
 import KanagawaWave from "./themes/KanagawaWave";
 import KanagawaLotus from "./themes/KanagawaLotus";
 import KanagawaDragon from "./themes/KanagawaDragon";
@@ -26,11 +27,11 @@ type Theme = {
 };
 
 export default (): JSX.Element => {
-  const unwatchCurrentTheme = CurrentThemeItem.watch((v) => switchTheme(getTheme(v)));
+  const unwatchCurrentTheme = Options.CURRENT_THEME.item.watch((v) => switchTheme(getTheme(v)));
 
   useEffect(() => {
     const setup = async () => {
-      switchTheme(getTheme(await CurrentThemeItem.getValue()));
+      switchTheme(getTheme(await Options.CURRENT_THEME.item.getValue()));
     };
     setup();
   }, []);

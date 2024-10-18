@@ -140,3 +140,12 @@ options:
         When checked, Pinned Tabs will return to being Pinned when Restored from
         the Dashboard.
   showGithub: Open GitHub Page
+  tab_sync_enabled:
+    label: Enable Tab Sync
+    description:
+      A: Sync Tabs between separate instances of Tab Funnel
+      B: Firefox Sync required
+  tab_sync_uuid:
+    label: Tab Sync ID
+    description:
+      A: The ID of this TabFunnel instance

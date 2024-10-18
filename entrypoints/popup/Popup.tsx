@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
 import { browser } from "wxt/browser";
 import { funnelTabs, snapshotTabs, storeTabs, type TabV2 } from "../utils/data";
+import { Options } from "../utils/options";
 import {
-  FunnelPinnedTabsItem,
-  IgnoreDuplicateTabsItem,
   LastSnapshotDateItem,
-  RemoveTabsFunnelledItem,
   TabCountItem,
   TabItem
 } from "../utils/storage";
@@ -17,9 +15,9 @@ export default () => {
   const [lastSnapshotDate, setLastSnapshotDate] = useState(LastSnapshotDateItem.fallback);
   const [storeSize, setStoreSize] = useState(0);
 
-  const funnelPinnedTabs = useRef(FunnelPinnedTabsItem.fallback);
-  const removeTabFunnelled = useRef(RemoveTabsFunnelledItem.fallback);
-  const ignoreDuplicateTabs = useRef(IgnoreDuplicateTabsItem.fallback);
+  const funnelPinnedTabs = useRef(Options.FUNNEL_PINNED_TABS.item.fallback);
+  const removeTabFunnelled = useRef(Options.REMOVE_TABS_FUNNELLED.item.fallback);
+  const ignoreDuplicateTabs = useRef(Options.IGNORE_DUPLICATE_TABS.item.fallback);
 
   const unwatchTabCount = TabCountItem.watch(v => setTabCount(v));
   const unwatchLastSnapshotDate = LastSnapshotDateItem.watch(v => setLastSnapshotDate(v));
@@ -32,9 +30,9 @@ export default () => {
       const blob = new Blob([JSON.stringify(await TabItem.getValue())]);
       setStoreSize(blob.size);
 
-      funnelPinnedTabs.current = await FunnelPinnedTabsItem.getValue();
-      removeTabFunnelled.current = await RemoveTabsFunnelledItem.getValue();
-      ignoreDuplicateTabs.current = await IgnoreDuplicateTabsItem.getValue();
+      funnelPinnedTabs.current = await Options.FUNNEL_PINNED_TABS.item.getValue();
+      removeTabFunnelled.current = await Options.REMOVE_TABS_FUNNELLED.item.getValue();
+      ignoreDuplicateTabs.current = await Options.IGNORE_DUPLICATE_TABS.item.getValue();
     };
     getCount();
   }, []);

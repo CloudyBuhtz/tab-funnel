@@ -142,6 +142,15 @@
 - [x] Nord
 - [x] Gruvbox Light
 
+## Firefox Sync Path
+- [ ] Replace DangerZone with just using a `Dangerous Settings` group
+- [ ] KeyOption
+- [ ] ButtonOption (`dangerous options`)
+- [ ] Redo all options to use `wxtStorageItem` instead of defining keys
+- [x] Enable Sync Setting
+- [x] Sync Instance UUID Setting
+
+
 ### 2.0.0 Syncing
 - [ ] Store in sync_tabs
 - [ ] Add listener to storage.sync.onChange
@@ -175,3 +184,8 @@
 - [ ] Opening Multiple Dashboards will de-sync
 - [ ] Drag Tabs from Dashboard, add URL as drag data
 - [ ] Multiple Windows Functions
+
+- [ ] History Feature?
+  - [ ] Changes kept, so that undo can be done
+  - [ ] See timeline of changes
+  - [ ] Who wants this?

@@ -1,7 +1,7 @@
-import { FontOverrideItem } from "@/entrypoints/utils/storage";
+import { Options } from "@/entrypoints/utils/options";
 
 export default (): JSX.Element => {
-  const unwatchFontOverride = FontOverrideItem.watch(v => setFont(v));
+  const unwatchFontOverride = Options.FONT_OVERRIDE.item.watch(v => setFont(v));
 
   const setFont = (val: string) => {
     document.body.style.fontFamily = val ?? undefined;
@@ -9,7 +9,7 @@ export default (): JSX.Element => {
 
   useEffect(() => {
     const setup = async () => {
-      setFont(await FontOverrideItem.getValue());
+      setFont(await Options.FONT_OVERRIDE.item.getValue());
     };
     setup();
   });
