@@ -24,10 +24,10 @@
     width: fit-content;
   }
 
-  button {
+  /* button {
     padding: 0.5rem;
     font-family: inherit;
-  }
+  } */
 
   .cog {
     position: fixed;

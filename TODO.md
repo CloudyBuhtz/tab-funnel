@@ -142,29 +142,28 @@
 - [x] Nord
 - [x] Gruvbox Light
 
-## Firefox Sync Path
-- [ ] Replace DangerZone with just using a `Dangerous Settings` group
-- [ ] KeyOption
-- [ ] ButtonOption (`dangerous options`)
-- [ ] Redo all options to use `wxtStorageItem` instead of defining keys
+## 1.3.1 Firefox Sync Branch
+- [x] Replace DangerZone with just using a `Dangerous Settings` group
+- [x] KeyOption
+- [x] ButtonOption (`dangerous options`)
+- [x] Redo all options to use `wxtStorageItem` instead of defining keys
 - [x] Enable Sync Setting
 - [x] Sync Instance UUID Setting
+- [x] Re-Add Dangerous Button Behaviour
+- [x] Add functionality for regenerating instance UUID
+- [x] Various CSS Fixes
+- [x] Options Rework
 
-
-### 2.0.0 Syncing
-- [ ] Store in sync_tabs
-- [ ] Add listener to storage.sync.onChange
-- [ ] Go through sync tabs to update local ones
-- [ ] Changes can be examined using the storage.StorageChange object
-- [ ] Each install uses a UUID to identify changes made by it
-
-- [ ] Make new type that describes changes to data
-- [ ] Like new tab, remove tab
-- [ ] Timestamp changes
-- [ ] Every sink, these changes are collated and dealt with
-
-- [ ] Cross Chrome / Firefox?
-- [ ] Needs external server; encrypt traffic and use a UUID generated or entered?
+- [ ] Make sync more robust
+- [ ] Handle Sync Errors
+- [ ] Never Lose SyncOps
+  - [ ] Store Locally, then mirror to sync
+- [ ] Give Sync Info to User
+- [ ] Sync Log
+  - [ ] Outgoing
+  - [ ] Incoming Changes
+  - [ ] Instance Names tied to ID
+- [ ] Last Sync Date Shown
 
 ### 1.4.0 Mobile Version
 ### 1.5.0 Import List 2.0
@@ -172,7 +171,7 @@
 - [ ] Possibly open them hidden if that doesn't work
   - [ ] Show progress bar
 
-### 2.0 Possible Additions
+### X.0 Possible Additions
 - [ ] Store as Bookmarks
   - [ ] Put into `tabfunnel` folder
   - [ ] Save everything as tabs instead

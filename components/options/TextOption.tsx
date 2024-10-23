@@ -1,7 +1,7 @@
-import type { TextOptionV2 } from "@/entrypoints/utils/options";
+import type { TTextOption } from "@/entrypoints/utils/options";
 
 interface TextInputProps {
-  option: TextOptionV2;
+  option: TTextOption;
 }
 export default ({ option }: TextInputProps) => {
   const [value, setValue] = useState<string>(option.item.fallback);
@@ -20,7 +20,6 @@ export default ({ option }: TextInputProps) => {
     const filtered = val.replace(regex, "");
 
     setValue(filtered ?? option.item.fallback);
-    console.log(value);
     option.item.setValue(filtered || option.item.fallback);
   };
 

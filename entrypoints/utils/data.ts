@@ -1,3 +1,4 @@
+import { AddOp, RemOp, SyncOp } from './sync';
 import { Tabs } from 'wxt/browser';
 import { Options } from './options';
 import {
@@ -8,7 +9,7 @@ import {
 } from "../utils/storage";
 import { hashString } from "./misc";
 
-type UUID = `${string}-${string}-${string}-${string}-${string}`;
+export type UUID = `${string}-${string}-${string}-${string}-${string}`;
 export type Tab = {
   title: string;
   url: string;
@@ -24,12 +25,11 @@ export type TabV2 = {
   pinned: boolean;
 };
 
-type funnelOverrides = {
+export const funnelTabs = async (tabs: Tabs.Tab[], overrides?: {
   funnelPinnedTabs?: boolean;
   ignoreDuplicateTabs?: boolean;
   removeTabsFunnelled?: boolean;
-};
-export const funnelTabs = async (tabs: Tabs.Tab[], overrides?: funnelOverrides): Promise<void> => {
+}): Promise<void> => {
   const funnelPinnedTabs = overrides?.funnelPinnedTabs ?? await Options.FUNNEL_PINNED_TABS.item.getValue();
   const ignoreDuplicateTabs = overrides?.ignoreDuplicateTabs ?? await Options.IGNORE_DUPLICATE_TABS.item.getValue();
   const removeTabsFunnelled = overrides?.removeTabsFunnelled ?? await Options.REMOVE_TABS_FUNNELLED.item.getValue();
@@ -72,22 +72,40 @@ export const funnelTabs = async (tabs: Tabs.Tab[], overrides?: funnelOverrides):
   }
 };
 
-export const storeTabs = async (newTabs: TabV2[]): Promise<void> => {
+export const storeTabs = async (newTabs: TabV2[], overrides?: {
+  tabSyncEnabled?: boolean;
+}): Promise<void> => {
   const currentTabs = await TabItem.getValue();
   const tabCount = await TabCountItem.getValue();
   await TabItem.setValue([...currentTabs, ...newTabs]);
   await TabCountItem.setValue(tabCount + newTabs.length);
 
+  // Tab Sync
+  const tabSyncEnabled = overrides?.tabSyncEnabled ?? await Options.TAB_SYNC_ENABLED.item.getValue();
+  const tabSyncUUID = await Options.TAB_SYNC_UUID.item.getValue();
+  if (tabSyncEnabled) {
+    // console.log("Syncing!");
+    const addOps: AddOp[] = newTabs.map(t => {
+      return {
+        kind: "add",
+        id: crypto.randomUUID(),
+        tab: t
+      } satisfies AddOp;
+    });
+    const currentOps: SyncOp[] = await storage.getItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, { fallback: [] });
+    await storage.setItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, [...currentOps, ...addOps]);
+  }
+
+  // Snapshot Tabs
   const snapshotFrequency = await Options.SNAPSHOT_FREQUENCY.item.getValue();
-  if (
-    snapshotFrequency === "only_funnel" ||
-    snapshotFrequency === "every_change"
-  ) {
+  if (snapshotFrequency === "only_funnel" || snapshotFrequency === "every_change") {
     await snapshotTabs();
   }
 };
 
-export const removeTabs = async (remTabs: Tab[]): Promise<void> => {
+export const removeTabs = async (remTabs: Tab[], overrides?: {
+  tabSyncEnabled?: boolean;
+}): Promise<void> => {
   const tabs = await TabItem.getValue();
   const filteredTabs = tabs.filter((t: Tab) => {
     return !(remTabs.filter((v) => v.hash === t.hash).length > 0);
@@ -97,6 +115,23 @@ export const removeTabs = async (remTabs: Tab[]): Promise<void> => {
   const tabCount = await TabCountItem.getValue();
   await TabCountItem.setValue(tabCount - remTabs.length);
 
+  // Tab Sync
+  const tabSyncEnabled = overrides?.tabSyncEnabled ?? await Options.TAB_SYNC_ENABLED.item.getValue();
+  const tabSyncUUID = await Options.TAB_SYNC_UUID.item.getValue();
+  if (tabSyncEnabled) {
+    // console.log("Syncing!");
+    const remOps: RemOp[] = remTabs.map(t => {
+      return {
+        kind: "rem",
+        id: crypto.randomUUID(),
+        hash: t.hash
+      } satisfies RemOp;
+    });
+    const currentOps: SyncOp[] = await storage.getItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, { fallback: [] });
+    await storage.setItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, [...currentOps, ...remOps]);
+  }
+
+  // Snapshot Tabs
   const snapshotFrequency = await Options.SNAPSHOT_FREQUENCY.item.getValue();
   if (snapshotFrequency === "every_change") {
     await snapshotTabs();

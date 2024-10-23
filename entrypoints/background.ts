@@ -1,5 +1,6 @@
+import { executeOp, RemOp, SyncOp } from './utils/sync';
 import { Omnibox } from "wxt/browser";
-import { funnelTabs, snapshotTabs, type TabV2 } from "./utils/data";
+import { funnelTabs, removeTabs, snapshotTabs, storeTabs, type TabV2 } from "./utils/data";
 import { hashString } from "./utils/misc";
 import {
   DashboardPinnedItem,
@@ -224,7 +225,7 @@ const setupUpdated = () => {
   });
 };
 
-const setupSnapshotAlarm = async () => {
+const setupSnapshotAlarm = () => {
   browser.alarms.create("snapshot-alarm", {
     periodInMinutes: 1
   });
@@ -234,13 +235,58 @@ const setupSnapshotAlarm = async () => {
   });
 };
 
+const setupFirefoxSync = async () => {
+  browser.alarms.onAlarm.addListener(async a => {
+    if (a.name !== "sync-alarm") return;
+    const syncEnabled = await Options.TAB_SYNC_ENABLED.item.getValue();
+    if (syncEnabled) {
+      console.log("Clearing Own Ops");
+      storage.removeItem(`sync:sync_op-${await Options.TAB_SYNC_UUID.item.getValue()}`);
+    }
+  });
+
+  browser.storage.sync.onChanged.addListener(async (changes) => {
+    const syncEnabled = await Options.TAB_SYNC_ENABLED.item.getValue();
+    if (!syncEnabled) return;
+
+    const self = await Options.TAB_SYNC_UUID.item.getValue();
+    const keys = Object.keys(changes).filter(k => k.startsWith("sync_op-"));
+    keys.forEach(async k => {
+      if (k.includes(self)) {
+        // console.log("Own Instance Sync Found", changes[k].oldValue, changes[k].newValue);
+        // Every local change, reset alarm to 1 hour
+        browser.alarms.create("sync-alarm", {
+          delayInMinutes: 60
+        });
+      } else {
+        // console.log("Remote Instance Sync Found", k.replace("sync_op-", ""));
+
+        const oldOps: SyncOp[] = changes[k].oldValue;
+        const newOps: SyncOp[] = changes[k].newValue;
+
+        const syncOps: SyncOp[] = newOps.filter(n => {
+          return !(oldOps.filter(o => o.id === n.id).length > 0);
+        });
+
+        // console.log(oldOps, newOps, syncOps);
+        // console.log("Running Ops", syncOps);
+        while (syncOps.length > 0) {
+          const o = syncOps.shift();
+          await executeOp(o!);
+        }
+      }
+    });
+  });
+};
+
 export default defineBackground(() => {
-  setupSnapshotAlarm();
-  setupOmnibox();
   setupInstalled();
   setupUpdated();
+  setupSnapshotAlarm();
+  setupOmnibox();
 
   if (import.meta.env.FIREFOX) {
     setupMenus();
+    setupFirefoxSync();
   }
 });

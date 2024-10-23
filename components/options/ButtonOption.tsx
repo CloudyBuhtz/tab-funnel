@@ -1,15 +1,15 @@
-import type { ButtonOptionV2 } from "@/entrypoints/utils/options";
+import type { TButtonOption } from "@/entrypoints/utils/options";
 
 interface CheckInputProps {
-  option: ButtonOptionV2;
+  option: TButtonOption;
 }
 export default ({ option }: CheckInputProps) => {
   return (
     <>
       <div className="option">
+        <label>{i18n.t(option.label as any)}</label>
         <div className="spacer"></div>
-        <button onClick={e => { option.onPress(); }}>{i18n.t(option.label as any)}</button>
-        <div className="spacer"></div>
+        <button className={option.danger ? "danger" : ""} onClick={e => { option.onPress(); }}>{i18n.t(option.button as any)}</button>
       </div>
       {option.description && <div className="description">
         {option.description.map((line, index) => (

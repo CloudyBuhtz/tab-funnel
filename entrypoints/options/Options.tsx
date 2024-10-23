@@ -1,81 +1,35 @@
+import ButtonOption from "@/components/options/ButtonOption";
 import CheckOption from "@/components/options/CheckOption";
+import KeyOption from "@/components/options/KeyOption";
 import MultiOption from "@/components/options/MultiOption";
 import TextOption from "@/components/options/TextOption";
-import { snapshotTabs, type TabV2 } from "../utils/data";
-import type {
-  CheckOptionV2,
-  MultiOptionV2,
-  TextOptionV2,
-  ButtonOptionV2,
-  KeyOptionV2
-} from "../utils/options";
-import { OptionV2, Options, OptionsGroup } from "../utils/options";
-import {
-  LastSnapshotDateItem,
-  LastSnapshotHashItem,
-  TabCountItem,
-  TabItem,
-} from "../utils/storage";
-import "./Options.css";
 import { Fragment } from "react/jsx-runtime";
-import ButtonOption from "@/components/options/ButtonOption";
-import KeyOption from "@/components/options/KeyOption";
+import type {
+  TButtonOption,
+  TCheckOption,
+  TKeyOption,
+  TMultiOption,
+  TTextOption
+} from "../utils/options";
+import { TOption, Options, OptionsGroup } from "../utils/options";
+import "./Options.css";
 
 export default () => {
-  const renderOptions = (options: OptionV2[]) => {
+  const renderOptions = (options: TOption[]) => {
     return options.map((option) => {
       switch (option.type) {
         case "text":
-          return <TextOption key={option.name} option={option as TextOptionV2}></TextOption>;
+          return <TextOption key={option.name} option={option as TTextOption}></TextOption>;
         case "check":
-          return <CheckOption key={option.name} option={option as CheckOptionV2}></CheckOption>;
+          return <CheckOption key={option.name} option={option as TCheckOption}></CheckOption>;
         case "multi":
-          return <MultiOption key={option.name} option={option as MultiOptionV2}></MultiOption>;
+          return <MultiOption key={option.name} option={option as TMultiOption}></MultiOption>;
         case "button":
-          return <ButtonOption key={option.name} option={option as ButtonOptionV2}></ButtonOption>;
+          return <ButtonOption key={option.name} option={option as TButtonOption}></ButtonOption>;
         case "key":
-          return <KeyOption key={option.name} option={option as KeyOptionV2}></KeyOption>;
+          return <KeyOption key={option.name} option={option as TKeyOption}></KeyOption>;
       };
     });
-  };
-
-  const resetOptions = async () => {
-    Object.entries(Options).forEach(([k, v]) => {
-      if (v.reset && v.item) {
-        v.item.removeValue();
-      }
-    });
-  };
-
-  const clearTabs = async () => {
-    if (!confirm(i18n.t("options.danger.clearAllTabs.confirm"))) return;
-    await snapshotTabs();
-    await TabCountItem.setValue(0);
-    await TabItem.setValue([]);
-  };
-
-  const clearSnapshotDate = async () => {
-    if (!confirm(i18n.t("options.danger.clearSnapshotDate.confirm"))) return;
-    await LastSnapshotHashItem.setValue(LastSnapshotHashItem.fallback);
-    await LastSnapshotDateItem.setValue(0);
-  };
-
-  const removeDuplicates = async () => {
-    if (!confirm(i18n.t("options.danger.removeAllDuplicates.confirm"))) return;
-    await snapshotTabs();
-
-    const tabs = await TabItem.getValue();
-    const tabMap = new Map<string, TabV2>();
-    tabs.forEach((tab: TabV2) => {
-      tabMap.set(tab.url, tab);
-    });
-    const filteredTabs: TabV2[] = [];
-    tabMap.forEach((tab: TabV2, url: string) => {
-      filteredTabs.push(tab);
-    });
-
-    TabItem.setValue(filteredTabs);
-    TabCountItem.setValue(filteredTabs.length);
   };
 
   const showOnboarding = () => {
@@ -101,7 +55,7 @@ export default () => {
       </menu>
       <main>
         {OptionsGroup.map(group => {
-          const optionList: OptionV2[] = [];
+          const optionList: TOption[] = [];
           group.options.forEach((o) => optionList.push(Options[o]));
           return (
             <Fragment key={group.key}>

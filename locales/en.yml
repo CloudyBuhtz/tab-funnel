@@ -47,7 +47,8 @@ popup:
 options:
   danger:
     removeAllDuplicates:
-      button: Remove ALL Duplicates
+      label: Remove ALL Duplicates
+      button: Remove
       description:
         A: Clicking this remove all duplicate Tabs based on their URL.
         B: 'Warning: This is a permanent change to the data.'
@@ -55,7 +56,8 @@ options:
         Are you sure you want to remove all duplicate Tabs, a Snapshot will be
         made
     clearAllTabs:
-      button: Clear ALL Tabs
+      label: Clear ALL Tabs
+      button: Clear
       description:
         A: >-
           Clicking this will remove all stored tabs, a backup will be made just
@@ -63,7 +65,8 @@ options:
         B: 'Warning: This is a permanent change to the data.'
       confirm: Are you sure you want to remove all Tabs? A Snapshot will be made.
     clearSnapshotDate:
-      button: Clear Snapshot Date
+      label: Clear Snapshot Date
+      button: Clear
       description:
         A: >-
           Clicking this will reset the date of the last snapshot to Never,
@@ -71,9 +74,20 @@ options:
       confirm: Are you sure you want to clear the last Snapshot date?
     show: Show / Hide Dangerous Options
     resetOptions:
-      button: Reset Options to Default
+      label: Reset Options to Default
+      button: Reset
       description:
         A: Clicking this will reset all the options to their defaults.
+    clearAllSync:
+      label: Clear All Sync Queues
+      button: Clear
+      description:
+        A: >-
+          Click to clear all sync queues, once done use Firefox Sync to sync
+          them up to the server and it should propagate to all other instances.
+        B: >-
+          Use if you're having trouble with some weird sync behaviour or wish to
+          not do any syncing again.
   showOnboarding: Show Welcome Page
   snapshot_frequency:
     label: Automatic Snapshot Frequency
@@ -141,11 +155,23 @@ options:
         the Dashboard.
   showGithub: Open GitHub Page
   tab_sync_enabled:
-    label: Enable Tab Sync
+    label: Enable Tab Sync [Experimental]
     description:
       A: Sync Tabs between separate instances of Tab Funnel
       B: Firefox Sync required
+      C: This feature is Experimental, and problems will most likely occur. Make sure to start with all instances loading the same Snapshot and then further changes should be shared / synced.
+      D: If you have any problems, there are buttons in the Options page to clear sync data.
   tab_sync_uuid:
     label: Tab Sync ID
     description:
-      A: The ID of this TabFunnel instance
+      A: >-
+        The ID of this TabFunnel instance, generally you won't want to change
+        this as the ID is used to track which instance made changes.
+  tab_sync_clear:
+    label: Clear Tab Sync Queue
+    button: Clear Queue
+    description:
+      A: >-
+        Click to clear your TabSync Queue, rarely would you need to but you may
+        if changes aren't being propagated or there are other problems with
+        syncing.

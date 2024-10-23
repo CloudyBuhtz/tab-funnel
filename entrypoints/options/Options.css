@@ -26,34 +26,11 @@
     flex-direction: column;
     gap: 1ch;
     padding: 1rem;
-    padding-top: 5rem;
+    padding-block: 5rem;
     margin-inline: auto;
     width: 60%;
     min-width: 25rem;
-    max-width: 1280px;
-
-    .danger-zone {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding: 1rem;
-      margin: -1rem;
-      background-color: var(--theme-bg5);
-      color: var(--theme-fg-ink1);
-
-      margin-bottom: 5rem;
-
-      .description {
-        margin-block: 0;
-        padding-bottom: 1ch;
-      }
-    }
-
-    .danger {
-      align-self: center;
-      cursor: pointer;
-      padding-block: 1rem;
-    }
+    max-width: 1024px;
 
     .group {
       font-size: 1.2rem;
@@ -64,19 +41,33 @@
       }
     }
 
-    &>.option {
+    .option {
       display: flex;
       flex-direction: row;
       gap: 1rem;
       align-items: center;
       height: 2.5rem;
 
+      &:has(button) {
+        padding-bottom: 1rem;
+      }
+
       .spacer {
         flex-grow: 1;
       }
 
-      &:hover {
+      &:hover,
+      &:has(+.description:hover) {
         color: var(--theme-fg-accent0);
+
+        label.checkbox,
+        input {
+          background-color: var(--theme-bg3);
+
+          &:has(+ input:checked) {
+            background-color: var(--theme-fg-accent1);
+          }
+        }
       }
 
       label:not(.checkbox) {
@@ -85,22 +76,36 @@
       }
 
       button {
-        min-width: 20rem;
+        min-width: 7rem;
+
+        &.danger {
+          outline: 2px solid var(--theme-fg-accent1);
+        }
+      }
+
+      input[type="text"] {
+        flex-grow: 1;
       }
 
       .key {
-        flex-grow: 1;
         text-align: center;
+        font-family: monospace;
+      }
+
+      .refresh {
+        min-width: 1rem;
+        padding-inline: 1rem;
       }
     }
 
     .description {
       font-size: 0.8rem;
       opacity: 0.7;
-      margin-block: -0.5rem 0.5rem;
+      margin-block: -0.5rem 0rem;
       display: flex;
       flex-direction: column;
       line-height: 1.2rem;
+      cursor: default;
     }
   }
 }

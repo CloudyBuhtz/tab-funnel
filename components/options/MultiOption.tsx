@@ -1,8 +1,8 @@
-import type { MultiOptionV2 } from "@/entrypoints/utils/options";
+import type { TMultiOption } from "@/entrypoints/utils/options";
 import SelectInput from "../SelectInput";
 
 interface MultiInputProps {
-  option: MultiOptionV2;
+  option: TMultiOption;
 }
 export default ({ option }: MultiInputProps) => {
   const [value, setValue] = useState<string>(option.item.fallback);

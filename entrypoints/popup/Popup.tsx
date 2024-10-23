@@ -104,8 +104,6 @@ export default () => {
     });
   };
 
-  const showGithub = async () => { };
-
   return (
     <main>
       <div className="info">{i18n.t("main.tabs", tabCount)} | {convertBytes(storeSize)}</div>
