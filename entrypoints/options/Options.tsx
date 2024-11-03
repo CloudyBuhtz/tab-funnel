@@ -3,13 +3,15 @@ import CheckOption from "@/components/options/CheckOption";
 import KeyOption from "@/components/options/KeyOption";
 import MultiOption from "@/components/options/MultiOption";
 import TextOption from "@/components/options/TextOption";
+import InstanceList from "@/components/options/InstanceList";
 import { Fragment } from "react/jsx-runtime";
 import type {
   TButtonOption,
   TCheckOption,
   TKeyOption,
   TMultiOption,
-  TTextOption
+  TTextOption,
+  TInstanceOption
 } from "../utils/options";
 import { TOption, Options, OptionsGroup } from "../utils/options";
 import "./Options.css";
@@ -28,6 +30,8 @@ export default () => {
           return <ButtonOption key={option.name} option={option as TButtonOption}></ButtonOption>;
         case "key":
           return <KeyOption key={option.name} option={option as TKeyOption}></KeyOption>;
+        case "instance_list":
+          return <InstanceList key={option.name} option={option as TInstanceOption}></InstanceList>;
       };
     });
   };
@@ -54,13 +58,14 @@ export default () => {
         <div onClick={showGithub}>{i18n.t("options.showGithub")}</div>
       </menu>
       <main>
-        {OptionsGroup.map(group => {
+        {OptionsGroup.map((group, index) => {
           const optionList: TOption[] = [];
           group.options.forEach((o) => optionList.push(Options[o]));
           return (
             <Fragment key={group.key}>
               <div className="group">{group.name}</div>
               {renderOptions(optionList)}
+              {index < OptionsGroup.length - 1 && <hr></hr>}
             </Fragment>
           );
         })}

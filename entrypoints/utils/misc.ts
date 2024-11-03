@@ -36,4 +36,6 @@ export const timeAgo = (input: Date | number) => {
       return formatter.format(Math.round(delta), rangeType);
     }
   }
+
+  return "Just Now";
 };

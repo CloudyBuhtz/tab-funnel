@@ -17,6 +17,7 @@ import TokyoNightStorm from "./themes/TokyoNightStorm";
 import Dracula from "./themes/Dracula";
 import Nord from "./themes/Nord";
 import GruvboxLight from "./themes/GruvboxLight";
+import TLollipop from "./themes/TLollipop";
 
 type Theme = {
   id: string,
@@ -72,6 +73,8 @@ export default (): JSX.Element => {
         return Dracula;
       case "nord":
         return Nord;
+      case "t_lollipop":
+        return TLollipop;
       default:
         return KanagawaWave;
     }

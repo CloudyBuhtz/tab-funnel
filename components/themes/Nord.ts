@@ -16,8 +16,6 @@ export default {
     "--theme-bg3": "#4c566a",
     /* Disabled Button Background */
     "--theme-bg4": "#d8dee9",
-    /* Danger Zone Background */
-    "--theme-bg5": "#3b4252",
 
     /* Default Text */
     "--theme-fg-ink0": "#eceff4",
@@ -31,5 +29,7 @@ export default {
     "--theme-fg-accent0": "#8fbcbb",
     /* Checkbox Hover Accent */
     "--theme-fg-accent1": "#81a1c1",
+    /* Danger Foreground */
+    "--theme-fg-danger": "#bf616a",
   }
 };

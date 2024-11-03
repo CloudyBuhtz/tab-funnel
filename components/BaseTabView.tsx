@@ -1,5 +1,5 @@
 import { Options } from "@/entrypoints/utils/options";
-import { removeTabs, TabV2 } from "@/entrypoints/utils/data";
+import { removeNew, removeTabs, TabV2 } from "@/entrypoints/utils/data";
 import type { TGranularity, TSort } from "@/entrypoints/utils/storage";
 
 export type TabViewProps = {
@@ -62,15 +62,32 @@ export const SortedTabView = ({ tabs, sort, reverse }: SortedTabViewProps): JSX.
     sortedTabs.reverse();
   }
 
+  const rem = (t: TabV2) => {
+    return async () => {
+      await removeNew(t);
+    };
+  };
+
   return (
     <>
       {sortedTabs.map((tab: TabV2) => (
-        <div key={tab.hash} className="tab" data-url={tab.url}>
+        <div key={tab.hash} onMouseOver={rem(tab)} className="tab" data-url={tab.url}>
           <span onClick={() => confirmRemoveTabs([tab])} className="close">
-            <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path>
+            </svg>
           </span>
           <img className="icon" src={getFavIconURL(tab.url)} alt={tab.title} onError={(e) => { e.currentTarget.src = '/fallback.png'; }} />
-          {tab.pinned && <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24"><path fill="currentColor" d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2z"></path></svg>}
+          {tab.pinned &&
+            <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2z"></path>
+            </svg>
+          }
+          {tab.new &&
+            <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10A10 10 0 0 0 12 2"></path>
+            </svg>
+          }
           <span onClick={() => openTabs([tab])} className="title">{tab.title}</span>
         </div>
       ))}

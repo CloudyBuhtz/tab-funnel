@@ -1,4 +1,4 @@
-import type { Tab, TabV2 } from "./data";
+import type { Tab, TabV2, UUID } from "./data";
 
 export const TabItem = storage.defineItem<TabV2[]>("local:tabs", {
   fallback: [],
@@ -55,4 +55,20 @@ export const GranularityItem = storage.defineItem<TGranularity>("local:dashboard
 
 export const SortReverseItem = storage.defineItem<boolean>("local:dashboard_sort_reverse", {
   fallback: false,
+});
+
+export const LastSyncDateItem = storage.defineItem<number>("local:sync_last_sync_date", {
+  fallback: 0
+});
+
+export type TSyncInstance = {
+  id: UUID;
+  name: string;
+}
+export const SyncInstancesItem = storage.defineItem<TSyncInstance[]>("sync:sync_instances", {
+  init: () => []
+});
+
+export const CompleteOpsItem = storage.defineItem<Map<UUID,number>>("local:sync_complete_ops", {
+  init: () => { return new Map<UUID,number>(); }
 });

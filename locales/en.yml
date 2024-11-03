@@ -6,8 +6,10 @@ main:
   version: Version $1
 dashboard:
   info:
-    lastSnapshot: Last Snapshot
-    never: Never
+    lastSnapshot: 'Last Snapshot: $1'
+    snapshotDate:
+      0: Never
+      n: '$1'
   menu:
     importSnapshot: Import Snapshot
     importList: Import List
@@ -157,10 +159,9 @@ options:
   tab_sync_enabled:
     label: Enable Tab Sync [Experimental]
     description:
-      A: Sync Tabs between separate instances of Tab Funnel
-      B: Firefox Sync required
-      C: This feature is Experimental, and problems will most likely occur. Make sure to start with all instances loading the same Snapshot and then further changes should be shared / synced.
-      D: If you have any problems, there are buttons in the Options page to clear sync data.
+      A: Firefox Sync required
+      B: This feature is Experimental, and problems will most likely occur.
+      C: Make sure to start with all instances loading the same Snapshot and then further changes should be shared / synced.
   tab_sync_uuid:
     label: Tab Sync ID
     description:
@@ -168,10 +169,15 @@ options:
         The ID of this TabFunnel instance, generally you won't want to change
         this as the ID is used to track which instance made changes.
   tab_sync_clear:
-    label: Clear Tab Sync Queue
+    label: Clear Local Sync Queue
     button: Clear Queue
     description:
       A: >-
-        Click to clear your TabSync Queue, rarely would you need to but you may
-        if changes aren't being propagated or there are other problems with
-        syncing.
+        Click to clear your Local Sync Queue, you shouldn't really need to do this; but while this is Experimental
+        having a button to clear potential problems is good.
+  tab_sync_instances:
+    label: Tab Sync Instances
+    description:
+      A: Here is a list of all the Sync Instances on your Firefox Account.
+      B: Changes will only be synced between instances on this list.
+      C: Make sure to use the Firefox sync `Sync Now` button to keep these changes up to date across instances.

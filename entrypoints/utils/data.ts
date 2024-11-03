@@ -1,4 +1,4 @@
-import { AddOp, RemOp, SyncOp } from './sync';
+import { AddOp, copySyncOp, RemOp, syncAddOp, SyncOp, syncRemOp } from './sync';
 import { Tabs } from 'wxt/browser';
 import { Options } from './options';
 import {
@@ -23,6 +23,7 @@ export type TabV2 = {
   date: string;
   hash: UUID;
   pinned: boolean;
+  new?: boolean;
 };
 
 export const funnelTabs = async (tabs: Tabs.Tab[], overrides?: {
@@ -82,18 +83,10 @@ export const storeTabs = async (newTabs: TabV2[], overrides?: {
 
   // Tab Sync
   const tabSyncEnabled = overrides?.tabSyncEnabled ?? await Options.TAB_SYNC_ENABLED.item.getValue();
-  const tabSyncUUID = await Options.TAB_SYNC_UUID.item.getValue();
   if (tabSyncEnabled) {
-    // console.log("Syncing!");
-    const addOps: AddOp[] = newTabs.map(t => {
-      return {
-        kind: "add",
-        id: crypto.randomUUID(),
-        tab: t
-      } satisfies AddOp;
-    });
-    const currentOps: SyncOp[] = await storage.getItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, { fallback: [] });
-    await storage.setItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, [...currentOps, ...addOps]);
+    console.log(`Adding ${newTabs.length} Tabs`);
+    await syncAddOp(newTabs);
+    await copySyncOp();
   }
 
   // Snapshot Tabs
@@ -103,7 +96,7 @@ export const storeTabs = async (newTabs: TabV2[], overrides?: {
   }
 };
 
-export const removeTabs = async (remTabs: Tab[], overrides?: {
+export const removeTabs = async (remTabs: TabV2[], overrides?: {
   tabSyncEnabled?: boolean;
 }): Promise<void> => {
   const tabs = await TabItem.getValue();
@@ -112,23 +105,14 @@ export const removeTabs = async (remTabs: Tab[], overrides?: {
   });
   await TabItem.setValue(filteredTabs);
 
-  const tabCount = await TabCountItem.getValue();
-  await TabCountItem.setValue(tabCount - remTabs.length);
+  await TabCountItem.setValue(filteredTabs.length);
 
   // Tab Sync
   const tabSyncEnabled = overrides?.tabSyncEnabled ?? await Options.TAB_SYNC_ENABLED.item.getValue();
-  const tabSyncUUID = await Options.TAB_SYNC_UUID.item.getValue();
   if (tabSyncEnabled) {
-    // console.log("Syncing!");
-    const remOps: RemOp[] = remTabs.map(t => {
-      return {
-        kind: "rem",
-        id: crypto.randomUUID(),
-        hash: t.hash
-      } satisfies RemOp;
-    });
-    const currentOps: SyncOp[] = await storage.getItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, { fallback: [] });
-    await storage.setItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, [...currentOps, ...remOps]);
+    console.log(`Removing ${remTabs.length} Tabs`);
+    await syncRemOp(remTabs);
+    await copySyncOp();
   }
 
   // Snapshot Tabs
@@ -136,6 +120,18 @@ export const removeTabs = async (remTabs: Tab[], overrides?: {
   if (snapshotFrequency === "every_change") {
     await snapshotTabs();
   }
+};
+
+export const replaceTabs = async (repTabs: TabV2[]): Promise<void> => {
+  const tabs = await TabItem.getValue();
+  const filteredTabs = tabs.filter((t: Tab) => {
+    return !(repTabs.filter((v) => v.hash === t.hash).length > 0);
+  });
+
+  const newTabs = [...filteredTabs, ...repTabs];
+  await TabItem.setValue(newTabs);
+
+  await TabCountItem.setValue(newTabs.length);
 };
 
 export const snapshotTabs = async () => {
@@ -184,4 +180,15 @@ export const snapshotTabs = async () => {
   }
 
   await LastSnapshotDateItem.setValue(Date.now());
+};
+
+export const removeNew = async (t: TabV2) => {
+  const tabs = (await TabItem.getValue()).map(v => {
+    if (v.hash === t.hash) {
+      delete v.new;
+    }
+    return v;
+  });
+
+  await TabItem.setValue(tabs);
 };

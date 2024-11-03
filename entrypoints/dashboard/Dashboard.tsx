@@ -12,6 +12,7 @@ import {
   GroupReverseItem,
   GranularityItem,
   DashboardPinnedItem,
+  LastSyncDateItem,
 } from "../utils/storage";
 import type { TGranularity, TGroup, TSort } from "../utils/storage";
 import "./Dashboard.css";
@@ -23,6 +24,7 @@ import ImportListModal from "@/components/ImportListModal";
 import ExportListModal from "@/components/ExportListModal";
 import SelectInput from "@/components/SelectInput";
 import NameGroupTabView from "@/components/NameGroupTabView";
+import { Options } from "../utils/options";
 
 export default () => {
   const [tabs, setTabs] = useState<TabV2[]>(TabItem.fallback);
@@ -32,13 +34,19 @@ export default () => {
   const [sort, setSort] = useState<string>(SortItem.fallback);
   const [sortReverse, setSortReverse] = useState<boolean>(SortReverseItem.fallback);
   const [granularity, setGranularity] = useState<TGranularity>("seconds");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [showImportSnapshot, setShowImportSnapshot] = useState<boolean>(false);
   const [showImportList, setShowImportList] = useState<boolean>(false);
   const [showExportList, setShowExportList] = useState<boolean>(false);
 
   const [lastSnapshotDate, setLastSnapshotDate] = useState(LastSnapshotDateItem.fallback);
+
+  const [syncEnabled, setSyncEnabled] = useState(Options.TAB_SYNC_ENABLED.item.fallback);
+  const [bytesInUse, setBytesInUse] = useState<number>(0);
+  const [lastSyncDate, setLastSyncDate] = useState(LastSyncDateItem.fallback);
+  const unwatchSyncEnabled = Options.TAB_SYNC_ENABLED.item.watch(v => setSyncEnabled(v));
+  const unwatchLastSyncDate = LastSyncDateItem.watch(v => setLastSyncDate(v));
 
   const unwatchTabCount = TabCountItem.watch((v) => setTabCount(v));
   const unwatchTabs = TabItem.watch((v) => setTabs(v));
@@ -57,6 +65,10 @@ export default () => {
       setGroupReverse(await GroupReverseItem.getValue());
       setGranularity(await GranularityItem.getValue());
 
+      setSyncEnabled(await Options.TAB_SYNC_ENABLED.item.getValue());
+      setBytesInUse(await browser.storage.sync.getBytesInUse());
+      setLastSyncDate(await LastSyncDateItem.getValue());
+
       // Check pinned
       const dashboardTabs = await browser.tabs.query({
         url: browser.runtime.getURL("/dashboard.html"),
@@ -64,7 +76,7 @@ export default () => {
       });
       await DashboardPinnedItem.setValue(dashboardTabs.length > 0);
 
-      setLoading(true);
+      setLoading(false);
     };
     setup();
   }, []);
@@ -150,7 +162,7 @@ export default () => {
     });
   };
 
-  if (!loading) {
+  if (loading) {
     return (<></>);
   }
 
@@ -160,9 +172,16 @@ export default () => {
         <div className="logo">TabFunnel</div>
         <div className="v-stack">
           <div className="count">{i18n.t("main.tabs", tabCount)} | {convertBytes(storeSize)}</div>
-          <div className="info">{i18n.t("dashboard.info.lastSnapshot")}: {lastSnapshotDate === 0 ? i18n.t("dashboard.info.never") : timeAgo(lastSnapshotDate)}</div>
+          <div className="info">{i18n.t("dashboard.info.lastSnapshot", [i18n.t("dashboard.info.snapshotDate", lastSnapshotDate, [timeAgo(lastSnapshotDate)])])}</div>
           <div className="info version" onClick={showVersions}>{i18n.t("main.version", [browser.runtime.getManifest().version])}</div>
         </div>
+        {syncEnabled &&
+          <div className="v-stack">
+            <div className="info">Sync Quota: {convertBytes(bytesInUse)} / {convertBytes(8192)}</div>
+            <div className="info">Last Sync: {lastSnapshotDate === 0 ? "Never" : timeAgo(lastSyncDate)}</div>
+            <div className="info">Up: X | Down: X</div>
+          </div>
+        }
         <div className="spacer"></div>
         <menu>
           <div onClick={() => setShowImportSnapshot(true)}>{i18n.t("dashboard.menu.importSnapshot")}</div>

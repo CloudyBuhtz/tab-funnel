@@ -1,4 +1,4 @@
-import { executeOp, RemOp, SyncOp } from './utils/sync';
+import { copySyncOp, executeOp, RemOp, syncConOp, SyncOp } from './utils/sync';
 import { Omnibox } from "wxt/browser";
 import { funnelTabs, removeTabs, snapshotTabs, storeTabs, type TabV2 } from "./utils/data";
 import { hashString } from "./utils/misc";
@@ -6,6 +6,7 @@ import {
   DashboardPinnedItem,
   LastSnapshotDateItem,
   LastSnapshotHashItem,
+  LastSyncDateItem,
   TabItem,
 } from "./utils/storage";
 import { Options } from "./utils/options";
@@ -237,43 +238,49 @@ const setupSnapshotAlarm = () => {
 
 const setupFirefoxSync = async () => {
   browser.alarms.onAlarm.addListener(async a => {
-    if (a.name !== "sync-alarm") return;
+    if (a.name !== "sync-copy-alarm") return;
     const syncEnabled = await Options.TAB_SYNC_ENABLED.item.getValue();
     if (syncEnabled) {
-      console.log("Clearing Own Ops");
-      storage.removeItem(`sync:sync_op-${await Options.TAB_SYNC_UUID.item.getValue()}`);
+      await copySyncOp();
     }
   });
 
   browser.storage.sync.onChanged.addListener(async (changes) => {
     const syncEnabled = await Options.TAB_SYNC_ENABLED.item.getValue();
     if (!syncEnabled) return;
+    LastSyncDateItem.setValue(Date.now());
 
     const self = await Options.TAB_SYNC_UUID.item.getValue();
     const keys = Object.keys(changes).filter(k => k.startsWith("sync_op-"));
     keys.forEach(async k => {
       if (k.includes(self)) {
-        // console.log("Own Instance Sync Found", changes[k].oldValue, changes[k].newValue);
-        // Every local change, reset alarm to 1 hour
-        browser.alarms.create("sync-alarm", {
-          delayInMinutes: 60
-        });
+        console.log("Own Instance Sync Found", changes[k].oldValue, changes[k].newValue);
       } else {
-        // console.log("Remote Instance Sync Found", k.replace("sync_op-", ""));
+        console.log("Remote Instance Sync Found", k.replace("sync_op-", ""), changes[k]);
 
         const oldOps: SyncOp[] = changes[k].oldValue;
         const newOps: SyncOp[] = changes[k].newValue;
+        let syncOps: SyncOp[];
 
-        const syncOps: SyncOp[] = newOps.filter(n => {
-          return !(oldOps.filter(o => o.id === n.id).length > 0);
-        });
+        if (newOps === undefined) return;
+        if (oldOps === undefined) {
+          syncOps = newOps;
+        } else {
+          syncOps = newOps.filter(n => {
+            return !(oldOps.filter(o => o.id === n.id).length > 0);
+          });
+        }
 
         // console.log(oldOps, newOps, syncOps);
         // console.log("Running Ops", syncOps);
-        while (syncOps.length > 0) {
-          const o = syncOps.shift();
+        const syncOpsCopy = syncOps.slice();
+        while (syncOpsCopy.length > 0) {
+          const o = syncOpsCopy.shift();
           await executeOp(o!);
         }
+
+        await syncConOp(syncOps);
+        await copySyncOp();
       }
     });
   });

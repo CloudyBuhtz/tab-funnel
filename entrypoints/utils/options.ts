@@ -1,8 +1,8 @@
 import { WxtStorageItem } from "wxt/storage";
-import { snapshotTabs, type TabV2 } from "./data";
-import { LastSnapshotDateItem, LastSnapshotHashItem, TabCountItem, TabItem } from "./storage";
+import { snapshotTabs, UUID, type TabV2 } from "./data";
+import { LastSnapshotDateItem, LastSnapshotHashItem, TabCountItem, TabItem, TSyncInstance } from "./storage";
 
-export type TOption = TTextOption | TCheckOption | TMultiOption | TButtonOption | TKeyOption;
+export type TOption = TTextOption | TCheckOption | TMultiOption | TButtonOption | TKeyOption | TInstanceOption;
 
 type TBasicOption = {
   name: string;
@@ -39,11 +39,17 @@ export type TButtonOption = TBasicOption & {
 export type TKeyOption = TBasicOption & {
   type: "key";
   gen: Function;
-  item: WxtStorageItem<string, Record<string, string>>;
+  item: WxtStorageItem<UUID, Record<string, UUID>>;
+};
+
+export type TInstanceOption = TBasicOption & {
+  type: "instance_list";
+  reset: false;
+  item: WxtStorageItem<TSyncInstance[], Record<string, TSyncInstance[]>>;
 };
 
 const snapshotFrequencyOptions = ["never", "only_funnel", "every_change", "hourly", "daily", "weekly", "monthly"];
-const currentThemeOptions = ["one_dark", "one_light", "kanagawa_wave", "kanagawa_dragon", "kanagawa_lotus", "gruvbox_dark", "gruvbox_light", "catpuccin_latte", "catpuccin_frappe", "catpuccin_macchiato", "catpuccin_mocha", "tokyonight_day", "tokyonight_moon", "tokyonight_night", "tokyonight_storm", "dracula", "nord"];
+const currentThemeOptions = ["one_dark", "one_light", "kanagawa_wave", "kanagawa_dragon", "kanagawa_lotus", "gruvbox_dark", "gruvbox_light", "catpuccin_latte", "catpuccin_frappe", "catpuccin_macchiato", "catpuccin_mocha", "tokyonight_day", "tokyonight_moon", "tokyonight_night", "tokyonight_storm", "dracula", "nord", "t_lollipop"];
 type MultiType = typeof snapshotFrequencyOptions[number] | typeof currentThemeOptions[number];
 
 export const Options = {
@@ -302,16 +308,15 @@ export const Options = {
       "options.tab_sync_enabled.description.A",
       "options.tab_sync_enabled.description.B",
       "options.tab_sync_enabled.description.C",
-      "options.tab_sync_enabled.description.D"
     ]
   } satisfies TCheckOption,
   TAB_SYNC_UUID: {
     type: "key",
     name: "tab_sync_uuid",
     label: "options.tab_sync_uuid.label",
-    item: storage.defineItem("local:tab_sync_uuid", {
+    item: storage.defineItem<UUID>("local:tab_sync_uuid", {
       init: () => crypto.randomUUID(),
-      fallback: "---"
+      fallback: "----"
     }),
     gen: () => crypto.randomUUID(),
     reset: false,
@@ -328,9 +333,26 @@ export const Options = {
       "options.tab_sync_clear.description.A"
     ],
     reset: false,
-    onPress: async () => { storage.removeItem(`sync:sync_op-${await Options.TAB_SYNC_UUID.item.getValue()}`); },
+    onPress: async () => {
+      storage.removeItem(`sync:sync_op-${await Options.TAB_SYNC_UUID.item.getValue()}`);
+      storage.removeItem(`local:sync_op-${await Options.TAB_SYNC_UUID.item.getValue()}`);
+    },
     danger: false
-  } satisfies TButtonOption
+  } satisfies TButtonOption,
+  TAB_SYNC_INSTANCES: {
+    type: "instance_list",
+    name: "tab_sync_instances",
+    label: "options.tab_sync_instances.label",
+    item: storage.defineItem<TSyncInstance[]>("sync:sync_instances", {
+      fallback: []
+    }),
+    description: [
+      "options.tab_sync_instances.description.A",
+      "options.tab_sync_instances.description.B",
+      "options.tab_sync_instances.description.C"
+    ],
+    reset: false,
+  } satisfies TInstanceOption
 };
 
 export const OptionsGroup: {
@@ -355,7 +377,7 @@ export const OptionsGroup: {
       name: "Snapshot Settings",
       options: [
         "SNAPSHOT_FREQUENCY",
-        "SNAPSHOT_LOCATION"
+        "SNAPSHOT_LOCATION",
       ]
     },
     {
@@ -363,8 +385,8 @@ export const OptionsGroup: {
       name: "Sync Settings",
       options: [
         "TAB_SYNC_ENABLED",
-        "TAB_SYNC_UUID",
-        "TAB_SYNC_CLEAR"
+        "TAB_SYNC_INSTANCES",
+        "TAB_SYNC_CLEAR",
       ]
     },
     {
@@ -383,7 +405,7 @@ export const OptionsGroup: {
         "DANGER_REMOVE_DUPLICATES",
         "DANGER_CLEAR_TABS",
         "DANGER_CLEAR_SNAPSHOT_DATE",
-        "DANGER_CLEAR_ALL_SYNC"
+        "DANGER_CLEAR_ALL_SYNC",
       ]
     }
   ];

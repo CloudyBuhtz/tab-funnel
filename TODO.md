@@ -142,28 +142,67 @@
 - [x] Nord
 - [x] Gruvbox Light
 
-## 1.3.1 Firefox Sync Branch
-- [x] Replace DangerZone with just using a `Dangerous Settings` group
-- [x] KeyOption
-- [x] ButtonOption (`dangerous options`)
-- [x] Redo all options to use `wxtStorageItem` instead of defining keys
+### 1.3.1 Firefox Sync Branch
+- [x] Various CSS Fixes
+- [x] Danger FG instead of background; essentially RED
+
+#### Tab Sync (Firefox)
 - [x] Enable Sync Setting
 - [x] Sync Instance UUID Setting
 - [x] Re-Add Dangerous Button Behaviour
 - [x] Add functionality for regenerating instance UUID
-- [x] Various CSS Fixes
-- [x] Options Rework
+- [x] Move Sync Functionality to sync.ts
+- [x] Keep local ops in `local:sync_op-*`
+- [x] Add optional `new` property to TabV2
+- [x] BaseTabView add blip to `new` tabs
+- [x] Remove `new` status on hover for tab
+- [x] Last Sync Date Shown
+- [x] Show Used / Available Space
+- [x] InstanceList setting
+- [x] Sort SyncOps to have ConOp[] to be at the front
+- [x] Have explicit number of Instances
+- [x] Make sync:sync-instances which is a list of instances by ID or NAME
+- [x] Can edit this, remove instances or add more
+- [x] Sort instance list
+  - [x] Local first
+  - [x] Then Alphabetical
+  - [x] Different icon for local / remote
+- [ ] Clean-up background.ts
+- [ ] ~~Store changes even when syncing is not enabled~~
+- [ ] Remove TabSyncID option from page ??
+- [ ] Removing Instance removes all it's queue, clears local queue
+  - [ ] May need to send instance remove op to propagate to all
+  - [ ] Observe changes to instances, remove all ops to do with instance
 
-- [ ] Make sync more robust
-- [ ] Handle Sync Errors
-- [ ] Never Lose SyncOps
-  - [ ] Store Locally, then mirror to sync
-- [ ] Give Sync Info to User
-- [ ] Sync Log
-  - [ ] Outgoing
-  - [ ] Incoming Changes
-  - [ ] Instance Names tied to ID
-- [ ] Last Sync Date Shown
+#### Options Changes
+- [x] Replace DangerZone with just using a `Dangerous Settings` group
+- [x] KeyOption
+- [x] ButtonOption (`dangerous options`)
+- [x] Redo all options to use `wxtStorageItem` instead of defining keys
+- [x] Options Rework
+- [ ] Add platform checks to options
+
+#### Testing
+- [ ] Setup 2 Instances using TabFunnel account
+- [ ] Have background scripts adding random Add/Remove Ops
+- [ ] Leave to sync these over time
+- [ ] Have sync log or something as a page
+  - [ ] Shows info from / to each instance
+- [ ] See if any data is lost / forgotten
+- [ ] See if both lists are the same after the test / final syncing.
+- [ ] See if sync queues are empty
+
+### TabFunnel Sync
+- [ ] Encrypt Tabs
+- [ ] Store Tabs w/ Upload Thing
+  - [ ] Replace Old
+- [ ] Database
+  - [ ] Match UUID -> File using Sqlite
+  - [ ] Store UUID, date of upload and FileID
+  - [ ] Cleanup File after not being updated in X amount of time
+- [ ] Heavily rate limit
+- [ ] Some sort of tracking for bad usage
+- [ ] File size limit (2GB)/(1mb) 2000 users
 
 ### 1.4.0 Mobile Version
 ### 1.5.0 Import List 2.0
@@ -179,7 +218,7 @@
   - [ ] big work
   - [ ] Synced using browser
 
-- [ ] Integrate with Tab-Style Tabs ( https://github.com/piroor/treestyletab/wiki/API-for-other-addons )
+- [ ] Integrate with Tree-Style Tabs ( https://github.com/piroor/treestyletab/wiki/API-for-other-addons )
 - [ ] Opening Multiple Dashboards will de-sync
 - [ ] Drag Tabs from Dashboard, add URL as drag data
 - [ ] Multiple Windows Functions

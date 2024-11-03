@@ -1,5 +1,16 @@
 # What's New
 
+### Firefox Sync (1.3.1)
+
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
+
 ### Group by Name (1.2.0)
 New `Group by Name` grouping, groups all the tabs by the first character of the name; moving symbols and numbers to their own separate sections.
 
@@ -18,9 +29,27 @@ New Themes:
 - Nord
 - Gruvbox Light
 
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
+
 #### Omnibox Fix (1.1.2)
 
 #### CSS Fix (1.1.1)
+
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
 
 ### Date / Time Granularity (1.1.0)
 `Group by Date` has become `Group by Time` and with that comes the ability to choose how granular the grouping is, find tabs from the same hour, day, week, month or year.
