@@ -51,6 +51,10 @@ export default ({ option }: InstanceListProps) => {
     await Options.TAB_SYNC_INSTANCES.item.setValue(instances.filter(i => i.id !== id));
   };
 
+  const copyInstance = async (id: UUID) => {
+    await Options.TAB_SYNC_UUID.item.setValue(id);
+  };
+
   const sortedInstances = instances?.slice().sort((a, b) => {
     if (a.id === uuid && b.id !== uuid) return -1;
     if (a.id !== uuid && b.id === uuid) return 1;
@@ -82,6 +86,13 @@ export default ({ option }: InstanceListProps) => {
             </div>
             <div className="name">{i.name}</div>
             <div className="spacer"></div>
+            {i.id !== uuid &&
+              <div onClick={() => { copyInstance(i.id); }} className="copy">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24 24">
+                  <path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"></path>
+                </svg>
+              </div>
+            }
             <div onClick={() => { removeInstance(i.id); }} className="remove">
               <svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" viewBox="0 0 24 24">
                 <path fill="currentColor" d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"></path>
@@ -91,7 +102,7 @@ export default ({ option }: InstanceListProps) => {
         ))}
       </div>
       <div className="option">
-        <input ref={nameRef} className="grow" type="text" defaultValue={localInstance?.name}></input>
+        <input ref={nameRef} className="grow" type="text" defaultValue={localInstance?.name} onKeyDown={(e) => e.key === "Enter" && (localInstance ? updateInstance() : addInstance())}></input>
         <button onClick={() => { localInstance ? updateInstance() : addInstance(); }}>{localInstance ? "Update Name" : "Add Instance"}</button>
       </div>
       {option.description &&

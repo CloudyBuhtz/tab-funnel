@@ -1,6 +1,16 @@
 # What's New
 
 ### Firefox Sync (1.3.1)
+Options menu rework, now with named sections. The `Danger Zone` has become `Dangerous Settings`!
+
+Firefox Sync is now out! Sync your tab funnel instances between two or more different installs using Firefox Sync. An account for Sync is required as well as setting up for each of the different instances.
+
+The Dashboard now shows how much space is being used for syncing within the addon, the last time everything was synced as well as how many operations need to be synced to the remote instance(s).
+
+Fixes:
+- Various CSS Fixes
+- General Theme Changes
+- Display `Just Now` instead of nothing when dates are <1ms apart
 
 ` `  
 ` `

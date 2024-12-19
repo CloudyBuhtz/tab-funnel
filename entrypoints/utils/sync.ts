@@ -89,8 +89,9 @@ export const copySyncOp = async (): Promise<void> => {
 
   await storage.setItem<SyncOp[]>(`sync:sync_op-${tabSyncUUID}`, localSlice).catch(e => {
     console.warn("Problem moving to Firefox Sync: ", e);
+    console.log("Retrying in 2 Minutes...");
     browser.alarms.create("sync-copy-alarm", {
-      delayInMinutes: 1
+      delayInMinutes: 2
     });
   });
 };

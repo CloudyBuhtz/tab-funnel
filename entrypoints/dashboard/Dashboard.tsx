@@ -25,6 +25,7 @@ import ExportListModal from "@/components/ExportListModal";
 import SelectInput from "@/components/SelectInput";
 import NameGroupTabView from "@/components/NameGroupTabView";
 import { Options } from "../utils/options";
+import { SyncOp } from "../utils/sync";
 
 export default () => {
   const [tabs, setTabs] = useState<TabV2[]>(TabItem.fallback);
@@ -40,11 +41,13 @@ export default () => {
   const [showImportList, setShowImportList] = useState<boolean>(false);
   const [showExportList, setShowExportList] = useState<boolean>(false);
 
-  const [lastSnapshotDate, setLastSnapshotDate] = useState(LastSnapshotDateItem.fallback);
+  const [lastSnapshotDate, setLastSnapshotDate] = useState<number>(LastSnapshotDateItem.fallback);
+  const [addOpCount, setAddOpCount] = useState<number>(0);
+  const [remOpCount, setRemOpCount] = useState<number>(0);
 
   const [syncEnabled, setSyncEnabled] = useState(Options.TAB_SYNC_ENABLED.item.fallback);
   const [bytesInUse, setBytesInUse] = useState<number>(0);
-  const [lastSyncDate, setLastSyncDate] = useState(LastSyncDateItem.fallback);
+  const [lastSyncDate, setLastSyncDate] = useState<number>(LastSyncDateItem.fallback);
   const unwatchSyncEnabled = Options.TAB_SYNC_ENABLED.item.watch(v => setSyncEnabled(v));
   const unwatchLastSyncDate = LastSyncDateItem.watch(v => setLastSyncDate(v));
 
@@ -75,6 +78,18 @@ export default () => {
         pinned: true
       });
       await DashboardPinnedItem.setValue(dashboardTabs.length > 0);
+
+      const uuid = await Options.TAB_SYNC_UUID.item.getValue();
+      const watchSyncQueue = storage.watch<SyncOp[]>(`local:sync_op-${uuid}`, (v) => {
+        if (v === null) return;
+        setAddOpCount(v.filter(a => a.kind === "add").length);
+        setRemOpCount(v.filter(a => a.kind === "rem").length);
+      });
+      const syncQueue = await storage.getItem<SyncOp[]>(`local:sync_op-${uuid}`);
+      if (syncQueue !== null) {
+        setAddOpCount(syncQueue.filter(a => a.kind === "add").length);
+        setRemOpCount(syncQueue.filter(a => a.kind === "rem").length);
+      }
 
       setLoading(false);
     };
@@ -177,9 +192,11 @@ export default () => {
         </div>
         {syncEnabled &&
           <div className="v-stack">
-            <div className="info">Sync Quota: {convertBytes(bytesInUse)} / {convertBytes(8192)}</div>
-            <div className="info">Last Sync: {lastSnapshotDate === 0 ? "Never" : timeAgo(lastSyncDate)}</div>
-            <div className="info">Up: X | Down: X</div>
+            <div className="info">Sync Size: {convertBytes(bytesInUse)} / {convertBytes(8192)}</div>
+            <div className="info">Last Sync: {lastSyncDate === 0 ? "Never" : timeAgo(lastSyncDate)}</div>
+            <div className="info">
+              + {addOpCount} | - {remOpCount}
+            </div>
           </div>
         }
         <div className="spacer"></div>

@@ -45,7 +45,7 @@
       width: 100%;
       margin-top: 2rem;
       border: 0;
-      border-bottom: 0.25ch dashed var(--theme-fg-grey1);
+      border-bottom: 0.25ch solid var(--theme-bg1);
     }
 
     >.option {
@@ -135,6 +135,16 @@
       .icon {
         width: 1.5rem;
         height: 1.5rem;
+      }
+
+      .copy {
+        width: 1.5rem;
+        height: 1.5rem;
+        cursor: pointer;
+
+        &:hover {
+          color: var(--theme-fg-accent1);
+        }
       }
 
       .remove {

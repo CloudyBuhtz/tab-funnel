@@ -9,6 +9,7 @@ dashboard:
     lastSnapshot: 'Last Snapshot: $1'
     snapshotDate:
       0: Never
+      1: '$1'
       n: '$1'
   menu:
     importSnapshot: Import Snapshot

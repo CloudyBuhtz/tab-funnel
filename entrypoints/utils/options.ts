@@ -57,7 +57,7 @@ export const Options = {
     type: "multi",
     name: "snapshot_frequency",
     label: "options.snapshot_frequency.label",
-    item: storage.defineItem("sync:snapshot_frequency", {
+    item: storage.defineItem("local:snapshot_frequency", {
       init: () => "never",
       fallback: "never",
     }),
@@ -387,6 +387,7 @@ export const OptionsGroup: {
         "TAB_SYNC_ENABLED",
         "TAB_SYNC_INSTANCES",
         "TAB_SYNC_CLEAR",
+        "TAB_SYNC_UUID",
       ]
     },
     {

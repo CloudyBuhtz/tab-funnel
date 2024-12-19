@@ -15,9 +15,9 @@ Tab Funnel is a browser addon to collect tabs into a single list that can be gro
 - Snapshots Triggered Automatically (when data changes)
 - Regular Snapshots (Daily, Weekly, Monthly)
 - Import / Export
+- Automatic Syncing (Firefox)
 
 ## What isn't a Feature
-- Auto Syncing between separate PC's / Accounts
 - Custom Grouping / Sorting
 - Editing Tabs / Data
 - Mobile Version

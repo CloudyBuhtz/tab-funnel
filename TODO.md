@@ -145,6 +145,14 @@
 ### 1.3.1 Firefox Sync Branch
 - [x] Various CSS Fixes
 - [x] Danger FG instead of background; essentially RED
+- [x] lastSnapshotDate Fix
+- [x] Dashboard Add / Rem
+- [x] Re-write Onboarding
+- [x] Update package.json to 1.3.1
+- [x] Update version info
+- [x] Update README.md with new Feature
+- [x] Update addon page with new Feature
+- [x] Update description to list requiring addon sync in Firefox Sync
 
 #### Tab Sync (Firefox)
 - [x] Enable Sync Setting
@@ -167,12 +175,7 @@
   - [x] Local first
   - [x] Then Alphabetical
   - [x] Different icon for local / remote
-- [ ] Clean-up background.ts
-- [ ] ~~Store changes even when syncing is not enabled~~
-- [ ] Remove TabSyncID option from page ??
-- [ ] Removing Instance removes all it's queue, clears local queue
-  - [ ] May need to send instance remove op to propagate to all
-  - [ ] Observe changes to instances, remove all ops to do with instance
+- [x] Make instance in list able to click to copy
 
 #### Options Changes
 - [x] Replace DangerZone with just using a `Dangerous Settings` group
@@ -180,26 +183,33 @@
 - [x] ButtonOption (`dangerous options`)
 - [x] Redo all options to use `wxtStorageItem` instead of defining keys
 - [x] Options Rework
+- [x] Instance List copy icon shifts layout
+
+### 1.?.0
+- [ ] Change funnel all tabs to a button + down arrow
+  - [ ] Add firefox right click context options as extra ways to funnel
+  - [ ] Selected tabs will open a custom tab choosing UI
+  - [ ] Remove context menu, or have as an option
+- [ ] Stop being able to close all tabs while funnelling
+  - [ ] Open new tab if all tabs are to be funnelled
+- [ ] Clear op map on local queue clear
+- [ ] Change instance CSS to not highlight copy / remove icons
+- [ ] Make copy / remove icons to highlight
+- [ ] Make dashboard more modular
+- [ ] Move info panels into their own components
+- [ ] Move control panel into its own component
+- [ ] Add option for re-pinning the dashboard, since the check seems to fail always
+- [ ] Clean-up dashboard
 - [ ] Add platform checks to options
 
-#### Testing
-- [ ] Setup 2 Instances using TabFunnel account
-- [ ] Have background scripts adding random Add/Remove Ops
-- [ ] Leave to sync these over time
-- [ ] Have sync log or something as a page
-  - [ ] Shows info from / to each instance
-- [ ] See if any data is lost / forgotten
-- [ ] See if both lists are the same after the test / final syncing.
-- [ ] See if sync queues are empty
-
-### TabFunnel Sync
+### 1.?.0 TabFunnel Sync
 - [ ] Encrypt Tabs
 - [ ] Store Tabs w/ Upload Thing
   - [ ] Replace Old
 - [ ] Database
   - [ ] Match UUID -> File using Sqlite
   - [ ] Store UUID, date of upload and FileID
-  - [ ] Cleanup File after not being updated in X amount of time
+  - [ ] Clean-up File after not being updated in X amount of time
 - [ ] Heavily rate limit
 - [ ] Some sort of tracking for bad usage
 - [ ] File size limit (2GB)/(1mb) 2000 users
@@ -222,8 +232,19 @@
 - [ ] Opening Multiple Dashboards will de-sync
 - [ ] Drag Tabs from Dashboard, add URL as drag data
 - [ ] Multiple Windows Functions
+  - [ ] Figure this out
+
+- [ ] Tags
+  - [ ] Tag certain things, sort by tags. Untagged will always be at the bottom
+  - [ ] Clicking a tag will auto sort by tags and go to that tag
 
 - [ ] History Feature?
   - [ ] Changes kept, so that undo can be done
   - [ ] See timeline of changes
   - [ ] Who wants this?
+
+- [ ] New Display Options
+  - [ ] Multiple Columns
+  - [ ] Display as Icons
+    - [ ] Looks kind of like vanilla new tab page
+  - [ ] Specific New Tab Page
