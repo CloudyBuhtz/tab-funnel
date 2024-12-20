@@ -408,8 +408,7 @@ export const OptionsGroup: {
         "IGNORE_DUPLICATE_TABS",
         "SWITCH_TAB_RESTORED",
         "FUNNEL_PINNED_TABS",
-        "RESTORE_AS_PINNED",
-        "SHOW_CONTEXT_MENU"
+        "RESTORE_AS_PINNED"
       ]
     },
     {

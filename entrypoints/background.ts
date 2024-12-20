@@ -176,8 +176,7 @@ const setupUpdated = () => {
       const url = browser.runtime.getURL("/dashboard.html");
       const tabs = await browser.tabs.query({
         url: url,
-        currentWindow: true,
-        pinned: dashboardPinned
+        currentWindow: true
       });
 
       if (tabs.length > 0) {
@@ -185,6 +184,7 @@ const setupUpdated = () => {
       } else {
         const newTab = browser.tabs.create({
           url: url,
+          pinned: dashboardPinned
         });
       }
     }
