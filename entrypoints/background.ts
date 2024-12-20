@@ -3,13 +3,13 @@ import { Omnibox } from "wxt/browser";
 import { funnelTabs, removeTabs, snapshotTabs, storeTabs, type TabV2 } from "./utils/data";
 import { hashString } from "./utils/misc";
 import {
-  DashboardPinnedItem,
   LastSnapshotDateItem,
   LastSnapshotHashItem,
   LastSyncDateItem,
   TabItem,
 } from "./utils/storage";
 import { Options } from "./utils/options";
+import { funnelLeftTabs, funnelOtherTabs, funnelRightTabs, funnelSelectedTabs, funnelThisTab } from './utils/funnel';
 
 const checkSnapshot = async () => {
   const currentTime = Date.now();
@@ -101,7 +101,10 @@ const setupOmnibox = () => {
   });
 };
 
-const setupMenus = () => {
+const setupMenus = async () => {
+  const showContextMenu = await Options.SHOW_CONTEXT_MENU.item.getValue();
+  if (!showContextMenu) return;
+
   const parentMenu = browser.menus.create({
     id: "menu_funnel_parent",
     title: "Funnel &Tabs",
@@ -115,11 +118,7 @@ const setupMenus = () => {
     contexts: ["tab"],
     type: "normal",
     parentId: "menu_funnel_parent",
-    onclick: async (info, tab) => {
-      await funnelTabs([tab], {
-        funnelPinnedTabs: true
-      });
-    },
+    onclick: funnelThisTab,
   });
 
   const funnelOtherMenu = browser.menus.create({
@@ -128,15 +127,7 @@ const setupMenus = () => {
     contexts: ["tab"],
     type: "normal",
     parentId: "menu_funnel_parent",
-    onclick: async (info, tab) => {
-      const tabs = (await browser.tabs.query({
-        currentWindow: true,
-        url: "*://*/*",
-        windowType: "normal",
-      })).filter((t) => t.id !== tab.id);
-
-      await funnelTabs(tabs);
-    },
+    onclick: funnelOtherTabs,
   });
 
   const funnelLeftMenu = browser.menus.create({
@@ -145,16 +136,7 @@ const setupMenus = () => {
     contexts: ["tab"],
     type: "normal",
     parentId: "menu_funnel_parent",
-    onclick: async (info, tab) => {
-      const funnelPinnedTabs = await Options.FUNNEL_PINNED_TABS.item.getValue();
-      const tabs = (await browser.tabs.query({
-        currentWindow: true,
-        url: "*://*/*",
-        windowType: "normal",
-      })).filter((t) => t.index < tab.index);
-
-      await funnelTabs(tabs);
-    },
+    onclick: funnelLeftTabs,
   });
 
   const funnelRightMenu = browser.menus.create({
@@ -163,15 +145,7 @@ const setupMenus = () => {
     contexts: ["tab"],
     type: "normal",
     parentId: "menu_funnel_parent",
-    onclick: async (info, tab) => {
-      const tabs = (await browser.tabs.query({
-        currentWindow: true,
-        url: "*://*/*",
-        windowType: "normal",
-      })).filter((t) => t.index > tab.index);
-
-      await funnelTabs(tabs);
-    },
+    onclick: funnelRightTabs,
   });
 
   const funnelSelectedMenu = browser.menus.create({
@@ -180,16 +154,7 @@ const setupMenus = () => {
     contexts: ["tab"],
     parentId: "menu_funnel_parent",
     type: "normal",
-    onclick: async (info, tab) => {
-      const tabs = (await browser.tabs.query({
-        currentWindow: true,
-        url: "*://*/*",
-        windowType: "normal",
-        highlighted: true
-      }));
-
-      await funnelTabs(tabs);
-    },
+    onclick: funnelSelectedTabs,
   });
 };
 
@@ -207,7 +172,7 @@ const setupInstalled = () => {
 const setupUpdated = () => {
   browser.runtime.onInstalled.addListener(async (details) => {
     if (details.reason === "update") {
-      const dashboardPinned = await DashboardPinnedItem.getValue();
+      const dashboardPinned = await Options.PIN_DASHBOARD.item.getValue();
       const url = browser.runtime.getURL("/dashboard.html");
       const tabs = await browser.tabs.query({
         url: url,
@@ -254,9 +219,9 @@ const setupFirefoxSync = async () => {
     const keys = Object.keys(changes).filter(k => k.startsWith("sync_op-"));
     keys.forEach(async k => {
       if (k.includes(self)) {
-        console.log("Own Instance Sync Found", changes[k].oldValue, changes[k].newValue);
+        // console.log("Own Instance Sync Found", changes[k].oldValue, changes[k].newValue);
       } else {
-        console.log("Remote Instance Sync Found", k.replace("sync_op-", ""), changes[k]);
+        // console.log("Remote Instance Sync Found", k.replace("sync_op-", ""), changes[k]);
 
         const oldOps: SyncOp[] = changes[k].oldValue;
         const newOps: SyncOp[] = changes[k].newValue;

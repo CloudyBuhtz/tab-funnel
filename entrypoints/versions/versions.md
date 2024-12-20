@@ -1,5 +1,20 @@
 # What's New
 
+### Post Sync Update (1.4.0)
+- Added new popup UI to do more granular funnelling without having to use the right-click menu
+- Made right-click context menu optional through new `Show Context Menu` setting
+- Added `Pin Dashboard` setting to keep dashboard pinned during update process
+- Various Small Fixes
+
+` `  
+` `
+` `  
+
+---
+
+` `  
+` `
+
 ### Firefox Sync (1.3.1)
 Options menu rework, now with named sections. The `Danger Zone` has become `Dangerous Settings`!
 

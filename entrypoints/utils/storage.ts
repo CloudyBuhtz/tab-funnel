@@ -39,10 +39,6 @@ export const GroupReverseItem = storage.defineItem<boolean>("local:dashboard_gro
   fallback: false,
 });
 
-export const DashboardPinnedItem = storage.defineItem<boolean>("local:dashboard_pinned", {
-  fallback: false
-});
-
 export type TSort = "sort_by_date" | "sort_by_name" | "sort_by_url";
 export const SortItem = storage.defineItem<TSort>("local:dashboard_sort", {
   fallback: "sort_by_date",
@@ -64,11 +60,11 @@ export const LastSyncDateItem = storage.defineItem<number>("local:sync_last_sync
 export type TSyncInstance = {
   id: UUID;
   name: string;
-}
+};
 export const SyncInstancesItem = storage.defineItem<TSyncInstance[]>("sync:sync_instances", {
   init: () => []
 });
 
-export const CompleteOpsItem = storage.defineItem<Map<UUID,number>>("local:sync_complete_ops", {
-  init: () => { return new Map<UUID,number>(); }
+export const CompleteOpsItem = storage.defineItem<Map<UUID, number>>("local:sync_complete_ops", {
+  init: () => { return new Map<UUID, number>(); }
 });

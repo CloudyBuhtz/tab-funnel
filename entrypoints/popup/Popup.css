@@ -8,6 +8,8 @@
     padding: 1rem;
     min-width: 15rem;
     background-color: var(--theme-bg1);
+
+    transition: height 100ms linear;
   }
 
   .info {
@@ -22,6 +24,30 @@
     margin-inline: auto;
     cursor: pointer;
     width: fit-content;
+  }
+
+  .funnel-button {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+
+
+    button:first-child {
+      flex-grow: 1;
+      padding-left: calc(3rem);
+    }
+
+    button:last-child {
+      width: 2rem;
+      padding-inline: 0;
+    }
+  }
+
+  .funnel-list {
+    margin-top: calc(-1rem + 2px);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 
   /* button {

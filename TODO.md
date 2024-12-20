@@ -185,22 +185,20 @@
 - [x] Options Rework
 - [x] Instance List copy icon shifts layout
 
-### 1.?.0
-- [ ] Change funnel all tabs to a button + down arrow
-  - [ ] Add firefox right click context options as extra ways to funnel
-  - [ ] Selected tabs will open a custom tab choosing UI
-  - [ ] Remove context menu, or have as an option
-- [ ] Stop being able to close all tabs while funnelling
-  - [ ] Open new tab if all tabs are to be funnelled
-- [ ] Clear op map on local queue clear
-- [ ] Change instance CSS to not highlight copy / remove icons
-- [ ] Make copy / remove icons to highlight
+### 1.4.0 Post Sync Update
+- [x] Change funnel all tabs to a button + down arrow
+  - [x] Add firefox right click context options as extra ways to funnel
+  - [x] Only show `selected` for Firefox
+  - [x] Add context menu as setting
+- [x] Stop being able to close all tabs while funnelling
+- [x] Clear CompleteOpsItem map when clearing all sync
+- [x] Add platform checks to option
+- [x] Add option for re-pinning the dashboard, since the check seems to fail always
+
+### 1.?.0 ???
 - [ ] Make dashboard more modular
 - [ ] Move info panels into their own components
 - [ ] Move control panel into its own component
-- [ ] Add option for re-pinning the dashboard, since the check seems to fail always
-- [ ] Clean-up dashboard
-- [ ] Add platform checks to options
 
 ### 1.?.0 TabFunnel Sync
 - [ ] Encrypt Tabs

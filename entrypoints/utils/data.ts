@@ -69,7 +69,12 @@ export const funnelTabs = async (tabs: Tabs.Tab[], overrides?: {
   await storeTabs(newTabs);
 
   if (removeTabsFunnelled) {
-    browser.tabs.remove(tabs.filter(t => { return !(!funnelPinnedTabs && t.pinned); }).map(t => { return t.id!; }));
+    const tabsToRemove = tabs.filter(t => { return !(!funnelPinnedTabs && t.pinned); }).map(t => { return t.id!; });
+    const browserTabs = await browser.tabs.query({ currentWindow: true });
+    if (tabsToRemove.length === browserTabs.length) {
+      browser.tabs.create({});
+    }
+    browser.tabs.remove(tabsToRemove);
   }
 };
 

@@ -1,6 +1,6 @@
 import { WxtStorageItem } from "wxt/storage";
 import { snapshotTabs, UUID, type TabV2 } from "./data";
-import { LastSnapshotDateItem, LastSnapshotHashItem, TabCountItem, TabItem, TSyncInstance } from "./storage";
+import { CompleteOpsItem, LastSnapshotDateItem, LastSnapshotHashItem, TabCountItem, TabItem, TSyncInstance } from "./storage";
 
 export type TOption = TTextOption | TCheckOption | TMultiOption | TButtonOption | TKeyOption | TInstanceOption;
 
@@ -9,6 +9,8 @@ type TBasicOption = {
   label: string;
   description: string[];
   reset: boolean;
+  chrome?: boolean;
+  firefox?: boolean;
 };
 
 export type TTextOption = TBasicOption & {
@@ -292,6 +294,7 @@ export const Options = {
           browser.storage.sync.remove(k);
         }
       });
+      await CompleteOpsItem.setValue(new Map<UUID, number>());
     },
     danger: true
   } satisfies TButtonOption,
@@ -352,7 +355,35 @@ export const Options = {
       "options.tab_sync_instances.description.C"
     ],
     reset: false,
-  } satisfies TInstanceOption
+  } satisfies TInstanceOption,
+  SHOW_CONTEXT_MENU: {
+    type: "check",
+    name: "show_context_menu",
+    label: "options.showContextMenu.label",
+    item: storage.defineItem<boolean>("local:show_context_menu", {
+      init: () => true,
+      fallback: true
+    }),
+    description: [
+      "options.showContextMenu.description.A",
+      "options.showContextMenu.description.B"
+    ],
+    reset: true,
+    chrome: false
+  } satisfies TCheckOption,
+  PIN_DASHBOARD: {
+    type: "check",
+    name: "pin_dashboard",
+    label: "options.PinDashboard.label",
+    item: storage.defineItem<boolean>("local:pin_dashboard", {
+      init: () => false,
+      fallback: false
+    }),
+    description: [
+      "options.pinDashboard.description.A"
+    ],
+    reset: true
+  } satisfies TCheckOption
 };
 
 export const OptionsGroup: {
@@ -360,6 +391,14 @@ export const OptionsGroup: {
   name: string,
   options: (keyof typeof Options)[],
 }[] = [
+    {
+      key: "general",
+      name: "General Settings",
+      options: [
+        "PIN_DASHBOARD",
+        "SHOW_CONTEXT_MENU"
+      ]
+    },
     {
       key: "tabs",
       name: "Tab Settings",
@@ -370,6 +409,7 @@ export const OptionsGroup: {
         "SWITCH_TAB_RESTORED",
         "FUNNEL_PINNED_TABS",
         "RESTORE_AS_PINNED",
+        "SHOW_CONTEXT_MENU"
       ]
     },
     {

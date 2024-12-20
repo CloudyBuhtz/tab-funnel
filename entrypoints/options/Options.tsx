@@ -19,6 +19,8 @@ import "./Options.css";
 export default () => {
   const renderOptions = (options: TOption[]) => {
     return options.map((option) => {
+      if (option.chrome === false && import.meta.env.CHROME) return;
+      if (option.firefox === false && import.meta.env.FIREFOX) return;
       switch (option.type) {
         case "text":
           return <TextOption key={option.name} option={option as TTextOption}></TextOption>;

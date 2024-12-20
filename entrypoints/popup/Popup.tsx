@@ -9,6 +9,36 @@ import {
 } from "../utils/storage";
 import "./Popup.css";
 import { convertBytes, timeAgo } from "../utils/misc";
+import { funnelLeftTabs, funnelOtherTabs, funnelRightTabs, funnelSelectedTabs, funnelThisTab } from "../utils/funnel";
+
+
+const FunnelButton = ({ onClick }: { onClick: React.MouseEventHandler<HTMLButtonElement>; }) => {
+  const [showList, setShowList] = useState<boolean>(false);
+
+  const arrowClickHandler = () => {
+    setShowList(!showList);
+  };
+
+  return <>
+    <div className="funnel-button">
+      <button onClick={onClick}>{i18n.t("popup.funnelAllTabs")}</button>
+      <button onClick={arrowClickHandler}>
+        <svg xmlns="http://www.w3.org/2000/svg" width="0.8rem" height="0.8rem" viewBox="0 0 24 24"><path fill="currentColor" d="M1 3h22L12 22"></path></svg>
+      </button>
+    </div>
+    {showList &&
+      <div className="funnel-list">
+        <button onClick={async () => { funnelThisTab({}, (await browser.tabs.query({ active: true })).at(0)!); }}>This Tab</button>
+        <button onClick={async () => { funnelOtherTabs({}, (await browser.tabs.query({ active: true })).at(0)!); }}>Other Tabs</button>
+        <button onClick={async () => { funnelLeftTabs({}, (await browser.tabs.query({ active: true })).at(0)!); }}>Tabs to the Left</button>
+        <button onClick={async () => { funnelRightTabs({}, (await browser.tabs.query({ active: true })).at(0)!); }}>Tabs to the Right</button>
+        {import.meta.env.FIREFOX &&
+          <button onClick={async () => { funnelSelectedTabs({}, (await browser.tabs.query({ active: true })).at(0)!); }}>Selected Tabs</button>
+        }
+      </div>
+    }
+  </>;
+};
 
 export default () => {
   const [tabCount, setTabCount] = useState(TabCountItem.fallback);
@@ -108,7 +138,7 @@ export default () => {
     <main>
       <div className="info">{i18n.t("main.tabs", tabCount)} | {convertBytes(storeSize)}</div>
       <div className="info">{i18n.t("dashboard.info.lastSnapshot", [i18n.t("dashboard.info.snapshotDate", lastSnapshotDate, [timeAgo(lastSnapshotDate)])])}</div>
-      <button onClick={funnelAllTabs}>{i18n.t("popup.funnelAllTabs")}</button>
+      <FunnelButton onClick={funnelAllTabs}></FunnelButton>
       <button onClick={showList}>{i18n.t("popup.showDashboard")}</button>
       <button onClick={manualSnapshot}>{i18n.t("popup.manualSnapshot")}</button>
       <div onClick={showVersions} className="info version">{i18n.t("main.version", [browser.runtime.getManifest().version])}</div>

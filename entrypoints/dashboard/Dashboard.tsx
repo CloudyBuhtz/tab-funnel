@@ -11,7 +11,6 @@ import {
   SortReverseItem,
   GroupReverseItem,
   GranularityItem,
-  DashboardPinnedItem,
   LastSyncDateItem,
 } from "../utils/storage";
 import type { TGranularity, TGroup, TSort } from "../utils/storage";
@@ -72,15 +71,8 @@ export default () => {
       setBytesInUse(await browser.storage.sync.getBytesInUse());
       setLastSyncDate(await LastSyncDateItem.getValue());
 
-      // Check pinned
-      const dashboardTabs = await browser.tabs.query({
-        url: browser.runtime.getURL("/dashboard.html"),
-        pinned: true
-      });
-      await DashboardPinnedItem.setValue(dashboardTabs.length > 0);
-
       const uuid = await Options.TAB_SYNC_UUID.item.getValue();
-      const watchSyncQueue = storage.watch<SyncOp[]>(`local:sync_op-${uuid}`, (v) => {
+      const unwatchSyncQueue = storage.watch<SyncOp[]>(`local:sync_op-${uuid}`, (v) => {
         if (v === null) return;
         setAddOpCount(v.filter(a => a.kind === "add").length);
         setRemOpCount(v.filter(a => a.kind === "rem").length);
